@@ -5,5 +5,16 @@
   ],
   "routes": [
     { "src": "/(.*)", "dest": "/src/main.ts" }
+  ],
+  "headers": [
+    {
+      "source": "/docs/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net;"
+        }
+      ]
+    }
   ]
 }
