@@ -1,0 +1,233 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-06-19T00:00:00.000Z",
+  "__export_source": "pizza-express-nestjs",
+  "resources": [
+    {
+      "_id": "wrk_pizzaexpress",
+      "parentId": null,
+      "modified": 0,
+      "created": 0,
+      "name": "Pizza Express API",
+      "description": "Coleção de rotas para o backend NestJS do Pizza Express. Inclui autenticação JWT, CRUDs protegidos, monitoramento de entrega e exemplos de uso. Veja README e API_DOC.md para detalhes de CI/CD, segurança e testes.",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_pizzaexpress",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000"
+      },
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "Auth",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_auth_login",
+      "parentId": "fld_auth",
+      "modified": 0,
+      "created": 0,
+      "name": "Login (obter JWT)",
+      "url": "{{ base_url }}/auth/login",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"joao@email.com\",\n  \"password\": \"123456\"\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_register",
+      "parentId": "fld_auth",
+      "modified": 0,
+      "created": 0,
+      "name": "Registrar novo cliente",
+      "url": "{{ base_url }}/auth/register",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"João\",\n  \"email\": \"joao@email.com\",\n  \"password\": \"123456\",\n  \"telefone\": \"11999999999\",\n  \"endereco\": \"Rua das Flores, 123\"\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "fld_pizzas",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "Pizzas",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_pizzas_get",
+      "parentId": "fld_pizzas",
+      "modified": 0,
+      "created": 0,
+      "name": "Listar Pizzas",
+      "url": "{{ base_url }}/pizzas",
+      "method": "GET",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pizzas_post",
+      "parentId": "fld_pizzas",
+      "modified": 0,
+      "created": 0,
+      "name": "Criar Pizza",
+      "url": "{{ base_url }}/pizzas",
+      "method": "POST",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Quatro Queijos\",\n  \"descricao\": \"Mussarela, parmesão, provolone, gorgonzola\",\n  \"preco\": 49.9\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "fld_clientes",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "Clientes",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_clientes_get",
+      "parentId": "fld_clientes",
+      "modified": 0,
+      "created": 0,
+      "name": "Listar Clientes",
+      "url": "{{ base_url }}/clientes",
+      "method": "GET",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "_type": "request"
+    },
+    {
+      "_id": "req_clientes_patch",
+      "parentId": "fld_clientes",
+      "modified": 0,
+      "created": 0,
+      "name": "Atualizar Cliente",
+      "url": "{{ base_url }}/clientes/1",
+      "method": "PATCH",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Novo Nome\"\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "req_clientes_delete",
+      "parentId": "fld_clientes",
+      "modified": 0,
+      "created": 0,
+      "name": "Deletar Cliente",
+      "url": "{{ base_url }}/clientes/1",
+      "method": "DELETE",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "_type": "request"
+    },
+    {
+      "_id": "fld_entregadores",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "Entregadores",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_entregadores_get",
+      "parentId": "fld_entregadores",
+      "modified": 0,
+      "created": 0,
+      "name": "Listar Entregadores",
+      "url": "{{ base_url }}/entregadores",
+      "method": "GET",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "_type": "request"
+    },
+    {
+      "_id": "req_entregadores_patch",
+      "parentId": "fld_entregadores",
+      "modified": 0,
+      "created": 0,
+      "name": "Atualizar Entregador",
+      "url": "{{ base_url }}/entregadores/1",
+      "method": "PATCH",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Novo Nome Entregador\"\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "req_entregadores_delete",
+      "parentId": "fld_entregadores",
+      "modified": 0,
+      "created": 0,
+      "name": "Deletar Entregador",
+      "url": "{{ base_url }}/entregadores/1",
+      "method": "DELETE",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "_type": "request"
+    },
+    {
+      "_id": "fld_pedidos",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "Pedidos",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_pedidos_get",
+      "parentId": "fld_pedidos",
+      "modified": 0,
+      "created": 0,
+      "name": "Listar Pedidos",
+      "url": "{{ base_url }}/pedidos",
+      "method": "GET",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pedidos_patch",
+      "parentId": "fld_pedidos",
+      "modified": 0,
+      "created": 0,
+      "name": "Atualizar Pedido",
+      "url": "{{ base_url }}/pedidos/1",
+      "method": "PATCH",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"enderecoEntrega\": \"Novo Endereço\"\n}"
+      },
+      "_type": "request"
+    },
+    {
+      "_id": "req_pedidos_delete",
+      "parentId": "fld_pedidos",
+      "modified": 0,
+      "created": 0,
+      "name": "Deletar Pedido",
+      "url": "{{ base_url }}/pedidos/1",
+      "method": "DELETE",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "_type": "request"
+    }
+  ]
+}

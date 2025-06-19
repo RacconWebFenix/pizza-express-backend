@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Rastreamento em tempo real - Pizza Express</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+      #map {
+        height: 400px;
+        width: 100%;
+      }
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      .controls {
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Rastreamento em tempo real (WebSocket + OpenStreetMap)</h2>
+    <div class="controls">
+      <label
+        >ID do Entregador: <input type="number" id="entregadorId" value="1"
+      /></label>
+      <label
+        >Latitude:
+        <input type="number" id="latitude" step="0.0001" value="-23.55052"
+      /></label>
+      <label
+        >Longitude:
+        <input type="number" id="longitude" step="0.0001" value="-46.633308"
+      /></label>
+      <button onclick="enviarLocalizacao()">Enviar Localização</button>
+    </div>
+    <div id="map"></div>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      // Inicializa o mapa
+      const map = L.map('map').setView([-23.55052, -46.633308], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+      }).addTo(map);
+
+      // Marker do entregador
+      let marker = null;
+
+      // Conecta ao WebSocket
+      const socket = io('http://localhost:3000/entregadores-localizacao');
+
+      // Recebe atualizações de localização
+      socket.on('locationUpdated', (data) => {
+        if (!marker) {
+          marker = L.marker([data.latitude, data.longitude]).addTo(map);
+        } else {
+          marker.setLatLng([data.latitude, data.longitude]);
+        }
+        map.setView([data.latitude, data.longitude], 15);
+      });
+
+      // Envia localização manualmente
+      function enviarLocalizacao() {
+        const entregadorId = Number(
+          document.getElementById('entregadorId').value,
+        );
+        const latitude = Number(document.getElementById('latitude').value);
+        const longitude = Number(document.getElementById('longitude').value);
+        socket.emit('updateLocation', { entregadorId, latitude, longitude });
+      }
+    </script>
+  </body>
+</html>
