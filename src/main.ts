@@ -29,7 +29,14 @@ async function bootstrap() {
     )
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('docs', app, document, {
+    customCssUrl:
+      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.8/swagger-ui.css',
+    customJs: [
+      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.8/swagger-ui-bundle.js',
+      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.8/swagger-ui-standalone-preset.js',
+    ],
+  });
 
   // Habilita CORS para qualquer origem (ajuste para produção se necessário)
   app.enableCors({
