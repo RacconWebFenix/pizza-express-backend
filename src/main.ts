@@ -44,6 +44,15 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Adiciona header CSP para Swagger funcionar em produção
+  app.use('/docs', (req: any, res: any, next: any) => {
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self' https://cdn.jsdelivr.net; object-src 'none';",
+    );
+    next();
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();
