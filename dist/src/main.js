@@ -20,6 +20,7 @@ async function bootstrap() {
             .setDescription('Documentação completa da API Pizza Express com autenticação JWT.')
             .setVersion('1.0')
             .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT')
+            .addTag('Auth', 'Endpoints relacionados à autenticação')
             .build();
         const document = swagger_1.SwaggerModule.createDocument(app, config);
         swagger_1.SwaggerModule.setup('docs', app, document, {
@@ -35,10 +36,11 @@ async function bootstrap() {
         });
     }
     app.enableCors({
-        origin: true,
+        origin: '*',
+        methods: ['GET', 'POST', 'PATCH', 'DELETE'],
         credentials: true,
     });
-    await app.listen(process.env.PORT ?? 3000);
+    await app.listen(process.env.PORT ?? 3005);
 }
 void bootstrap();
 //# sourceMappingURL=main.js.map

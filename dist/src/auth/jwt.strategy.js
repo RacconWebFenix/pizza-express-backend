@@ -22,6 +22,10 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
         });
     }
     validate(payload) {
+        console.log('Token recebido no validate:', payload);
+        if (!payload.sub || !payload.email) {
+            throw new Error('Token inválido: payload incompleto');
+        }
         return { userId: payload.sub, email: payload.email };
     }
 };

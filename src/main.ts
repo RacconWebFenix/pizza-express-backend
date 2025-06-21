@@ -29,6 +29,7 @@ async function bootstrap() {
         { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
         'JWT',
       )
+      .addTag('Auth', 'Endpoints relacionados à autenticação')
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document, {
@@ -58,6 +59,6 @@ async function bootstrap() {
     credentials: true,
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT ?? 3005);
 }
 void bootstrap();

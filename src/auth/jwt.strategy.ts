@@ -18,6 +18,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtPayload) {
+    if (!payload.sub || !payload.email) {
+      throw new Error('Token inválido: payload incompleto');
+    }
     return { userId: payload.sub, email: payload.email };
   }
 }

@@ -11,6 +11,8 @@ const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
     canActivate(context) {
+        const request = context.switchToHttp().getRequest();
+        console.log('Token recebido no JwtAuthGuard:', request.headers.authorization);
         return super.canActivate(context);
     }
 };
