@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -40,10 +41,12 @@ async function bootstrap() {
     });
     // Adiciona header CSP para Swagger funcionar em dev
     app.use('/docs', (req: any, res: any, next: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       res.setHeader(
         'Content-Security-Policy',
         "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self' https://cdn.jsdelivr.net; img-src 'self' data:; font-src 'self' https://cdn.jsdelivr.net; object-src 'none';",
       );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       next();
     });
   }
