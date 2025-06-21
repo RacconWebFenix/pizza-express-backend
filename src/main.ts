@@ -50,7 +50,8 @@ async function bootstrap() {
 
   // Habilita CORS para qualquer origem (ajuste para produção se necessário)
   app.enableCors({
-    origin: true,
+    origin: '*', // Permite qualquer origem
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     credentials: true,
   });
 

@@ -30,6 +30,13 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], EntregadoresLocationGateway.prototype, "handleLocationUpdate", null);
 exports.EntregadoresLocationGateway = EntregadoresLocationGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ namespace: '/entregadores-localizacao', cors: true })
+    (0, websockets_1.WebSocketGateway)({
+        namespace: '/entregadores-localizacao',
+        cors: {
+            origin: '*',
+            methods: ['GET', 'POST'],
+            credentials: true,
+        },
+    })
 ], EntregadoresLocationGateway);
 //# sourceMappingURL=entregadores-location.gateway.js.map

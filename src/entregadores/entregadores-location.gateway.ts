@@ -11,7 +11,14 @@ interface LocationUpdate {
   longitude: number;
 }
 
-@WebSocketGateway({ namespace: '/entregadores-localizacao', cors: true })
+@WebSocketGateway({
+  namespace: '/entregadores-localizacao',
+  cors: {
+    origin: '*', // Permite qualquer origem
+    methods: ['GET', 'POST'],
+    credentials: true,
+  },
+})
 export class EntregadoresLocationGateway {
   @WebSocketServer()
   server!: Server;
