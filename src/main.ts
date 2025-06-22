@@ -4,8 +4,14 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
+import * as fs from 'fs';
+import * as path from 'path';
 
 async function bootstrap() {
+  // Verifica se é uma chamada para gerar documentação do Swagger
+  const isSwaggerGeneration = process.argv.includes('--generate-swagger');
+  
+  try {
   const app = await NestFactory.create(AppModule, { cors: true });
 
   // Configurar o Helmet com exceção para o Swagger
@@ -39,6 +45,23 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+
+  // Se for modo de geração de documentação, salva o arquivo e encerra
+  if (isSwaggerGeneration) {
+    // Certifica-se de que o diretório existe
+    if (!fs.existsSync('swagger')) {
+      fs.mkdirSync('swagger', { recursive: true });
+    }
+    
+    // Salva a documentação do Swagger como JSON
+    fs.writeFileSync(
+      path.join('swagger', 'swagger.json'),
+      JSON.stringify(document, null, 2),
+    );
+    
+    console.log('✅ Documentação Swagger gerada com sucesso!');
+    process.exit(0);
+  }
 
   // Configuração mais simples do Swagger com opções diretas
   SwaggerModule.setup('docs', app, document, {
@@ -74,5 +97,14 @@ async function bootstrap() {
   });
 
   await app.listen(process.env.PORT ?? 3005);
+  } catch (error) {
+    console.error('Erro durante inicialização da aplicação:', error);
+    // Se estamos gerando swagger, devemos falhar explicitamente
+    if (isSwaggerGeneration) {
+      console.error('Erro na geração da documentação Swagger');
+      process.exit(1);
+    }
+    throw error;
+  }
 }
 void bootstrap();

@@ -9,6 +9,22 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Adicionar serviços necessários (PostgreSQL)
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        # Verificar saúde do PostgreSQL
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node.js
@@ -21,11 +37,40 @@ jobs:
         run: npx eslint src
       - name: Run tests
         run: npm test
+      - name: Instala pacotes específicos para CI
+        run: |
+          # Instala o cliente PostgreSQL para verificação
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+          
+      - name: Prepara ambiente de banco para geração do Swagger
+        run: |
+          # Cria arquivo .env para o CI com DATABASE_URL
+          echo "DATABASE_URL=postgresql://test:test@localhost:5432/testdb?schema=public" > .env
+          echo "JWT_SECRET=jwt-secret-para-ci-nao-usar-em-producao" >> .env
+          
+          # Verifica conexão ao PostgreSQL
+          PGPASSWORD=test psql -h localhost -p 5432 -U test -d testdb -c "SELECT 1" || echo "Erro ao conectar ao PostgreSQL"
+          
+          # Gera o Prisma Client
+          npx prisma generate
+          
+          # Executa migrations para preparar o banco de dados
+          npx prisma migrate deploy
+          
+          # Executa seed para ter dados de exemplo
+          npx prisma db seed || echo "Erro no seed - continuando mesmo assim"
+          
       - name: Gera documentação Swagger
         run: |
-          npx nest build
+          # Cria diretório para documentação
           mkdir -p swagger
-          npx ts-node -r tsconfig-paths/register src/main.ts --generate-swagger
+          
+          # Compila o projeto
+          npx nest build
+          
+          # Gera documentação Swagger em modo mock (desconectado do banco de dados real)
+          NODE_ENV=test DATABASE_URL="postgresql://test:test@localhost:5432/testdb?schema=public" npx ts-node -r tsconfig-paths/register src/main.ts --generate-swagger
       - name: Upload Swagger como artefato
         uses: actions/upload-artifact@v4
         with:
