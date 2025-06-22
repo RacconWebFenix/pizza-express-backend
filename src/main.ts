@@ -72,6 +72,7 @@ async function bootstrap() {
       res.removeHeader('X-Content-Security-Policy');
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('Content-Type', 'application/json');
       next();
     });
 
