@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -10,6 +9,7 @@ import { Request, Response, NextFunction } from 'express';
 
 async function bootstrap() {
   const isSwaggerGeneration = process.argv.includes('--generate-swagger');
+  const isDevelopment = process.env.NODE_ENV === 'development';
 
   try {
     const app = await NestFactory.create(AppModule, { cors: true });
@@ -30,51 +30,53 @@ async function bootstrap() {
       }),
     );
 
-    const config = new DocumentBuilder()
-      .setTitle('Pizza Express API')
-      .setDescription(
-        'Documentação completa da API Pizza Express com autenticação JWT.',
-      )
-      .addBearerAuth(
-        { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-        'JWT',
-      )
-      .addTag('Auth', 'Endpoints relacionados à autenticação')
-      .build();
+    if (isDevelopment || isSwaggerGeneration) {
+      const config = new DocumentBuilder()
+        .setTitle('Pizza Express API')
+        .setDescription(
+          'Documentação completa da API Pizza Express com autenticação JWT.',
+        )
+        .addBearerAuth(
+          { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+          'JWT',
+        )
+        .addTag('Auth', 'Endpoints relacionados à autenticação')
+        .build();
 
-    const document = SwaggerModule.createDocument(app, config);
+      const document = SwaggerModule.createDocument(app, config);
 
-    if (isSwaggerGeneration) {
-      if (!fs.existsSync('swagger')) {
-        fs.mkdirSync('swagger', { recursive: true });
+      if (isSwaggerGeneration) {
+        if (!fs.existsSync('swagger')) {
+          fs.mkdirSync('swagger', { recursive: true });
+        }
+
+        fs.writeFileSync(
+          path.join('swagger', 'swagger.json'),
+          JSON.stringify(document, null, 2),
+        );
+
+        console.log('✅ Documentação Swagger gerada com sucesso!');
+        process.exit(0);
       }
 
-      fs.writeFileSync(
-        path.join('swagger', 'swagger.json'),
-        JSON.stringify(document, null, 2),
-      );
+      SwaggerModule.setup('docs', app, document, {
+        swaggerOptions: {
+          persistAuthorization: true,
+          docExpansion: 'list',
+          filter: true,
+          displayRequestDuration: true,
+        },
+      });
 
-      console.log('✅ Documentação Swagger gerada com sucesso!');
-      process.exit(0);
+      app.use('/docs', (req: Request, res: Response, next: NextFunction) => {
+        res.removeHeader('Content-Security-Policy');
+        res.removeHeader('X-Content-Security-Policy');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.setHeader('Content-Type', 'application/json');
+        next();
+      });
     }
-
-    SwaggerModule.setup('docs', app, document, {
-      swaggerOptions: {
-        persistAuthorization: true,
-        docExpansion: 'list',
-        filter: true,
-        displayRequestDuration: true,
-      },
-    });
-
-    app.use('/docs', (req: Request, res: Response, next: NextFunction) => {
-      res.removeHeader('Content-Security-Policy');
-      res.removeHeader('X-Content-Security-Policy');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('X-Content-Type-Options', 'nosniff');
-      res.setHeader('Content-Type', 'application/json');
-      next();
-    });
 
     app.enableCors({
       origin: '*',
