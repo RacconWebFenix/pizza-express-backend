@@ -4,16 +4,20 @@
     { "src": "src/main.ts", "use": "@vercel/node" }
   ],
   "routes": [
+    { 
+      "src": "/docs/(.*)", 
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "application/json; charset=utf-8"
+      },
+      "dest": "/src/main.ts"
+    },
     { "src": "/(.*)", "dest": "/src/main.ts" }
   ],
   "headers": [
     {
       "source": "/docs/(.*)",
       "headers": [
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self' *; img-src 'self' data:; font-src 'self' https://cdn.jsdelivr.net; object-src 'none';"
-        },
         {
           "key": "Access-Control-Allow-Origin",
           "value": "*"
@@ -25,6 +29,10 @@
         {
           "key": "Access-Control-Allow-Headers",
           "value": "X-Requested-With, Content-Type, Authorization"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
         }
       ]
     },

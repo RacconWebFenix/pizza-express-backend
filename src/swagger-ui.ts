@@ -1,17 +1,20 @@
 export const swaggerUiConfig = {
   customSiteTitle: 'Pizza Express API Documentation',
+  explorer: true,
   swaggerOptions: {
     persistAuthorization: true,
     tryItOutEnabled: true,
     displayRequestDuration: true,
     filter: true,
     deepLinking: true,
+    docExpansion: 'list',
+    syntaxHighlight: {
+      theme: 'monokai',
+    },
+    defaultModelsExpandDepth: 1,
+    defaultModelExpandDepth: 1,
   },
-  customfavIcon: 'https://www.pizza-express-backend.vercel.app/favicon.ico',
-  customCss: `
-    .swagger-ui .topbar { display: none !important; }
-    .swagger-ui .info { margin-top: 20px; }
-    .swagger-ui .scheme-container { box-shadow: none; }
-    .swagger-ui .auth-wrapper { display: flex; justify-content: flex-end; }
-  `,
+  // Remova o customfavIcon que pode estar causando problemas
+  // Usar CSS simplificado para evitar problemas
+  customCss: '.swagger-ui .topbar { display: none }',
 };

@@ -4,12 +4,18 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
-import { swaggerUiConfig } from './swagger-ui';
-import { setupSwaggerMiddlewares } from './swagger-middleware';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.use(helmet());
+  const app = await NestFactory.create(AppModule, { cors: true });
+
+  // Configurar o Helmet com exceção para o Swagger
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      crossOriginEmbedderPolicy: false,
+    }),
+  );
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -19,7 +25,6 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger config (ativado em todos os ambientes)
   const config = new DocumentBuilder()
     .setTitle('Pizza Express API')
     .setDescription(
@@ -32,34 +37,39 @@ async function bootstrap() {
     )
     .addTag('Auth', 'Endpoints relacionados à autenticação')
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
+
+  // Configuração mais simples do Swagger com opções diretas
   SwaggerModule.setup('docs', app, document, {
-    customCssUrl:
-      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.8/swagger-ui.css',
-    customJs: [
-      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.8/swagger-ui-bundle.js',
-      'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.8/swagger-ui-standalone-preset.js',
-    ],
-    ...swaggerUiConfig,
+    swaggerOptions: {
+      persistAuthorization: true,
+      docExpansion: 'list',
+      filter: true,
+      displayRequestDuration: true,
+    },
   });
-  // Adiciona header CSP para Swagger funcionar em todos ambientes
+  // Middleware específico para a rota de documentação
   app.use('/docs', (req: any, res: any, next: any) => {
+    // Remover headers restritivos de segurança que podem bloquear recursos do Swagger
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    res.setHeader(
-      'Content-Security-Policy',
-      "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; connect-src 'self' *; img-src 'self' data:; font-src 'self' https://cdn.jsdelivr.net; object-src 'none';",
-    );
+    res.removeHeader('Content-Security-Policy');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    res.removeHeader('X-Content-Security-Policy');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    res.setHeader('X-Content-Type-Options', 'nosniff');
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     next();
   });
 
-  // Configura middlewares personalizados para servir arquivos Swagger com MIME types corretos
-  setupSwaggerMiddlewares(app);
-
-  // Habilita CORS para qualquer origem (ajuste para produção se necessário)
+  // Habilita CORS para qualquer origem
   app.enableCors({
-    origin: '*', // Permite qualquer origem
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['Authorization'],
     credentials: true,
   });
 
