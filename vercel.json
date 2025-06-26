@@ -3,12 +3,16 @@
   "builds": [
     { "src": "src/main.ts", "use": "@vercel/node" }
   ],
-  "rewrites": [
+  "routes": [
     { 
-      "source": "/docs/(.*)", 
-      "destination": "/src/docs/$1"
+      "src": "/docs/(.*)", 
+      "headers": {
+        "cache-control": "public, max-age=0, must-revalidate",
+        "content-type": "application/json; charset=utf-8"
+      },
+      "dest": "/src/main.ts"
     },
-    { "source": "/(.*)", "destination": "/src/main.ts" }
+    { "src": "/(.*)", "dest": "/src/main.ts" }
   ],
   "headers": [
     {
@@ -29,10 +33,6 @@
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
-        },
-        {
-          "key": "Content-Type",
-          "value": "application/json"
         }
       ]
     },
