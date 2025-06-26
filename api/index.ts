@@ -53,7 +53,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const nestApp = await createNestApp();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const server = nestApp.getHttpAdapter().getInstance();
-  
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   return new Promise((resolve) => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call

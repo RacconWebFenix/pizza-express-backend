@@ -8,44 +8,44 @@ export declare class PizzasController {
         statusCode: number;
         message: string;
         data: {
-            id: number;
             nome: string;
-            createdAt: Date;
-            updatedAt: Date;
             descricao: string | null;
             preco: number;
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
         };
     }>;
     findAll(): Promise<{
-        id: number;
         nome: string;
-        createdAt: Date;
-        updatedAt: Date;
         descricao: string | null;
         preco: number;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
     }[]>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__PizzaClient<{
-        id: number;
         nome: string;
-        createdAt: Date;
-        updatedAt: Date;
         descricao: string | null;
         preco: number;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, updatePizzaDto: UpdatePizzaDto): import(".prisma/client").Prisma.Prisma__PizzaClient<{
-        id: number;
         nome: string;
-        createdAt: Date;
-        updatedAt: Date;
         descricao: string | null;
         preco: number;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__PizzaClient<{
-        id: number;
         nome: string;
-        createdAt: Date;
-        updatedAt: Date;
         descricao: string | null;
         preco: number;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
 }

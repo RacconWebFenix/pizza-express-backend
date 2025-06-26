@@ -10,13 +10,13 @@ export declare class AuthController {
         access_token: string;
     }>;
     register(createClienteDto: CreateClienteDto): Promise<{
-        id: number;
         nome: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         password: string;
         telefone: string | null;
         endereco: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
 }

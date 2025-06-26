@@ -8,39 +8,39 @@ export declare class EntregadoresController {
         statusCode: number;
         message: string;
         data: {
-            id: number;
             nome: string;
-            telefone: string | null;
+            id: number;
             createdAt: Date;
             updatedAt: Date;
+            telefone: string | null;
         };
     }>;
     findAll(): Promise<{
-        id: number;
         nome: string;
-        telefone: string | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        telefone: string | null;
     }[]>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__EntregadorClient<{
-        id: number;
         nome: string;
-        telefone: string | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        telefone: string | null;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, updateEntregadoreDto: UpdateEntregadoreDto): import(".prisma/client").Prisma.Prisma__EntregadorClient<{
-        id: number;
         nome: string;
-        telefone: string | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        telefone: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__EntregadorClient<{
-        id: number;
         nome: string;
-        telefone: string | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        telefone: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
 }
