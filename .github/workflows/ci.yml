@@ -9,25 +9,70 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: pizza_express_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
     steps:
       - uses: actions/checkout@v4
+      
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
+      
       - name: Install dependencies
         run: npm ci
+      
+      - name: Create .env file
+        run: |
+          echo "DATABASE_URL=postgresql://test:test@localhost:5432/pizza_express_test" > .env
+          echo "JWT_SECRET=test-secret-key" >> .env
+          echo "NODE_ENV=test" >> .env
+      
+      - name: Generate Prisma Client
+        run: npx prisma generate
+      
+      - name: Run database migrations
+        run: npx prisma migrate deploy
+        
+      - name: Seed database
+        run: npx prisma db seed
+        continue-on-error: true
+      
       - name: Run linter
-        run: npx eslint src
+        run: npm run lint
+      
       - name: Run tests
         run: npm test
-      - name: Gera documentação Swagger
+        env:
+          NODE_ENV: test
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Generate OpenAPI documentation
         run: |
-          npx nest build
-          mkdir -p swagger
-          npx ts-node -r tsconfig-paths/register src/main.ts --generate-swagger
-      - name: Upload Swagger como artefato
+          NODE_ENV=development node dist/main.js --generate-swagger
+        env:
+          NODE_ENV: development
+      
+      - name: Upload OpenAPI documentation
         uses: actions/upload-artifact@v4
         with:
-          name: swagger-doc
+          name: openapi-docs
           path: swagger/
+          retention-days: 30
