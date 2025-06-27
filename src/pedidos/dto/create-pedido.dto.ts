@@ -1,20 +1,26 @@
 import {
+  IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsArray,
   IsString,
-  IsOptional,
-  ArrayNotEmpty,
 } from 'class-validator';
 
 export class CreatePedidoDto {
+  @IsNotEmpty()
   @IsNumber()
   clienteId: number;
 
+  @IsNotEmpty()
   @IsArray()
-  @ArrayNotEmpty()
   @IsNumber({}, { each: true })
   pizzasIds: number[];
 
+  @IsOptional()
+  @IsString()
+  observacoes?: string;
+
+  @IsNotEmpty()
   @IsString()
   status: string;
 

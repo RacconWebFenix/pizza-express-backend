@@ -20,29 +20,30 @@ export declare class PedidosController {
     }>;
     findAll(): Promise<({
         cliente: {
-            nome: string;
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
+            nome: string;
             email: string;
             password: string;
             telefone: string | null;
             endereco: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
         entregador: {
-            nome: string;
             id: number;
+            nome: string;
+            telefone: string | null;
             createdAt: Date;
             updatedAt: Date;
-            telefone: string | null;
         } | null;
         pizzas: {
-            nome: string;
-            descricao: string | null;
-            preco: number;
             id: number;
+            nome: string;
             createdAt: Date;
             updatedAt: Date;
+            descricao: string | null;
+            preco: number;
+            imagemUrl: string | null;
         }[];
     } & {
         id: number;
@@ -54,31 +55,32 @@ export declare class PedidosController {
         criadoEm: Date;
         atualizadoEm: Date;
     })[]>;
-    findOne(id: string): import(".prisma/client").Prisma.Prisma__PedidoClient<({
+    findOne(id: string): Promise<{
         cliente: {
-            nome: string;
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
+            nome: string;
             email: string;
             password: string;
             telefone: string | null;
             endereco: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
         entregador: {
-            nome: string;
             id: number;
+            nome: string;
+            telefone: string | null;
             createdAt: Date;
             updatedAt: Date;
-            telefone: string | null;
         } | null;
         pizzas: {
-            nome: string;
-            descricao: string | null;
-            preco: number;
             id: number;
+            nome: string;
             createdAt: Date;
             updatedAt: Date;
+            descricao: string | null;
+            preco: number;
+            imagemUrl: string | null;
         }[];
     } & {
         id: number;
@@ -89,25 +91,23 @@ export declare class PedidosController {
         longitude: number | null;
         criadoEm: Date;
         atualizadoEm: Date;
-    }) | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    update(id: string, updatePedidoDto: UpdatePedidoDto): Promise<{
-        id: number;
-        clienteId: number;
-        status: string;
-        entregadorId: number | null;
-        latitude: number | null;
-        longitude: number | null;
-        criadoEm: Date;
-        atualizadoEm: Date;
     }>;
-    remove(id: string): import(".prisma/client").Prisma.Prisma__PedidoClient<{
-        id: number;
-        clienteId: number;
-        status: string;
-        entregadorId: number | null;
-        latitude: number | null;
-        longitude: number | null;
-        criadoEm: Date;
-        atualizadoEm: Date;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+    update(id: string, updatePedidoDto: UpdatePedidoDto): Promise<{
+        statusCode: number;
+        message: string;
+        data: {
+            id: number;
+            clienteId: number;
+            status: string;
+            entregadorId: number | null;
+            latitude: number | null;
+            longitude: number | null;
+            criadoEm: Date;
+            atualizadoEm: Date;
+        };
+    }>;
+    remove(id: string): Promise<{
+        statusCode: number;
+        message: string;
+    }>;
 }

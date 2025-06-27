@@ -16,29 +16,30 @@ export declare class PedidosService {
     }>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<({
         cliente: {
-            nome: string;
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
+            nome: string;
             email: string;
             password: string;
             telefone: string | null;
             endereco: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
         entregador: {
-            nome: string;
             id: number;
+            nome: string;
+            telefone: string | null;
             createdAt: Date;
             updatedAt: Date;
-            telefone: string | null;
         } | null;
         pizzas: {
-            nome: string;
-            descricao: string | null;
-            preco: number;
             id: number;
+            nome: string;
             createdAt: Date;
             updatedAt: Date;
+            descricao: string | null;
+            preco: number;
+            imagemUrl: string | null;
         }[];
     } & {
         id: number;
@@ -52,29 +53,30 @@ export declare class PedidosService {
     })[]>;
     findOne(id: number): import(".prisma/client").Prisma.Prisma__PedidoClient<({
         cliente: {
-            nome: string;
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
+            nome: string;
             email: string;
             password: string;
             telefone: string | null;
             endereco: string;
+            createdAt: Date;
+            updatedAt: Date;
         };
         entregador: {
-            nome: string;
             id: number;
+            nome: string;
+            telefone: string | null;
             createdAt: Date;
             updatedAt: Date;
-            telefone: string | null;
         } | null;
         pizzas: {
-            nome: string;
-            descricao: string | null;
-            preco: number;
             id: number;
+            nome: string;
             createdAt: Date;
             updatedAt: Date;
+            descricao: string | null;
+            preco: number;
+            imagemUrl: string | null;
         }[];
     } & {
         id: number;

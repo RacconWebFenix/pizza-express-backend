@@ -18,7 +18,6 @@ const entregadores_service_1 = require("./entregadores.service");
 const create_entregadore_dto_1 = require("./dto/create-entregadore.dto");
 const update_entregadore_dto_1 = require("./dto/update-entregadore.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
-const swagger_1 = require("@nestjs/swagger");
 let EntregadoresController = class EntregadoresController {
     entregadoresService;
     constructor(entregadoresService) {
@@ -26,82 +25,78 @@ let EntregadoresController = class EntregadoresController {
     }
     async create(createEntregadoreDto) {
         try {
-            const entregadore = await this.entregadoresService.create(createEntregadoreDto);
+            const entregador = await this.entregadoresService.create(createEntregadoreDto);
             return {
                 statusCode: 201,
                 message: 'Entregador criado com sucesso',
-                data: entregadore,
+                data: entregador,
             };
         }
         catch (error) {
             if (error instanceof common_1.HttpException) {
                 throw error;
             }
-            let message = 'Erro ao criar entregador';
-            if (typeof error === 'object' &&
-                error &&
-                'message' in error &&
-                typeof error.message === 'string') {
-                message = String(error.message);
-            }
-            throw new common_1.HttpException({
-                statusCode: common_1.HttpStatus.BAD_REQUEST,
-                message,
-            }, common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async findAll() {
-        return this.entregadoresService.findAll();
+        try {
+            return await this.entregadoresService.findAll();
+        }
+        catch (error) {
+            throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    findOne(id) {
-        return this.entregadoresService.findOne(+id);
+    async findOne(id) {
+        try {
+            const entregador = await this.entregadoresService.findOne(+id);
+            if (!entregador) {
+                throw new common_1.HttpException('Entregador não encontrado', common_1.HttpStatus.NOT_FOUND);
+            }
+            return entregador;
+        }
+        catch (error) {
+            if (error instanceof common_1.HttpException) {
+                throw error;
+            }
+            throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    update(id, updateEntregadoreDto) {
-        return this.entregadoresService.update(+id, updateEntregadoreDto);
+    async update(id, updateEntregadoreDto) {
+        try {
+            const entregador = await this.entregadoresService.update(+id, updateEntregadoreDto);
+            return {
+                statusCode: 200,
+                message: 'Entregador atualizado com sucesso',
+                data: entregador,
+            };
+        }
+        catch (error) {
+            if (error.code === 'P2025') {
+                throw new common_1.HttpException('Entregador não encontrado', common_1.HttpStatus.NOT_FOUND);
+            }
+            throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
-    remove(id) {
-        return this.entregadoresService.remove(+id);
+    async remove(id) {
+        try {
+            await this.entregadoresService.remove(+id);
+            return {
+                statusCode: 200,
+                message: 'Entregador removido com sucesso',
+            };
+        }
+        catch (error) {
+            if (error.code === 'P2025') {
+                throw new common_1.HttpException('Entregador não encontrado', common_1.HttpStatus.NOT_FOUND);
+            }
+            throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 };
 exports.EntregadoresController = EntregadoresController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Registrar novo entregador' }),
-    (0, swagger_1.ApiBody)({
-        schema: {
-            example: {
-                nome: 'Maria Entregadora',
-                email: 'maria@mail.com',
-                senha: '123456',
-                telefone: '11988888888',
-                endereco: 'Rua das Oliveiras, 456',
-            },
-        },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 201,
-        description: 'Entregador registrado com sucesso',
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 400,
-        description: 'Erro de validação ou conflito',
-        schema: {
-            example: {
-                statusCode: 400,
-                message: 'Email já cadastrado',
-            },
-        },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 401,
-        description: 'Não autorizado',
-        schema: {
-            example: {
-                statusCode: 401,
-                message: 'Token JWT inválido ou ausente',
-            },
-        },
-    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_entregadore_dto_1.CreateEntregadoreDto]),
@@ -109,133 +104,33 @@ __decorate([
 ], EntregadoresController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Listar entregadores' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista de entregadores' }),
-    (0, swagger_1.ApiResponse)({
-        status: 401,
-        description: 'Não autorizado',
-        schema: {
-            example: {
-                statusCode: 401,
-                message: 'Token JWT inválido ou ausente',
-            },
-        },
-    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], EntregadoresController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Buscar entregador por ID' }),
-    (0, swagger_1.ApiParam)({ name: 'id', type: Number }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Entregador encontrado' }),
-    (0, swagger_1.ApiResponse)({
-        status: 404,
-        description: 'Entregador não encontrado',
-        schema: {
-            example: {
-                statusCode: 404,
-                message: 'Entregador não encontrado',
-            },
-        },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 401,
-        description: 'Não autorizado',
-        schema: {
-            example: {
-                statusCode: 401,
-                message: 'Token JWT inválido ou ausente',
-            },
-        },
-    }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], EntregadoresController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar entregador por ID' }),
-    (0, swagger_1.ApiParam)({ name: 'id', type: Number }),
-    (0, swagger_1.ApiBody)({
-        schema: {
-            example: {
-                nome: 'Novo Nome Entregador',
-            },
-        },
-    }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Entregador atualizado' }),
-    (0, swagger_1.ApiResponse)({
-        status: 404,
-        description: 'Entregador não encontrado',
-        schema: {
-            example: {
-                statusCode: 404,
-                message: 'Entregador não encontrado',
-            },
-        },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 400,
-        description: 'Erro de validação',
-        schema: {
-            example: {
-                statusCode: 400,
-                message: 'Dados inválidos',
-            },
-        },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 401,
-        description: 'Não autorizado',
-        schema: {
-            example: {
-                statusCode: 401,
-                message: 'Token JWT inválido ou ausente',
-            },
-        },
-    }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, update_entregadore_dto_1.UpdateEntregadoreDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], EntregadoresController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Remover entregador por ID' }),
-    (0, swagger_1.ApiParam)({ name: 'id', type: Number }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Entregador removido' }),
-    (0, swagger_1.ApiResponse)({
-        status: 404,
-        description: 'Entregador não encontrado',
-        schema: {
-            example: {
-                statusCode: 404,
-                message: 'Entregador não encontrado',
-            },
-        },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 401,
-        description: 'Não autorizado',
-        schema: {
-            example: {
-                statusCode: 401,
-                message: 'Token JWT inválido ou ausente',
-            },
-        },
-    }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], EntregadoresController.prototype, "remove", null);
 exports.EntregadoresController = EntregadoresController = __decorate([
-    (0, swagger_1.ApiTags)('Entregadores'),
-    (0, swagger_1.ApiBearerAuth)('JWT'),
     (0, common_1.Controller)('entregadores'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:paramtypes", [entregadores_service_1.EntregadoresService])

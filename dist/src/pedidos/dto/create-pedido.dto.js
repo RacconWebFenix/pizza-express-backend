@@ -14,21 +14,29 @@ const class_validator_1 = require("class-validator");
 class CreatePedidoDto {
     clienteId;
     pizzasIds;
+    observacoes;
     status;
     entregadorId;
 }
 exports.CreatePedidoDto = CreatePedidoDto;
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreatePedidoDto.prototype, "clienteId", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.ArrayNotEmpty)(),
     (0, class_validator_1.IsNumber)({}, { each: true }),
     __metadata("design:type", Array)
 ], CreatePedidoDto.prototype, "pizzasIds", void 0);
 __decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePedidoDto.prototype, "observacoes", void 0);
+__decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreatePedidoDto.prototype, "status", void 0);

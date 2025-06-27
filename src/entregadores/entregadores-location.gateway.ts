@@ -1,30 +1,26 @@
 import {
-  SubscribeMessage,
   WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 
-interface LocationUpdate {
-  entregadorId: number;
-  latitude: number;
-  longitude: number;
-}
-
-@WebSocketGateway({
-  namespace: '/entregadores-localizacao',
-  cors: {
-    origin: '*', // Permite qualquer origem
-    methods: ['GET', 'POST'],
-    credentials: true,
-  },
-})
+@WebSocketGateway({ cors: true })
 export class EntregadoresLocationGateway {
   @WebSocketServer()
-  server!: Server;
+  server: Server;
 
   @SubscribeMessage('updateLocation')
-  handleLocationUpdate(data: LocationUpdate): void {
-    this.server.emit('locationUpdated', data);
+  handleLocationUpdate(
+    @MessageBody()
+    data: {
+      entregadorId: number;
+      latitude: number;
+      longitude: number;
+    },
+  ): void {
+    // Broadcast da localização para todos os clientes conectados
+    this.server.emit('locationUpdate', data);
   }
 }

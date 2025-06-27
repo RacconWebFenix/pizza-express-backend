@@ -8,44 +8,48 @@ export declare class PizzasController {
         statusCode: number;
         message: string;
         data: {
-            nome: string;
-            descricao: string | null;
-            preco: number;
             id: number;
+            nome: string;
             createdAt: Date;
             updatedAt: Date;
+            descricao: string | null;
+            preco: number;
+            imagemUrl: string | null;
         };
     }>;
     findAll(): Promise<{
-        nome: string;
-        descricao: string | null;
-        preco: number;
         id: number;
+        nome: string;
         createdAt: Date;
         updatedAt: Date;
+        descricao: string | null;
+        preco: number;
+        imagemUrl: string | null;
     }[]>;
-    findOne(id: string): import(".prisma/client").Prisma.Prisma__PizzaClient<{
-        nome: string;
-        descricao: string | null;
-        preco: number;
+    findOne(id: string): Promise<{
         id: number;
+        nome: string;
         createdAt: Date;
         updatedAt: Date;
-    } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    update(id: string, updatePizzaDto: UpdatePizzaDto): import(".prisma/client").Prisma.Prisma__PizzaClient<{
-        nome: string;
         descricao: string | null;
         preco: number;
-        id: number;
-        createdAt: Date;
-        updatedAt: Date;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
-    remove(id: string): import(".prisma/client").Prisma.Prisma__PizzaClient<{
-        nome: string;
-        descricao: string | null;
-        preco: number;
-        id: number;
-        createdAt: Date;
-        updatedAt: Date;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
+        imagemUrl: string | null;
+    } | null>;
+    update(id: string, updatePizzaDto: UpdatePizzaDto): Promise<{
+        statusCode: number;
+        message: string;
+        data: {
+            id: number;
+            nome: string;
+            createdAt: Date;
+            updatedAt: Date;
+            descricao: string | null;
+            preco: number;
+            imagemUrl: string | null;
+        };
+    }>;
+    remove(id: string): Promise<{
+        statusCode: number;
+        message: string;
+    }>;
 }

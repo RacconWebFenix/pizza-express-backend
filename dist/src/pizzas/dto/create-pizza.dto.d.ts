@@ -1,5 +1,6 @@
 export declare class CreatePizzaDto {
     nome: string;
-    descricao?: string;
+    descricao: string;
     preco: number;
+    imagemUrl?: string;
 }

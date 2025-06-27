@@ -18,7 +18,6 @@ const clientes_service_1 = require("./clientes.service");
 const create_cliente_dto_1 = require("./dto/create-cliente.dto");
 const update_cliente_dto_1 = require("./dto/update-cliente.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
-const swagger_1 = require("@nestjs/swagger");
 let ClientesController = class ClientesController {
     clientesService;
     constructor(clientesService) {
@@ -27,88 +26,52 @@ let ClientesController = class ClientesController {
     async create(createClienteDto) {
         try {
             const cliente = await this.clientesService.create(createClienteDto);
-            return {
-                statusCode: 201,
-                message: 'Cliente criado com sucesso',
-                data: cliente,
-            };
+            return cliente;
         }
         catch (error) {
-            if (error instanceof common_1.HttpException) {
-                throw error;
+            if (error.code === 'P2002') {
+                throw new common_1.HttpException('Email já cadastrado', common_1.HttpStatus.CONFLICT);
             }
-            let message = 'Erro ao criar cliente';
-            if (typeof error === 'object' &&
-                error !== null &&
-                'message' in error &&
-                typeof error.message === 'string') {
-                message = String(error.message);
-            }
-            throw new common_1.HttpException({
-                statusCode: common_1.HttpStatus.BAD_REQUEST,
-                message,
-            }, common_1.HttpStatus.BAD_REQUEST);
+            throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     async findAll(email) {
         if (email) {
-            return await this.clientesService.findByEmail(email);
+            return this.clientesService.findByEmail(email);
         }
-        return await this.clientesService.findAll();
+        return this.clientesService.findAll();
     }
     async findOne(id) {
-        return await this.clientesService.findOne(+id);
+        return this.clientesService.findOne(+id);
     }
     async update(id, updateClienteDto) {
-        return await this.clientesService.update(+id, updateClienteDto);
+        try {
+            const cliente = await this.clientesService.update(+id, updateClienteDto);
+            return cliente;
+        }
+        catch (error) {
+            if (error.code === 'P2025') {
+                throw new common_1.HttpException('Cliente não encontrado', common_1.HttpStatus.NOT_FOUND);
+            }
+            throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     async remove(id) {
-        return await this.clientesService.remove(+id);
+        try {
+            await this.clientesService.remove(+id);
+            return { message: 'Cliente removido com sucesso' };
+        }
+        catch (error) {
+            if (error.code === 'P2025') {
+                throw new common_1.HttpException('Cliente não encontrado', common_1.HttpStatus.NOT_FOUND);
+            }
+            throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 };
 exports.ClientesController = ClientesController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Registrar novo cliente' }),
-    (0, swagger_1.ApiBody)({
-        schema: {
-            example: {
-                nome: 'João Silva',
-                email: 'joao@mail.com',
-                senha: '123456',
-                telefone: '11999999999',
-                endereco: 'Rua das Flores, 123',
-            },
-        },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 201,
-        description: 'Cliente registrado com sucesso',
-        schema: {
-            example: {
-                id: 1,
-                nome: 'João Silva',
-                email: 'joao@mail.com',
-                telefone: '11999999999',
-                endereco: 'Rua das Flores, 123',
-            },
-        },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 400,
-        description: 'Erro de validação',
-        schema: {
-            example: {
-                statusCode: 400,
-                message: [
-                    'email must be an email',
-                    'senha must be longer than or equal to 6 characters',
-                ],
-                error: 'Bad Request',
-            },
-        },
-    }),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_cliente_dto_1.CreateClienteDto]),
@@ -117,9 +80,6 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Listar clientes ou buscar por email' }),
-    (0, swagger_1.ApiQuery)({ name: 'email', required: false }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Lista de clientes' }),
     __param(0, (0, common_1.Query)('email')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -128,9 +88,6 @@ __decorate([
 __decorate([
     (0, common_1.Get)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Buscar cliente por ID' }),
-    (0, swagger_1.ApiParam)({ name: 'id', type: Number }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Cliente encontrado' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -139,25 +96,6 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Atualizar cliente por ID' }),
-    (0, swagger_1.ApiParam)({ name: 'id', type: Number }),
-    (0, swagger_1.ApiBody)({ schema: { example: { nome: 'Novo Nome' } } }),
-    (0, swagger_1.ApiResponse)({
-        status: 200,
-        description: 'Cliente atualizado',
-        schema: { example: { id: 1, nome: 'Novo Nome', email: 'joao@mail.com' } },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 404,
-        description: 'Cliente não encontrado',
-        schema: {
-            example: {
-                statusCode: 404,
-                message: 'Cliente não encontrado',
-                error: 'Not Found',
-            },
-        },
-    }),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -167,32 +105,12 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, swagger_1.ApiOperation)({ summary: 'Remover cliente por ID' }),
-    (0, swagger_1.ApiParam)({ name: 'id', type: Number }),
-    (0, swagger_1.ApiResponse)({
-        status: 200,
-        description: 'Cliente removido',
-        schema: { example: { id: 1, nome: 'João Silva', email: 'joao@mail.com' } },
-    }),
-    (0, swagger_1.ApiResponse)({
-        status: 404,
-        description: 'Cliente não encontrado',
-        schema: {
-            example: {
-                statusCode: 404,
-                message: 'Cliente não encontrado',
-                error: 'Not Found',
-            },
-        },
-    }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ClientesController.prototype, "remove", null);
 exports.ClientesController = ClientesController = __decorate([
-    (0, swagger_1.ApiTags)('Clientes'),
-    (0, swagger_1.ApiBearerAuth)('JWT'),
     (0, common_1.Controller)('clientes'),
     __metadata("design:paramtypes", [clientes_service_1.ClientesService])
 ], ClientesController);

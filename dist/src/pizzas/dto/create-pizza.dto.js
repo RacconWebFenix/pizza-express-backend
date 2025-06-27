@@ -15,21 +15,27 @@ class CreatePizzaDto {
     nome;
     descricao;
     preco;
+    imagemUrl;
 }
 exports.CreatePizzaDto = CreatePizzaDto;
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(2),
     __metadata("design:type", String)
 ], CreatePizzaDto.prototype, "nome", void 0);
 __decorate([
-    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreatePizzaDto.prototype, "descricao", void 0);
 __decorate([
+    (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.Min)(0),
     __metadata("design:type", Number)
 ], CreatePizzaDto.prototype, "preco", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreatePizzaDto.prototype, "imagemUrl", void 0);
 //# sourceMappingURL=create-pizza.dto.js.map

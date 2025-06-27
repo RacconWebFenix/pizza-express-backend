@@ -1,21 +1,19 @@
-import {
-  IsString,
-  MinLength,
-  IsOptional,
-  IsNumber,
-  Min,
-} from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreatePizzaDto {
+  @IsNotEmpty()
   @IsString()
-  @MinLength(2)
   nome: string;
+
+  @IsNotEmpty()
+  @IsString()
+  descricao: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  preco: number;
 
   @IsOptional()
   @IsString()
-  descricao?: string;
-
-  @IsNumber()
-  @Min(0)
-  preco: number;
+  imagemUrl?: string;
 }
