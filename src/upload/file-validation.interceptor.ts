@@ -7,6 +7,10 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
+interface RequestWithFile extends Request {
+  file?: Express.Multer.File;
+}
+
 @Injectable()
 export class FileValidationInterceptor implements NestInterceptor {
   private readonly allowedMimeTypes = [
@@ -19,8 +23,8 @@ export class FileValidationInterceptor implements NestInterceptor {
   private readonly maxFileSize = 5 * 1024 * 1024; // 5MB
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const request = context.switchToHttp().getRequest();
-    const file = request.file as Express.Multer.File;
+    const request = context.switchToHttp().getRequest<RequestWithFile>();
+    const file = request.file;
 
     if (file) {
       // Validar tipo de arquivo

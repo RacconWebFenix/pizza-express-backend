@@ -158,8 +158,8 @@ export class PizzasController {
         message: 'Pizza atualizada com sucesso',
         data: pizza,
       };
-    } catch (error: any) {
-      if (error?.code === 'P2025') {
+    } catch (error) {
+      if ((error as { code?: string })?.code === 'P2025') {
         throw new HttpException('Pizza não encontrada', HttpStatus.NOT_FOUND);
       }
       throw new HttpException(
@@ -177,8 +177,8 @@ export class PizzasController {
         statusCode: 200,
         message: 'Pizza removida com sucesso',
       };
-    } catch (error: any) {
-      if (error?.code === 'P2025') {
+    } catch (error) {
+      if ((error as { code?: string })?.code === 'P2025') {
         throw new HttpException('Pizza não encontrada', HttpStatus.NOT_FOUND);
       }
       throw new HttpException(
