@@ -10,10 +10,6 @@ async function bootstrap() {
   try {
     const app = await NestFactory.create(AppModule);
 
-    console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV || 'undefined'}`);
-    console.log(`🔧 isDevelopment: ${isDevelopment}`);
-
-    // Configurar helmet adequadamente para production
     if (!isDevelopment) {
       app.use(
         helmet({
@@ -48,7 +44,7 @@ async function bootstrap() {
     // CORS configuration
     app.enableCors({
       origin: isDevelopment
-        ? ['http://localhost:3000', 'http://localhost:3005']
+        ? 'http://localhost:3000'
         : process.env.FRONTEND_URL?.split(',') || '*',
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
