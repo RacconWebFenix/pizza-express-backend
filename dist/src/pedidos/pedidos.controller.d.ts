@@ -20,30 +20,30 @@ export declare class PedidosController {
     }>;
     findAll(): Promise<({
         cliente: {
-            nome: string;
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
+            nome: string;
             email: string;
             password: string;
             telefone: string | null;
             endereco: string;
-        };
-        entregador: {
-            nome: string;
-            id: number;
             createdAt: Date;
             updatedAt: Date;
+        };
+        entregador: {
+            id: number;
+            nome: string;
             telefone: string | null;
+            createdAt: Date;
+            updatedAt: Date;
         } | null;
         pizzas: {
+            id: number;
             nome: string;
+            createdAt: Date;
+            updatedAt: Date;
             descricao: string | null;
             preco: number;
             imagemUrl: string | null;
-            id: number;
-            createdAt: Date;
-            updatedAt: Date;
         }[];
     } & {
         id: number;
@@ -57,30 +57,30 @@ export declare class PedidosController {
     })[]>;
     findOne(id: string): Promise<{
         cliente: {
-            nome: string;
             id: number;
-            createdAt: Date;
-            updatedAt: Date;
+            nome: string;
             email: string;
             password: string;
             telefone: string | null;
             endereco: string;
-        };
-        entregador: {
-            nome: string;
-            id: number;
             createdAt: Date;
             updatedAt: Date;
+        };
+        entregador: {
+            id: number;
+            nome: string;
             telefone: string | null;
+            createdAt: Date;
+            updatedAt: Date;
         } | null;
         pizzas: {
+            id: number;
             nome: string;
+            createdAt: Date;
+            updatedAt: Date;
             descricao: string | null;
             preco: number;
             imagemUrl: string | null;
-            id: number;
-            createdAt: Date;
-            updatedAt: Date;
         }[];
     } & {
         id: number;

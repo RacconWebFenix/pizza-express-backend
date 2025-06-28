@@ -15,13 +15,13 @@ export declare class AuthController {
         telefone?: string;
         endereco?: string;
     }): Promise<{
-        nome: string;
         id: number;
-        createdAt: Date;
-        updatedAt: Date;
+        nome: string;
         email: string;
         password: string;
         telefone: string | null;
         endereco: string;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
 }
