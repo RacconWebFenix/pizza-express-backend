@@ -8,8 +8,6 @@ async function bootstrap() {
     const isDevelopment = process.env.NODE_ENV !== 'production';
     try {
         const app = await core_1.NestFactory.create(app_module_1.AppModule);
-        console.log(`🔧 NODE_ENV: ${process.env.NODE_ENV || 'undefined'}`);
-        console.log(`🔧 isDevelopment: ${isDevelopment}`);
         if (!isDevelopment) {
             app.use((0, helmet_1.default)({
                 contentSecurityPolicy: {
@@ -36,7 +34,7 @@ async function bootstrap() {
         }));
         app.enableCors({
             origin: isDevelopment
-                ? ['http://localhost:3000', 'http://localhost:3005']
+                ? 'http://localhost:3000'
                 : process.env.FRONTEND_URL?.split(',') || '*',
             methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
             allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],

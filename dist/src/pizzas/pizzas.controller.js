@@ -14,14 +14,19 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PizzasController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const pizzas_service_1 = require("./pizzas.service");
 const create_pizza_dto_1 = require("./dto/create-pizza.dto");
 const update_pizza_dto_1 = require("./dto/update-pizza.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const upload_service_1 = require("../upload/upload.service");
+const file_validation_interceptor_1 = require("../upload/file-validation.interceptor");
 let PizzasController = class PizzasController {
     pizzasService;
-    constructor(pizzasService) {
+    uploadService;
+    constructor(pizzasService, uploadService) {
         this.pizzasService = pizzasService;
+        this.uploadService = uploadService;
     }
     async create(createPizzaDto) {
         try {
@@ -30,6 +35,56 @@ let PizzasController = class PizzasController {
                 statusCode: 201,
                 message: 'Pizza criada com sucesso',
                 data: pizza,
+            };
+        }
+        catch (error) {
+            if (error instanceof common_1.HttpException) {
+                throw error;
+            }
+            const errMsg = typeof error === 'object' && error && 'message' in error
+                ? error.message
+                : undefined;
+            throw new common_1.HttpException(errMsg || 'Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async createWithImage(createPizzaDto, file) {
+        try {
+            let imagemUrl;
+            if (file) {
+                imagemUrl = await this.uploadService.uploadImage(file, 'pizzas');
+            }
+            const pizzaData = {
+                ...createPizzaDto,
+                imagemUrl: imagemUrl || createPizzaDto.imagemUrl,
+            };
+            const pizza = await this.pizzasService.create(pizzaData);
+            return {
+                statusCode: 201,
+                message: 'Pizza criada com sucesso',
+                data: pizza,
+            };
+        }
+        catch (error) {
+            if (error instanceof common_1.HttpException) {
+                throw error;
+            }
+            const errMsg = typeof error === 'object' && error && 'message' in error
+                ? error.message
+                : undefined;
+            throw new common_1.HttpException(errMsg || 'Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async uploadImage(id, file) {
+        try {
+            if (!file) {
+                throw new common_1.HttpException('Arquivo de imagem é obrigatório', common_1.HttpStatus.BAD_REQUEST);
+            }
+            const imagemUrl = await this.uploadService.uploadImage(file, 'pizzas');
+            const pizza = await this.pizzasService.update(+id, { imagemUrl });
+            return {
+                statusCode: 200,
+                message: 'Imagem da pizza atualizada com sucesso',
+                data: { imagemUrl: pizza.imagemUrl },
             };
         }
         catch (error) {
@@ -63,7 +118,7 @@ let PizzasController = class PizzasController {
             };
         }
         catch (error) {
-            if (error.code === 'P2025') {
+            if (error?.code === 'P2025') {
                 throw new common_1.HttpException('Pizza não encontrada', common_1.HttpStatus.NOT_FOUND);
             }
             throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
@@ -78,7 +133,7 @@ let PizzasController = class PizzasController {
             };
         }
         catch (error) {
-            if (error.code === 'P2025') {
+            if (error?.code === 'P2025') {
                 throw new common_1.HttpException('Pizza não encontrada', common_1.HttpStatus.NOT_FOUND);
             }
             throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,6 +148,24 @@ __decorate([
     __metadata("design:paramtypes", [create_pizza_dto_1.CreatePizzaDto]),
     __metadata("design:returntype", Promise)
 ], PizzasController.prototype, "create", null);
+__decorate([
+    (0, common_1.Post)('with-image'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('imagem'), file_validation_interceptor_1.FileValidationInterceptor),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_pizza_dto_1.CreatePizzaDto, Object]),
+    __metadata("design:returntype", Promise)
+], PizzasController.prototype, "createWithImage", null);
+__decorate([
+    (0, common_1.Post)(':id/upload-image'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('imagem'), file_validation_interceptor_1.FileValidationInterceptor),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], PizzasController.prototype, "uploadImage", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
@@ -124,6 +197,7 @@ __decorate([
 exports.PizzasController = PizzasController = __decorate([
     (0, common_1.Controller)('pizzas'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __metadata("design:paramtypes", [pizzas_service_1.PizzasService])
+    __metadata("design:paramtypes", [pizzas_service_1.PizzasService,
+        upload_service_1.UploadService])
 ], PizzasController);
 //# sourceMappingURL=pizzas.controller.js.map

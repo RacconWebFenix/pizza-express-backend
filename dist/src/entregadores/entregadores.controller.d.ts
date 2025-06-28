@@ -8,36 +8,36 @@ export declare class EntregadoresController {
         statusCode: number;
         message: string;
         data: {
-            id: number;
             nome: string;
-            telefone: string | null;
+            id: number;
             createdAt: Date;
             updatedAt: Date;
+            telefone: string | null;
         };
     }>;
     findAll(): Promise<{
-        id: number;
         nome: string;
-        telefone: string | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        telefone: string | null;
     }[]>;
     findOne(id: string): Promise<{
-        id: number;
         nome: string;
-        telefone: string | null;
+        id: number;
         createdAt: Date;
         updatedAt: Date;
+        telefone: string | null;
     }>;
     update(id: string, updateEntregadoreDto: UpdateEntregadoreDto): Promise<{
         statusCode: number;
         message: string;
         data: {
-            id: number;
             nome: string;
-            telefone: string | null;
+            id: number;
             createdAt: Date;
             updatedAt: Date;
+            telefone: string | null;
         };
     }>;
     remove(id: string): Promise<{
