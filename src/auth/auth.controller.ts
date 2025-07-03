@@ -25,7 +25,7 @@ export class AuthController {
         );
       }
       return this.authService.login(user);
-    } catch (error) {
+    } catch {
       throw new HttpException('Credenciais inválidas', HttpStatus.UNAUTHORIZED);
     }
   }
@@ -48,8 +48,13 @@ export class AuthController {
       };
       const result = await this.authService.register(dataToCreate);
       return result;
-    } catch (error: any) {
-      if (error.code === 'P2002') {
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2002'
+      ) {
         throw new HttpException('Email já cadastrado', HttpStatus.CONFLICT);
       }
       throw new HttpException(

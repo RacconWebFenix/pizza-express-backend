@@ -36,6 +36,6 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], CreatePizzaDto.prototype, "imagemUrl", void 0);
 //# sourceMappingURL=create-pizza.dto.js.map

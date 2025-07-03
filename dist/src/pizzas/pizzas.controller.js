@@ -14,14 +14,81 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PizzasController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const pizzas_service_1 = require("./pizzas.service");
 const create_pizza_dto_1 = require("./dto/create-pizza.dto");
 const update_pizza_dto_1 = require("./dto/update-pizza.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const cloudinary_service_1 = require("../cloudinary/cloudinary.service");
 let PizzasController = class PizzasController {
     pizzasService;
-    constructor(pizzasService) {
+    cloudinaryService;
+    constructor(pizzasService, cloudinaryService) {
         this.pizzasService = pizzasService;
+        this.cloudinaryService = cloudinaryService;
+    }
+    async uploadImage(file) {
+        if (!file) {
+            throw new common_1.BadRequestException('Nenhum arquivo foi enviado');
+        }
+        const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        if (!allowedMimes.includes(file.mimetype || '')) {
+            throw new common_1.BadRequestException('Apenas arquivos de imagem são permitidos!');
+        }
+        try {
+            const imageUrl = await this.cloudinaryService.uploadImage(file);
+            return {
+                statusCode: 200,
+                message: 'Imagem enviada com sucesso',
+                data: {
+                    imageUrl,
+                    originalname: file.originalname || '',
+                    mimetype: file.mimetype || '',
+                    size: file.size || 0,
+                },
+            };
+        }
+        catch {
+            throw new common_1.HttpException('Erro ao fazer upload da imagem', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    async createWithImage(file, body) {
+        try {
+            let imageUrl;
+            if (file) {
+                const allowedMimes = [
+                    'image/jpeg',
+                    'image/jpg',
+                    'image/png',
+                    'image/gif',
+                ];
+                if (!allowedMimes.includes(file.mimetype || '')) {
+                    throw new common_1.BadRequestException('Apenas arquivos de imagem são permitidos!');
+                }
+                imageUrl = await this.cloudinaryService.uploadImage(file);
+            }
+            const pizzaData = {
+                nome: body?.nome || '',
+                descricao: body?.descricao || '',
+                preco: parseFloat(body?.preco || '0'),
+                imagemUrl: imageUrl,
+            };
+            const pizza = await this.pizzasService.create(pizzaData);
+            return {
+                statusCode: 201,
+                message: 'Pizza criada com sucesso',
+                data: pizza,
+            };
+        }
+        catch (error) {
+            if (error instanceof common_1.HttpException) {
+                throw error;
+            }
+            const errMsg = typeof error === 'object' && error && 'message' in error
+                ? error.message
+                : undefined;
+            throw new common_1.HttpException(errMsg || 'Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     async create(createPizzaDto) {
         try {
@@ -63,7 +130,10 @@ let PizzasController = class PizzasController {
             };
         }
         catch (error) {
-            if (error.code === 'P2025') {
+            if (typeof error === 'object' &&
+                error !== null &&
+                'code' in error &&
+                error.code === 'P2025') {
                 throw new common_1.HttpException('Pizza não encontrada', common_1.HttpStatus.NOT_FOUND);
             }
             throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
@@ -78,7 +148,10 @@ let PizzasController = class PizzasController {
             };
         }
         catch (error) {
-            if (error.code === 'P2025') {
+            if (typeof error === 'object' &&
+                error !== null &&
+                'code' in error &&
+                error.code === 'P2025') {
                 throw new common_1.HttpException('Pizza não encontrada', common_1.HttpStatus.NOT_FOUND);
             }
             throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
@@ -86,6 +159,27 @@ let PizzasController = class PizzasController {
     }
 };
 exports.PizzasController = PizzasController;
+__decorate([
+    (0, common_1.Post)('upload-image'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', {
+        limits: { fileSize: 5 * 1024 * 1024 },
+    })),
+    __param(0, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], PizzasController.prototype, "uploadImage", null);
+__decorate([
+    (0, common_1.Post)('with-image'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', {
+        limits: { fileSize: 5 * 1024 * 1024 },
+    })),
+    __param(0, (0, common_1.UploadedFile)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], PizzasController.prototype, "createWithImage", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
@@ -124,6 +218,7 @@ __decorate([
 exports.PizzasController = PizzasController = __decorate([
     (0, common_1.Controller)('pizzas'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __metadata("design:paramtypes", [pizzas_service_1.PizzasService])
+    __metadata("design:paramtypes", [pizzas_service_1.PizzasService,
+        cloudinary_service_1.CloudinaryService])
 ], PizzasController);
 //# sourceMappingURL=pizzas.controller.js.map

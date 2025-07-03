@@ -27,3 +27,5 @@ Thumbs.db
 *.cache
 *.tgz
 pizza-express-insomnia.json
+# Uploads (opcional - remova se quiser versionar as imagens)
+uploads/

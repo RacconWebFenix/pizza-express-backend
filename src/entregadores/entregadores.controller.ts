@@ -45,7 +45,7 @@ export class EntregadoresController {
   async findAll() {
     try {
       return await this.entregadoresService.findAll();
-    } catch (error) {
+    } catch {
       throw new HttpException(
         'Erro interno do servidor',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -90,8 +90,13 @@ export class EntregadoresController {
         message: 'Entregador atualizado com sucesso',
         data: entregador,
       };
-    } catch (error) {
-      if (error.code === 'P2025') {
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
         throw new HttpException(
           'Entregador não encontrado',
           HttpStatus.NOT_FOUND,
@@ -112,8 +117,13 @@ export class EntregadoresController {
         statusCode: 200,
         message: 'Entregador removido com sucesso',
       };
-    } catch (error) {
-      if (error.code === 'P2025') {
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
         throw new HttpException(
           'Entregador não encontrado',
           HttpStatus.NOT_FOUND,

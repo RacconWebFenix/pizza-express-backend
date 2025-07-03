@@ -40,6 +40,7 @@ export declare class PedidosController {
             nome: string;
             descricao: string | null;
             preco: number;
+            imagemUrl: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
@@ -76,6 +77,7 @@ export declare class PedidosController {
             nome: string;
             descricao: string | null;
             preco: number;
+            imagemUrl: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;

@@ -25,8 +25,13 @@ export class ClientesController {
     try {
       const cliente = await this.clientesService.create(createClienteDto);
       return cliente;
-    } catch (error) {
-      if (error.code === 'P2002') {
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2002'
+      ) {
         throw new HttpException('Email já cadastrado', HttpStatus.CONFLICT);
       }
       throw new HttpException(
@@ -60,8 +65,13 @@ export class ClientesController {
     try {
       const cliente = await this.clientesService.update(+id, updateClienteDto);
       return cliente;
-    } catch (error) {
-      if (error.code === 'P2025') {
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
         throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
       }
       throw new HttpException(
@@ -77,8 +87,13 @@ export class ClientesController {
     try {
       await this.clientesService.remove(+id);
       return { message: 'Cliente removido com sucesso' };
-    } catch (error) {
-      if (error.code === 'P2025') {
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
         throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
       }
       throw new HttpException(

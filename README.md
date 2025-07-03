@@ -1,68 +1,85 @@
 ![CI](https://github.com/seu-usuario/pizza-express/actions/workflows/ci.yml/badge.svg)
 
-# Pizza Express API
+# 🍕 Pizza Express API
 
-Uma API completa para gerenciamento de pizzarias, desenvolvida com NestJS, Prisma e PostgreSQL.
+Uma API completa para gerenciamento de pizzarias, desenvolvida com NestJS, Prisma e PostgreSQL com upload de imagens via Cloudinary.
 
 ## 🚀 Funcionalidades
 
-- **Autenticação JWT** - Sistema de login seguro
-- **Gestão de Clientes** - CRUD completo para clientes
-- **Catálogo de Pizzas** - Gerenciamento do cardápio
-- **Sistema de Pedidos** - Controle completo de pedidos
-- **Gestão de Entregadores** - Acompanhamento de entregas em tempo real
-- **Documentação OpenAPI/Swagger** - Documentação interativa (apenas em desenvolvimento)
+- **🔐 Autenticação JWT** - Sistema de login seguro para clientes
+- **👥 Gestão de Clientes** - CRUD completo para clientes
+- **🍕 Catálogo de Pizzas** - Gerenciamento do cardápio com upload de imagens
+- **📷 Upload de Imagens** - Integração com Cloudinary (processamento automático, CDN global)
+- **📋 Sistema de Pedidos** - Controle completo de pedidos
+- **🚚 Gestão de Entregadores** - Acompanhamento de entregas em tempo real via WebSockets
+- **📖 Documentação OpenAPI/Swagger** - Documentação interativa (desenvolvimento)
+- **🐳 Docker Ready** - Configurado para deploy com Docker
 
 ## 🛠️ Tecnologias
 
-- **NestJS** - Framework Node.js
+- **NestJS** - Framework Node.js robusto e escalável
 - **Prisma** - ORM moderno para bancos de dados
 - **PostgreSQL** - Banco de dados relacional
+- **Cloudinary** - Armazenamento e processamento de imagens na nuvem
 - **JWT** - Autenticação segura
-- **WebSockets** - Comunicação em tempo real
+- **WebSockets** - Comunicação em tempo real para entregas
 - **TypeScript** - Linguagem tipada
-- **OpenAPI/Swagger** - Documentação da API
 - **Jest** + **Supertest** - Testes automatizados
-- **GitHub Actions** - CI/CD
+- **Docker** - Containerização para produção
 
 ## 📋 Pré-requisitos
 
 - Node.js 18+
-- PostgreSQL 15+
+- PostgreSQL 15+ ou Docker
+- Conta no Cloudinary (gratuita)
 - npm ou yarn
 
 ## 🔧 Instalação
 
-1. Clone o repositório:
+### 1. Clone e instale dependências
+
 ```bash
 git clone <url-do-repositorio>
 cd pizza-express-backend
-```
-
-2. Instale as dependências:
-```bash
 npm install
 ```
 
-3. Configure as variáveis de ambiente:
+### 2. Configure variáveis de ambiente
+
 ```bash
 cp .env.example .env
 ```
 
-Edite o arquivo `.env` com suas configurações:
+Edite o arquivo `.env`:
+
 ```env
+# Banco de dados
 DATABASE_URL="postgresql://usuario:senha@localhost:5432/pizza_express"
-JWT_SECRET="seu-jwt-secret-aqui"
+
+# JWT
+JWT_SECRET="seu-jwt-secret-super-seguro"
+
+# Servidor
 NODE_ENV="development"
+PORT=3005
+FRONTEND_URL="http://localhost:3000"
+
+# Cloudinary (obrigatório para upload de imagens)
+CLOUDINARY_CLOUD_NAME="seu-cloud-name"
+CLOUDINARY_API_KEY="sua-api-key"
+CLOUDINARY_API_SECRET="seu-api-secret"
+
+# Teste (desenvolvimento)
+TEST_CLIENTE_PASSWORD="senha123"
 ```
 
-4. Execute as migrações do banco:
+### 3. Configure o banco de dados
+
 ```bash
+# Execute as migrações
 npx prisma migrate deploy
-```
 
-5. Seed do banco (opcional):
-```bash
+# Seed do banco (opcional)
 npx prisma db seed
 ```
 
@@ -70,143 +87,305 @@ npx prisma db seed
 
 ### Desenvolvimento
 ```bash
-# Modo watch
-npm run start:dev
-
-# Modo debug
-npm run start:debug
+npm run start:dev    # Modo watch com hot reload
+npm run start:debug  # Modo debug
 ```
 
 ### Produção
 ```bash
-# Build
-npm run build
+npm run build        # Build da aplicação
+npm run start:prod   # Inicia em produção
+```
 
-# Start
-npm run start:prod
+### Docker
+```bash
+# Build da imagem
+docker build -t pizza-express-api .
+
+# Executar container
+docker run -p 3005:3005 --env-file .env pizza-express-api
 ```
 
 ## 📚 Documentação da API
 
-A documentação OpenAPI/Swagger está disponível apenas em ambiente de desenvolvimento:
-
+### Swagger (Desenvolvimento)
 ```
 http://localhost:3005/docs
 ```
 
 ### Endpoints JSON/YAML
-
 - **JSON**: `http://localhost:3005/docs/json`
 - **YAML**: `http://localhost:3005/docs/yaml`
 
-## 🧪 Testes
+## 📷 Upload de Imagens - Cloudinary
 
-Para garantir a robustez e evitar falhas intermitentes, execute os testes e2e sempre em modo sequencial:
+### Configuração
+O projeto utiliza **Cloudinary** para armazenamento na nuvem com:
+- ✅ **CDN Global** - Entrega rápida mundial
+- ✅ **Processamento Automático** - Redimensionamento (800x600), otimização, WebP
+- ✅ **Backup Seguro** - Imagens protegidas na nuvem
+- ✅ **Escalabilidade** - Suporte a milhões de imagens
+
+### Endpoints de Upload
+
+#### 1. Upload Simples de Imagem
+```bash
+POST /pizzas/upload-image
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+
+# Campos:
+# - image: arquivo (JPEG, JPG, PNG, GIF - máx 5MB)
+```
+
+**Resposta:**
+```json
+{
+  "statusCode": 200,
+  "message": "Imagem enviada com sucesso",
+  "data": {
+    "imageUrl": "https://res.cloudinary.com/pizzariaexpress/image/upload/v1.../pizzas/nome.webp",
+    "originalname": "pizza-margherita.jpg",
+    "mimetype": "image/jpeg",
+    "size": 245760
+  }
+}
+```
+
+#### 2. Criar Pizza com Imagem
+```bash
+POST /pizzas/with-image
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+
+# Campos:
+# - image: arquivo de imagem (opcional)
+# - nome: string
+# - descricao: string  
+# - preco: number
+```
+
+### Exemplo Frontend (JavaScript)
+```javascript
+// Upload simples
+const formData = new FormData();
+formData.append('image', fileInput.files[0]);
+
+const response = await fetch('/api/pizzas/upload-image', {
+  method: 'POST',
+  headers: { 'Authorization': `Bearer ${token}` },
+  body: formData
+});
+
+// Criar pizza com imagem
+const pizzaData = new FormData();
+pizzaData.append('image', file);
+pizzaData.append('nome', 'Pizza Margherita');
+pizzaData.append('descricao', 'Molho, mussarela e manjericão');
+pizzaData.append('preco', '25.90');
+
+await fetch('/api/pizzas/with-image', {
+  method: 'POST',
+  headers: { 'Authorization': `Bearer ${token}` },
+  body: pizzaData
+});
+```
+
+## 🔐 Autenticação
+
+### Login de Cliente
+```bash
+POST /auth/login
+Content-Type: application/json
+
+{
+  "email": "cliente@exemplo.com",
+  "password": "senha123"
+}
+```
+
+### Uso do Token
+```bash
+Authorization: Bearer <jwt-token>
+```
+
+## 🗄️ Principais Endpoints
+
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| POST | `/auth/login` | Login de cliente | ❌ |
+| GET | `/auth/me` | Dados do usuário logado | ✅ |
+| GET | `/pizzas` | Listar pizzas | ✅ |
+| POST | `/pizzas` | Criar pizza | ✅ |
+| POST | `/pizzas/upload-image` | Upload de imagem | ✅ |
+| POST | `/pizzas/with-image` | Criar pizza com imagem | ✅ |
+| GET | `/pedidos` | Listar pedidos | ✅ |
+| POST | `/pedidos` | Criar pedido | ✅ |
+| GET | `/clientes` | Listar clientes | ✅ |
+| POST | `/clientes` | Cadastrar cliente | ❌ |
+
+## 🧪 Testes
 
 ```bash
 # Testes unitários
 npm run test
 
-# Testes e2e (modo sequencial)
+# Testes e2e (sempre sequenciais)
 npm run test:e2e
 
 # Coverage
 npm run test:cov
-```
 
-## 📦 Scripts Disponíveis
-
-```bash
-npm run build          # Build da aplicação
-npm run start          # Inicia em modo produção
-npm run start:dev      # Inicia em modo desenvolvimento
-npm run start:debug    # Inicia em modo debug
-npm run lint           # Executa o linter
-npm run test           # Executa os testes
-npm run test:e2e       # Executa os testes e2e
-npm run test:cov       # Executa testes com coverage
+# Lint
+npm run lint
 ```
 
 ## 🗄️ Banco de Dados
 
-### Migrações
+### Prisma Commands
 ```bash
-# Criar nova migração
+# Nova migração
 npx prisma migrate dev --name nome-da-migracao
 
-# Aplicar migrações
+# Aplicar migrações (produção)
 npx prisma migrate deploy
 
-# Reset do banco
+# Reset banco (desenvolvimento)
 npx prisma migrate reset --force
-```
 
-### Prisma Studio
-```bash
+# Visualizar dados
 npx prisma studio
 ```
 
-## 🌐 Deploy
+### Schema Principal
+```prisma
+model Pizza {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  descricao String
+  preco     Float
+  imagemUrl String?  // URL do Cloudinary
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-### Vercel
-O projeto está configurado para deploy automático no Vercel. O arquivo `vercel.json` já está configurado.
-
-### Variáveis de Ambiente para Produção
-- `DATABASE_URL` - URL do banco PostgreSQL
-- `JWT_SECRET` - Chave secreta para JWT
-- `NODE_ENV` - Deve ser "production"
-- `FRONTEND_URL` - URLs permitidas para CORS (separadas por vírgula)
-
-## 🔒 Autenticação
-
-A API utiliza JWT Bearer Token. Para acessar endpoints protegidos:
-
-```bash
-Authorization: Bearer <seu-jwt-token>
+model Cliente {
+  id       Int    @id @default(autoincrement())
+  nome     String
+  email    String @unique
+  password String
+  // ... outros campos
+}
 ```
 
 ## 📁 Estrutura do Projeto
 
 ```
 src/
-├── auth/              # Módulo de autenticação
-├── clientes/          # Módulo de clientes
-├── entregadores/      # Módulo de entregadores
-├── pedidos/           # Módulo de pedidos
-├── pizzas/            # Módulo de pizzas
-├── prisma.module.ts   # Configuração do Prisma
-├── prisma.service.ts  # Serviço do Prisma
-├── app.module.ts      # Módulo principal
-└── main.ts           # Ponto de entrada
+├── auth/              # 🔐 Módulo de autenticação JWT
+├── clientes/          # 👥 Módulo de clientes
+├── entregadores/      # 🚚 Módulo de entregadores + WebSockets
+├── pedidos/           # 📋 Módulo de pedidos
+├── pizzas/            # 🍕 Módulo de pizzas + upload
+├── cloudinary/        # 📷 Serviço de upload Cloudinary
+├── prisma.module.ts   # 🗄️ Configuração do Prisma
+├── app.module.ts      # 🏠 Módulo principal
+└── main.ts           # 🚀 Ponto de entrada
 
 prisma/
-├── migrations/        # Migrações do banco
-├── schema.prisma     # Schema do banco
-└── seed.ts           # Dados iniciais
+├── migrations/        # 📝 Migrações do banco
+├── schema.prisma     # 🗄️ Schema do banco
+└── seed.ts           # 🌱 Dados iniciais
 
-test/                 # Testes e2e
+docker/
+├── Dockerfile        # 🐳 Imagem Docker
+└── docker-compose.yml # 🐳 Orquestração
 ```
 
-## 🎯 CI/CD
+## 🌐 Deploy
 
-O projeto possui pipeline automatizado com GitHub Actions que:
-- Executa testes automatizados
-- Verifica qualidade do código
-- Gera documentação OpenAPI
-- Faz deploy automático no Vercel
+### Vercel (Recomendado)
+```bash
+# Deploy automático via GitHub
+# Configurar variáveis de ambiente no dashboard da Vercel
+```
+
+### Docker
+```bash
+# Build
+docker build -t pizza-express-api .
+
+# Run
+docker run -p 3005:3005 \
+  -e DATABASE_URL="..." \
+  -e JWT_SECRET="..." \
+  -e CLOUDINARY_CLOUD_NAME="..." \
+  pizza-express-api
+```
+
+### Variáveis de Ambiente (Produção)
+```env
+NODE_ENV=production
+DATABASE_URL=postgresql://...
+JWT_SECRET=super-secret-key
+FRONTEND_URL=https://meuapp.com,https://app.exemplo.com
+CLOUDINARY_CLOUD_NAME=pizzariaexpress
+CLOUDINARY_API_KEY=sua-api-key
+CLOUDINARY_API_SECRET=seu-api-secret
+```
+
+## 🔧 Scripts Disponíveis
+
+```bash
+npm run build          # 🏗️  Build da aplicação
+npm run start          # 🚀 Inicia em produção
+npm run start:dev      # 🔥 Desenvolvimento com hot reload
+npm run start:debug    # 🐛 Modo debug
+npm run lint           # 🧹 Linter + auto-fix
+npm run test           # 🧪 Testes unitários
+npm run test:e2e       # 🔄 Testes end-to-end
+npm run test:cov       # 📊 Coverage de testes
+```
+
+## 🎯 Recursos Avançados
+
+### WebSockets (Entregadores)
+```javascript
+// Conectar ao WebSocket
+const socket = io('http://localhost:3005');
+
+// Escutar atualizações de localização
+socket.on('location-update', (data) => {
+  console.log('Nova localização:', data);
+});
+```
+
+### Rate Limiting
+- **20 requests por minuto** por IP
+- Proteção contra spam e ataques
+
+### CORS Configurado
+- URLs do frontend permitidas via `FRONTEND_URL`
+- Suporte a múltiplos domínios
 
 ## 🤝 Contribuição
 
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+1. **Fork** o projeto
+2. **Crie** uma branch (`git checkout -b feature/MinhaFeature`)
+3. **Commit** suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
+4. **Push** para a branch (`git push origin feature/MinhaFeature`)
+5. **Abra** um Pull Request
 
 ## 📝 Licença
 
-Este projeto está sob a licença MIT.
+Este projeto está sob a licença **MIT**.
 
-## 🐛 Problemas
+## 🐛 Suporte
 
-Encontrou um bug? Abra uma [issue](https://github.com/seu-usuario/pizza-express-backend/issues).
+- **Issues**: [GitHub Issues](https://github.com/seu-usuario/pizza-express-backend/issues)
+- **Wiki**: Documentação completa no GitHub
+- **Email**: suporte@pizzaexpress.com
+
+---
+
+⚡ **Feito com ❤️ usando NestJS + Prisma + Cloudinary**

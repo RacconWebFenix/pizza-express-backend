@@ -4,10 +4,14 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const common_1 = require("@nestjs/common");
 const helmet_1 = require("helmet");
+const path_1 = require("path");
 async function bootstrap() {
     const isDevelopment = process.env.NODE_ENV !== 'production';
     try {
         const app = await core_1.NestFactory.create(app_module_1.AppModule);
+        app.useStaticAssets((0, path_1.join)(__dirname, '..', 'uploads'), {
+            prefix: '/uploads/',
+        });
         if (!isDevelopment) {
             app.use((0, helmet_1.default)({
                 contentSecurityPolicy: {

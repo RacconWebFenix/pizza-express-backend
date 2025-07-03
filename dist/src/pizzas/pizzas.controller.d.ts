@@ -1,9 +1,34 @@
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
 import { UpdatePizzaDto } from './dto/update-pizza.dto';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 export declare class PizzasController {
     private readonly pizzasService;
-    constructor(pizzasService: PizzasService);
+    private readonly cloudinaryService;
+    constructor(pizzasService: PizzasService, cloudinaryService: CloudinaryService);
+    uploadImage(file?: Express.Multer.File): Promise<{
+        statusCode: number;
+        message: string;
+        data: {
+            imageUrl: string;
+            originalname: string;
+            mimetype: string;
+            size: number;
+        };
+    }>;
+    createWithImage(file?: Express.Multer.File, body?: Record<string, string>): Promise<{
+        statusCode: number;
+        message: string;
+        data: {
+            nome: string;
+            descricao: string | null;
+            preco: number;
+            imagemUrl: string | null;
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
+        };
+    }>;
     create(createPizzaDto: CreatePizzaDto): Promise<{
         statusCode: number;
         message: string;
@@ -11,6 +36,7 @@ export declare class PizzasController {
             nome: string;
             descricao: string | null;
             preco: number;
+            imagemUrl: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
@@ -20,6 +46,7 @@ export declare class PizzasController {
         nome: string;
         descricao: string | null;
         preco: number;
+        imagemUrl: string | null;
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -28,6 +55,7 @@ export declare class PizzasController {
         nome: string;
         descricao: string | null;
         preco: number;
+        imagemUrl: string | null;
         id: number;
         createdAt: Date;
         updatedAt: Date;
@@ -39,6 +67,7 @@ export declare class PizzasController {
             nome: string;
             descricao: string | null;
             preco: number;
+            imagemUrl: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;

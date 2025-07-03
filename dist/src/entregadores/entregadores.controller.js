@@ -43,7 +43,7 @@ let EntregadoresController = class EntregadoresController {
         try {
             return await this.entregadoresService.findAll();
         }
-        catch (error) {
+        catch {
             throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -72,7 +72,10 @@ let EntregadoresController = class EntregadoresController {
             };
         }
         catch (error) {
-            if (error.code === 'P2025') {
+            if (typeof error === 'object' &&
+                error !== null &&
+                'code' in error &&
+                error.code === 'P2025') {
                 throw new common_1.HttpException('Entregador não encontrado', common_1.HttpStatus.NOT_FOUND);
             }
             throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
@@ -87,7 +90,10 @@ let EntregadoresController = class EntregadoresController {
             };
         }
         catch (error) {
-            if (error.code === 'P2025') {
+            if (typeof error === 'object' &&
+                error !== null &&
+                'code' in error &&
+                error.code === 'P2025') {
                 throw new common_1.HttpException('Entregador não encontrado', common_1.HttpStatus.NOT_FOUND);
             }
             throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
