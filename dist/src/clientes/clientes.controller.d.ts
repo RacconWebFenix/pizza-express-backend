@@ -5,44 +5,44 @@ export declare class ClientesController {
     private readonly clientesService;
     constructor(clientesService: ClientesService);
     create(createClienteDto: CreateClienteDto): Promise<{
-        id: number;
         nome: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         password: string;
         telefone: string | null;
         endereco: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     findAll(email?: string): Promise<{
-        id: number;
         nome: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         password: string;
         telefone: string | null;
         endereco: string;
-        createdAt: Date;
-        updatedAt: Date;
     }[]>;
     findOne(id: string): Promise<{
-        id: number;
         nome: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         password: string;
         telefone: string | null;
         endereco: string;
-        createdAt: Date;
-        updatedAt: Date;
     } | null>;
     update(id: string, updateClienteDto: UpdateClienteDto): Promise<{
-        id: number;
         nome: string;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
         email: string;
         password: string;
         telefone: string | null;
         endereco: string;
-        createdAt: Date;
-        updatedAt: Date;
     }>;
     remove(id: string): Promise<{
         message: string;

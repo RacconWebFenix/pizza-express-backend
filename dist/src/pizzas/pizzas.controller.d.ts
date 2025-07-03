@@ -8,44 +8,40 @@ export declare class PizzasController {
         statusCode: number;
         message: string;
         data: {
-            id: number;
             nome: string;
-            createdAt: Date;
-            updatedAt: Date;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
         };
     }>;
     findAll(): Promise<{
-        id: number;
         nome: string;
-        createdAt: Date;
-        updatedAt: Date;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
     }[]>;
     findOne(id: string): Promise<{
-        id: number;
         nome: string;
-        createdAt: Date;
-        updatedAt: Date;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
+        id: number;
+        createdAt: Date;
+        updatedAt: Date;
     } | null>;
     update(id: string, updatePizzaDto: UpdatePizzaDto): Promise<{
         statusCode: number;
         message: string;
         data: {
-            id: number;
             nome: string;
-            createdAt: Date;
-            updatedAt: Date;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
+            id: number;
+            createdAt: Date;
+            updatedAt: Date;
         };
     }>;
     remove(id: string): Promise<{
