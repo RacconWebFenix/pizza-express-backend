@@ -16,6 +16,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
+import { UpdatePizzaDto } from './dto/update-pizza.dto';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
@@ -173,13 +174,13 @@ export class PizzasController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: CreatePizzaDto) {
+  async update(@Param('id') id: string, @Body() body: UpdatePizzaDto) {
     try {
       const data = {
         ...body,
         imagemUrl: body.image ?? null,
       };
-      delete (data as CreatePizzaDto).image;
+      delete (data as UpdatePizzaDto).image;
       const pizza = await this.pizzasService.update(+id, data);
       return {
         statusCode: 200,
