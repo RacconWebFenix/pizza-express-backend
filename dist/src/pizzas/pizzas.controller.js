@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const pizzas_service_1 = require("./pizzas.service");
 const create_pizza_dto_1 = require("./dto/create-pizza.dto");
-const update_pizza_dto_1 = require("./dto/update-pizza.dto");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const cloudinary_service_1 = require("../cloudinary/cloudinary.service");
 let PizzasController = class PizzasController {
@@ -71,7 +70,7 @@ let PizzasController = class PizzasController {
                 nome: body?.nome || '',
                 descricao: body?.descricao || '',
                 preco: parseFloat(body?.preco || '0'),
-                imagemUrl: imageUrl,
+                image: imageUrl,
             };
             const pizza = await this.pizzasService.create(pizzaData);
             return {
@@ -90,13 +89,22 @@ let PizzasController = class PizzasController {
             throw new common_1.HttpException(errMsg || 'Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    async create(createPizzaDto) {
+    async create(body) {
         try {
-            const pizza = await this.pizzasService.create(createPizzaDto);
+            const data = {
+                ...body,
+                imagemUrl: body.image ?? null,
+            };
+            delete data.image;
+            const pizza = await this.pizzasService.create(data);
             return {
                 statusCode: 201,
                 message: 'Pizza criada com sucesso',
-                data: pizza,
+                data: {
+                    ...pizza,
+                    image: pizza.imagemUrl,
+                    imagemUrl: undefined,
+                },
             };
         }
         catch (error) {
@@ -120,13 +128,22 @@ let PizzasController = class PizzasController {
     async findOne(id) {
         return this.pizzasService.findOne(+id);
     }
-    async update(id, updatePizzaDto) {
+    async update(id, body) {
         try {
-            const pizza = await this.pizzasService.update(+id, updatePizzaDto);
+            const data = {
+                ...body,
+                imagemUrl: body.image ?? null,
+            };
+            delete data.image;
+            const pizza = await this.pizzasService.update(+id, data);
             return {
                 statusCode: 200,
                 message: 'Pizza atualizada com sucesso',
-                data: pizza,
+                data: {
+                    ...pizza,
+                    image: pizza.imagemUrl,
+                    imagemUrl: undefined,
+                },
             };
         }
         catch (error) {
@@ -205,7 +222,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_pizza_dto_1.UpdatePizzaDto]),
+    __metadata("design:paramtypes", [String, create_pizza_dto_1.CreatePizzaDto]),
     __metadata("design:returntype", Promise)
 ], PizzasController.prototype, "update", null);
 __decorate([

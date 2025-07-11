@@ -36,8 +36,8 @@ export declare class PedidosService {
             nome: string;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
             id: number;
+            imagemUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
         }[];
@@ -73,8 +73,8 @@ export declare class PedidosService {
             nome: string;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
             id: number;
+            imagemUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
         }[];

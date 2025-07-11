@@ -14,6 +14,6 @@ export class CreatePizzaDto {
   preco: number;
 
   @IsOptional()
-  @IsString({ message: "O campo 'imagemUrl' deve ser uma string." })
-  imagemUrl?: string | null;
+  @IsString({ message: "O campo 'image' deve ser uma string." })
+  image?: string | null;
 }

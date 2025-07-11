@@ -16,7 +16,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
-import { UpdatePizzaDto } from './dto/update-pizza.dto';
+
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
@@ -98,7 +98,7 @@ export class PizzasController {
         nome: body?.nome || '',
         descricao: body?.descricao || '',
         preco: parseFloat(body?.preco || '0'),
-        imagemUrl: imageUrl,
+        image: imageUrl,
       };
 
       const pizza = await this.pizzasService.create(pizzaData);
@@ -123,13 +123,22 @@ export class PizzasController {
   }
 
   @Post()
-  async create(@Body() createPizzaDto: CreatePizzaDto) {
+  async create(@Body() body: CreatePizzaDto) {
     try {
-      const pizza = await this.pizzasService.create(createPizzaDto);
+      const data = {
+        ...body,
+        imagemUrl: body.image ?? null,
+      };
+      delete (data as CreatePizzaDto).image;
+      const pizza = await this.pizzasService.create(data);
       return {
         statusCode: 201,
         message: 'Pizza criada com sucesso',
-        data: pizza,
+        data: {
+          ...pizza,
+          image: pizza.imagemUrl,
+          imagemUrl: undefined,
+        },
       };
     } catch (error) {
       if (error instanceof HttpException) {
@@ -164,16 +173,22 @@ export class PizzasController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updatePizzaDto: UpdatePizzaDto,
-  ) {
+  async update(@Param('id') id: string, @Body() body: CreatePizzaDto) {
     try {
-      const pizza = await this.pizzasService.update(+id, updatePizzaDto);
+      const data = {
+        ...body,
+        imagemUrl: body.image ?? null,
+      };
+      delete (data as CreatePizzaDto).image;
+      const pizza = await this.pizzasService.update(+id, data);
       return {
         statusCode: 200,
         message: 'Pizza atualizada com sucesso',
-        data: pizza,
+        data: {
+          ...pizza,
+          image: pizza.imagemUrl,
+          imagemUrl: undefined,
+        },
       };
     } catch (error: unknown) {
       if (

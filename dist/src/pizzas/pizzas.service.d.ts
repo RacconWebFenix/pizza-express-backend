@@ -8,8 +8,8 @@ export declare class PizzasService {
         nome: string;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
         id: number;
+        imagemUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
@@ -17,8 +17,8 @@ export declare class PizzasService {
         nome: string;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
         id: number;
+        imagemUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
@@ -26,8 +26,8 @@ export declare class PizzasService {
         nome: string;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
         id: number;
+        imagemUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
@@ -35,8 +35,8 @@ export declare class PizzasService {
         nome: string;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
         id: number;
+        imagemUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
@@ -44,8 +44,8 @@ export declare class PizzasService {
         nome: string;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
         id: number;
+        imagemUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;

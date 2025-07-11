@@ -2,5 +2,5 @@ export declare class CreatePizzaDto {
     nome: string;
     descricao: string;
     preco: number;
-    imagemUrl?: string | null;
+    image?: string | null;
 }

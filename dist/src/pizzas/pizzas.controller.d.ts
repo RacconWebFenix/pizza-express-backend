@@ -1,6 +1,5 @@
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
-import { UpdatePizzaDto } from './dto/update-pizza.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 export declare class PizzasController {
     private readonly pizzasService;
@@ -23,20 +22,21 @@ export declare class PizzasController {
             nome: string;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
             id: number;
+            imagemUrl: string | null;
             createdAt: Date;
             updatedAt: Date;
         };
     }>;
-    create(createPizzaDto: CreatePizzaDto): Promise<{
+    create(body: CreatePizzaDto): Promise<{
         statusCode: number;
         message: string;
         data: {
+            image: string | null;
+            imagemUrl: undefined;
             nome: string;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
@@ -46,8 +46,8 @@ export declare class PizzasController {
         nome: string;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
         id: number;
+        imagemUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
     }[]>;
@@ -55,19 +55,20 @@ export declare class PizzasController {
         nome: string;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
         id: number;
+        imagemUrl: string | null;
         createdAt: Date;
         updatedAt: Date;
     } | null>;
-    update(id: string, updatePizzaDto: UpdatePizzaDto): Promise<{
+    update(id: string, body: CreatePizzaDto): Promise<{
         statusCode: number;
         message: string;
         data: {
+            image: string | null;
+            imagemUrl: undefined;
             nome: string;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
             id: number;
             createdAt: Date;
             updatedAt: Date;
