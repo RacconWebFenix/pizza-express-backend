@@ -1,3 +1,5 @@
+// ARQUIVO: pizzas.controller.ts (VERSÃO CORRIGIDA)
+
 import {
   Controller,
   Get,
@@ -14,9 +16,10 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express'; // Certifique-se de ter o tipo
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
-
+import { UpdatePizzaDto } from './dto/update-pizza.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
@@ -28,128 +31,56 @@ export class PizzasController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  @Post('upload-image')
-  @UseInterceptors(
-    FileInterceptor('image', {
-      limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-    }),
-  )
-  async uploadImage(@UploadedFile() file?: Express.Multer.File) {
-    if (!file) {
-      throw new BadRequestException('Nenhum arquivo foi enviado');
-    }
-
-    const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-    if (!allowedMimes.includes(file.mimetype || '')) {
-      throw new BadRequestException(
-        'Apenas arquivos de imagem são permitidos!',
-      );
-    }
-
-    try {
-      const imageUrl = await this.cloudinaryService.uploadImage(file);
-      return {
-        statusCode: 200,
-        message: 'Imagem enviada com sucesso',
-        data: {
-          imageUrl,
-          originalname: file.originalname || '',
-          mimetype: file.mimetype || '',
-          size: file.size || 0,
-        },
-      };
-    } catch {
-      throw new HttpException(
-        'Erro ao fazer upload da imagem',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  @Post('with-image')
-  @UseInterceptors(
-    FileInterceptor('image', {
-      limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-    }),
-  )
-  async createWithImage(
-    @UploadedFile() file?: Express.Multer.File,
-    @Body() body?: Record<string, string>,
+  // O único método POST necessário
+  @Post()
+  @UseInterceptors(FileInterceptor('imagem')) // Usa o nome 'imagem' do frontend
+  async create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createPizzaDto: CreatePizzaDto, // Validação automática com o Pipe
   ) {
-    try {
-      let imageUrl: string | undefined;
-
-      if (file) {
-        const allowedMimes = [
-          'image/jpeg',
-          'image/jpg',
-          'image/png',
-          'image/gif',
-        ];
-        if (!allowedMimes.includes(file.mimetype || '')) {
-          throw new BadRequestException(
-            'Apenas arquivos de imagem são permitidos!',
-          );
-        }
-        imageUrl = await this.cloudinaryService.uploadImage(file);
+    // 1. Validar o arquivo recebido (se existir)
+    if (file) {
+      const allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowedMimes.includes(file.mimetype)) {
+        throw new BadRequestException(
+          'Formato de imagem inválido. Use JPG, PNG ou WebP.',
+        );
       }
+    } else {
+      throw new BadRequestException(
+        'A imagem é obrigatória para criar uma pizza.',
+      );
+    }
 
-      const pizzaData = {
-        nome: body?.nome || '',
-        descricao: body?.descricao || '',
-        preco: parseFloat(body?.preco || '0'),
-        imagemUrl: imageUrl ?? null,
+    try {
+      const uploadResult = await this.cloudinaryService.uploadImage(file);
+
+      const pizzaDataWithImageUrl = {
+        ...createPizzaDto,
+        image: uploadResult,
       };
-      const pizza = await this.pizzasService.create(pizzaData);
+
+      const pizza = await this.pizzasService.create(pizzaDataWithImageUrl);
+
       return {
         statusCode: 201,
-        message: 'Pizza criada com sucesso',
+        message: 'Pizza criada com sucesso!',
         data: pizza,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof HttpException) {
         throw error;
       }
-      const errMsg =
-        typeof error === 'object' && error && 'message' in error
-          ? (error as { message?: string }).message
-          : undefined;
-      throw new HttpException(
-        errMsg || 'Erro interno do servidor',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
 
-  @Post()
-  async create(@Body() body: CreatePizzaDto) {
-    try {
-      const data = {
-        nome: body.nome,
-        descricao: body.descricao,
-        preco: body.preco,
-        imagemUrl: body.image ?? null,
-      };
-      const pizza = await this.pizzasService.create(data);
-      return {
-        statusCode: 201,
-        message: 'Pizza criada com sucesso',
-        data: {
-          ...pizza,
-          image: pizza.imagemUrl,
-          imagemUrl: undefined,
-        },
-      };
-    } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
+      if (error instanceof Error) {
+        throw new HttpException(
+          error.message,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
-      const errMsg =
-        typeof error === 'object' && error && 'message' in error
-          ? (error as { message?: string }).message
-          : undefined;
+
       throw new HttpException(
-        errMsg || 'Erro interno do servidor',
+        'Ocorreu um erro inesperado no servidor.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -173,57 +104,24 @@ export class PizzasController {
   }
 
   @Patch(':id')
-  @UseInterceptors(
-    FileInterceptor('image', {
-      limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
-    }),
-  )
+  @UseInterceptors(FileInterceptor('imagem'))
   async update(
     @Param('id') id: string,
-    @UploadedFile() file?: Express.Multer.File,
-    @Body() body?: Record<string, string>,
+    @UploadedFile() file: Express.Multer.File,
+    @Body() updatePizzaDto: UpdatePizzaDto,
   ) {
+    // Lógica similar de upload se um novo arquivo for enviado
+    if (file) {
+      const imageUrl = await this.cloudinaryService.uploadImage(file);
+      updatePizzaDto.image = imageUrl;
+    }
+
     try {
-      let imagemUrl = body?.image ?? null;
-
-      if (file) {
-        const allowedMimes = [
-          'image/jpeg',
-          'image/jpg',
-          'image/png',
-          'image/gif',
-        ];
-        if (!allowedMimes.includes(file.mimetype || '')) {
-          throw new BadRequestException(
-            'Apenas arquivos de imagem são permitidos!',
-          );
-        }
-        imagemUrl = await this.cloudinaryService.uploadImage(file);
-      }
-
-      const data = {
-        nome: body?.nome,
-        descricao: body?.descricao,
-        preco: body?.preco ? parseFloat(body.preco) : undefined,
-        imagemUrl,
-      };
-
-      // Remove campos undefined para não sobrescrever dados não enviados
-      Object.keys(data).forEach(
-        (key) =>
-          data[key as keyof typeof data] === undefined &&
-          delete data[key as keyof typeof data],
-      );
-
-      const pizza = await this.pizzasService.update(+id, data);
+      const pizza = await this.pizzasService.update(+id, updatePizzaDto);
       return {
         statusCode: 200,
         message: 'Pizza atualizada com sucesso',
-        data: {
-          ...pizza,
-          image: pizza.imagemUrl,
-          imagemUrl: undefined,
-        },
+        data: pizza,
       };
     } catch (error: unknown) {
       if (

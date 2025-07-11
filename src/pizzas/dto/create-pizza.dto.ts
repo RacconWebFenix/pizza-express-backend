@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
+// ARQUIVO: create-pizza.dto.ts
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsUrl,
+} from 'class-validator';
 
 export class CreatePizzaDto {
   @IsNotEmpty({ message: "O campo 'nome' é obrigatório." })
@@ -14,6 +21,6 @@ export class CreatePizzaDto {
   preco: number;
 
   @IsOptional()
-  @IsString({ message: "O campo 'image' deve ser uma string." })
-  image?: string | null;
+  @IsUrl({}, { message: 'URL da imagem inválida.' })
+  image?: string; // Alterado para receber a URL do Cloudinary
 }
