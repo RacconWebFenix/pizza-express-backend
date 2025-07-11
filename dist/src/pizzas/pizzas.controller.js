@@ -92,10 +92,11 @@ let PizzasController = class PizzasController {
     async create(body) {
         try {
             const data = {
-                ...body,
+                nome: body.nome,
+                descricao: body.descricao,
+                preco: body.preco,
                 imagemUrl: body.image ?? null,
             };
-            delete data.image;
             const pizza = await this.pizzasService.create(data);
             return {
                 statusCode: 201,

@@ -94,13 +94,12 @@ export class PizzasController {
         imageUrl = await this.cloudinaryService.uploadImage(file);
       }
 
-      const pizzaData: CreatePizzaDto = {
+      const pizzaData = {
         nome: body?.nome || '',
         descricao: body?.descricao || '',
         preco: parseFloat(body?.preco || '0'),
-        image: imageUrl,
+        imagemUrl: imageUrl ?? null,
       };
-
       const pizza = await this.pizzasService.create(pizzaData);
       return {
         statusCode: 201,
