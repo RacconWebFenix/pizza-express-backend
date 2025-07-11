@@ -93,26 +93,31 @@ export class PizzasController {
   }
 
   @Patch(':id')
-  @UseInterceptors(FileInterceptor('imagem'))
+  @UseInterceptors(FileInterceptor('image')) // Espera um campo opcional 'image'
   async update(
     @Param('id') id: string,
-    @UploadedFile() file: Express.Multer.File,
-    @Body() updatePizzaDto: UpdatePizzaDto,
+    @Body() updatePizzaDto: UpdatePizzaDto, // Usa o DTO para validar os dados de texto
+    @UploadedFile() file?: Express.Multer.File, // O arquivo é opcional
   ) {
-    // Lógica similar de upload se um novo arquivo for enviado
-    if (file) {
-      const imageUrl = await this.cloudinaryService.uploadImage(file);
-      updatePizzaDto.image = imageUrl;
-    }
-
     try {
-      const pizza = await this.pizzasService.update(+id, updatePizzaDto);
+      const dataToUpdate: UpdatePizzaDto = { ...updatePizzaDto };
+
+      // Se um novo arquivo foi enviado, faz o upload e atualiza a imagemUrl
+      if (file) {
+        const imageUrl = await this.cloudinaryService.uploadImage(file);
+        dataToUpdate.imagemUrl = imageUrl;
+      }
+
+      const pizza = await this.pizzasService.update(+id, dataToUpdate);
       return {
         statusCode: 200,
         message: 'Pizza atualizada com sucesso',
         data: pizza,
       };
     } catch (error: unknown) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       if (
         typeof error === 'object' &&
         error !== null &&

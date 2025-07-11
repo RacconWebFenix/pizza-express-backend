@@ -21,6 +21,6 @@ export class CreatePizzaDto {
   preco: number;
 
   @IsOptional()
-  @IsUrl({}, { message: 'URL da imagem inválida.' })
-  image?: string; // Alterado para receber a URL do Cloudinary
+  @IsUrl({}, { message: 'A URL da imagem é inválida.' })
+  imagemUrl?: string;
 }
