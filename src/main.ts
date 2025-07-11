@@ -42,9 +42,11 @@ async function bootstrap() {
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
-        transform: true,
         forbidNonWhitelisted: true,
-        transformOptions: { enableImplicitConversion: true },
+        transform: true, // <-- ISTO RESOLVE O PROBLEMA
+        transformOptions: {
+          enableImplicitConversion: true, // Garante a conversão de string para número
+        },
       }),
     );
 
