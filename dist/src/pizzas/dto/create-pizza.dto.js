@@ -19,23 +19,23 @@ class CreatePizzaDto {
 }
 exports.CreatePizzaDto = CreatePizzaDto;
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)({ message: "O campo 'nome' é obrigatório." }),
+    (0, class_validator_1.IsString)({ message: "O campo 'nome' deve ser uma string." }),
     __metadata("design:type", String)
 ], CreatePizzaDto.prototype, "nome", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)({ message: "O campo 'descricao' é obrigatório." }),
+    (0, class_validator_1.IsString)({ message: "O campo 'descricao' deve ser uma string." }),
     __metadata("design:type", String)
 ], CreatePizzaDto.prototype, "descricao", void 0);
 __decorate([
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNotEmpty)({ message: "O campo 'preco' é obrigatório." }),
+    (0, class_validator_1.IsNumber)({}, { message: "O campo 'preco' deve ser um número." }),
     __metadata("design:type", Number)
 ], CreatePizzaDto.prototype, "preco", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsString)({ message: "O campo 'imagemUrl' deve ser uma string." }),
     __metadata("design:type", Object)
 ], CreatePizzaDto.prototype, "imagemUrl", void 0);
 //# sourceMappingURL=create-pizza.dto.js.map
