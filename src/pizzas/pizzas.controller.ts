@@ -31,56 +31,45 @@ export class PizzasController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  // O único método POST necessário
   @Post()
-  @UseInterceptors(FileInterceptor('imagem')) // Usa o nome 'imagem' do frontend
+  @UseInterceptors(FileInterceptor('image')) // 1. Adiciona o interceptor para o campo 'image'
   async create(
-    @UploadedFile() file: Express.Multer.File,
-    @Body() createPizzaDto: CreatePizzaDto, // Validação automática com o Pipe
+    @UploadedFile() file: Express.Multer.File, // 2. Recebe o arquivo do formulário
+    @Body() createPizzaDto: CreatePizzaDto, // 3. Recebe os outros dados e os VALIDA
   ) {
-    // 1. Validar o arquivo recebido (se existir)
-    if (file) {
-      const allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
-      if (!allowedMimes.includes(file.mimetype)) {
-        throw new BadRequestException(
-          'Formato de imagem inválido. Use JPG, PNG ou WebP.',
-        );
-      }
-    } else {
+    if (!file) {
+      throw new BadRequestException('O arquivo de imagem é obrigatório.');
+    }
+
+    // Validação extra do tipo de arquivo (opcional mas recomendado)
+    const allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedMimes.includes(file.mimetype)) {
       throw new BadRequestException(
-        'A imagem é obrigatória para criar uma pizza.',
+        'Formato de imagem inválido. Use JPG, PNG ou WebP.',
       );
     }
 
     try {
-      const uploadResult = await this.cloudinaryService.uploadImage(file);
+      const imageUrl = await this.cloudinaryService.uploadImage(file);
 
-      const pizzaDataWithImageUrl = {
+      const pizzaDataCompleta = {
         ...createPizzaDto,
-        image: uploadResult,
+        imagemUrl: imageUrl,
       };
 
-      const pizza = await this.pizzasService.create(pizzaDataWithImageUrl);
+      const pizza = await this.pizzasService.create(pizzaDataCompleta);
 
       return {
         statusCode: 201,
         message: 'Pizza criada com sucesso!',
         data: pizza,
       };
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof HttpException) {
         throw error;
       }
-
-      if (error instanceof Error) {
-        throw new HttpException(
-          error.message,
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
-
       throw new HttpException(
-        'Ocorreu um erro inesperado no servidor.',
+        'Erro interno ao criar a pizza',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
