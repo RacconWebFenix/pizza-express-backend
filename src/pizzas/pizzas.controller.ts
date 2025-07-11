@@ -16,7 +16,6 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
-import { UpdatePizzaDto } from './dto/update-pizza.dto';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
@@ -174,13 +173,48 @@ export class PizzasController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() body: UpdatePizzaDto) {
+  @UseInterceptors(
+    FileInterceptor('image', {
+      limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+    }),
+  )
+  async update(
+    @Param('id') id: string,
+    @UploadedFile() file?: Express.Multer.File,
+    @Body() body?: Record<string, string>,
+  ) {
     try {
+      let imagemUrl = body?.image ?? null;
+
+      if (file) {
+        const allowedMimes = [
+          'image/jpeg',
+          'image/jpg',
+          'image/png',
+          'image/gif',
+        ];
+        if (!allowedMimes.includes(file.mimetype || '')) {
+          throw new BadRequestException(
+            'Apenas arquivos de imagem são permitidos!',
+          );
+        }
+        imagemUrl = await this.cloudinaryService.uploadImage(file);
+      }
+
       const data = {
-        ...body,
-        imagemUrl: body.image ?? null,
+        nome: body?.nome,
+        descricao: body?.descricao,
+        preco: body?.preco ? parseFloat(body.preco) : undefined,
+        imagemUrl,
       };
-      delete (data as UpdatePizzaDto).image;
+
+      // Remove campos undefined para não sobrescrever dados não enviados
+      Object.keys(data).forEach(
+        (key) =>
+          data[key as keyof typeof data] === undefined &&
+          delete data[key as keyof typeof data],
+      );
+
       const pizza = await this.pizzasService.update(+id, data);
       return {
         statusCode: 200,
