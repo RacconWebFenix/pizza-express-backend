@@ -29,3 +29,4 @@ Thumbs.db
 pizza-express-insomnia.json
 # Uploads (opcional - remova se quiser versionar as imagens)
 uploads/
+.dist/
