@@ -21,6 +21,6 @@ export class CreatePizzaDto {
   preco: number;
 
   @IsOptional()
-  @IsUrl({}, { message: 'A URL da imagem é inválida.' })
-  imagemUrl?: string;
+  @IsString()
+  image?: string;
 }

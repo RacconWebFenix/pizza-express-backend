@@ -1,1 +1,3 @@
-export class Pizza {}
+export class Pizza {
+  image?: string;
+}

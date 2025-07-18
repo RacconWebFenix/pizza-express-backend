@@ -13,63 +13,119 @@ import {
   HttpStatus,
   UseInterceptors,
   UploadedFile,
-  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Express } from 'express'; // Certifique-se de ter o tipo
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
 import { UpdatePizzaDto } from './dto/update-pizza.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { UploadService } from '../upload/upload.service';
+import { FileValidationInterceptor } from '../upload/file-validation.interceptor';
 
 @Controller('pizzas')
 @UseGuards(JwtAuthGuard)
 export class PizzasController {
   constructor(
     private readonly pizzasService: PizzasService,
-    private readonly cloudinaryService: CloudinaryService,
+    private readonly uploadService: UploadService,
   ) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('image')) // 1. Adiciona o interceptor para o campo 'image'
-  async create(
-    @UploadedFile() file: Express.Multer.File, // 2. Recebe o arquivo do formulário
-    @Body() createPizzaDto: CreatePizzaDto, // 3. Recebe os outros dados e os VALIDA
-  ) {
-    if (!file) {
-      throw new BadRequestException('O arquivo de imagem é obrigatório.');
-    }
-
-    // Validação extra do tipo de arquivo (opcional mas recomendado)
-    const allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (!allowedMimes.includes(file.mimetype)) {
-      throw new BadRequestException(
-        'Formato de imagem inválido. Use JPG, PNG ou WebP.',
-      );
-    }
-
+  async create(@Body() createPizzaDto: CreatePizzaDto) {
     try {
-      const imageUrl = await this.cloudinaryService.uploadImage(file);
-
-      const pizzaDataCompleta = {
-        ...createPizzaDto,
-        imagemUrl: imageUrl,
-      };
-
-      const pizza = await this.pizzasService.create(pizzaDataCompleta);
-
+      const pizza = await this.pizzasService.create(createPizzaDto);
       return {
         statusCode: 201,
-        message: 'Pizza criada com sucesso!',
+        message: 'Pizza criada com sucesso',
         data: pizza,
       };
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
       }
+      const errMsg =
+        typeof error === 'object' && error && 'message' in error
+          ? (error as { message?: string }).message
+          : undefined;
       throw new HttpException(
-        'Erro interno ao criar a pizza',
+        errMsg || 'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post('with-image')
+  @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
+  async createWithImage(
+    @Body() createPizzaDto: CreatePizzaDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    try {
+      let image: string | undefined;
+
+      if (file) {
+        image = await this.uploadService.uploadImage(file, 'pizzas');
+      }
+
+      const pizzaData = {
+        ...createPizzaDto,
+        image: image || createPizzaDto.image,
+      };
+
+      const pizza = await this.pizzasService.create(pizzaData);
+      return {
+        statusCode: 201,
+        message: 'Pizza criada com sucesso',
+        data: pizza,
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      const errMsg =
+        typeof error === 'object' && error && 'message' in error
+          ? (error as { message?: string }).message
+          : undefined;
+      throw new HttpException(
+        errMsg || 'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post(':id/upload-image')
+  @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
+  async uploadImage(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    try {
+      if (!file) {
+        throw new HttpException(
+          'Arquivo de imagem é obrigatório',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const image = await this.uploadService.uploadImage(file, 'pizzas');
+
+      const pizza = await this.pizzasService.update(+id, { image });
+
+      return {
+        statusCode: 200,
+        message: 'Imagem da pizza atualizada com sucesso',
+        data: { image: (pizza as { image?: string }).image },
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      const errMsg =
+        typeof error === 'object' && error && 'message' in error
+          ? (error as { message?: string }).message
+          : undefined;
+      throw new HttpException(
+        errMsg || 'Erro interno do servidor',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -114,16 +170,8 @@ export class PizzasController {
         message: 'Pizza atualizada com sucesso',
         data: pizza,
       };
-    } catch (error: unknown) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        error.code === 'P2025'
-      ) {
+    } catch (error) {
+      if ((error as { code?: string })?.code === 'P2025') {
         throw new HttpException('Pizza não encontrada', HttpStatus.NOT_FOUND);
       }
       throw new HttpException(
@@ -141,13 +189,8 @@ export class PizzasController {
         statusCode: 200,
         message: 'Pizza removida com sucesso',
       };
-    } catch (error: unknown) {
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        error.code === 'P2025'
-      ) {
+    } catch (error) {
+      if ((error as { code?: string })?.code === 'P2025') {
         throw new HttpException('Pizza não encontrada', HttpStatus.NOT_FOUND);
       }
       throw new HttpException(

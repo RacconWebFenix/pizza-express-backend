@@ -6,6 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { CreateClienteDto } from '../clientes/dto/create-cliente.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -31,29 +32,24 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(
-    @Body()
-    registerDto: {
-      nome: string;
-      email: string;
-      password: string;
-      telefone?: string;
-      endereco?: string;
-    },
-  ) {
+  async register(@Body() registerDto: CreateClienteDto) {
     try {
-      const dataToCreate = {
-        ...registerDto,
-        endereco: registerDto.endereco || '',
-      };
-      const result = await this.authService.register(dataToCreate);
+      const result = await this.authService.register(registerDto);
       return result;
-    } catch (error: unknown) {
+    } catch (error) {
+      // Log detalhado para depuração
+      // eslint-disable-next-line no-console
+      console.error('Erro no registro de cliente:', {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        message: error instanceof Error ? error.message : error,
+        stack: error instanceof Error ? error.stack : undefined,
+        error,
+      });
       if (
         typeof error === 'object' &&
         error !== null &&
         'code' in error &&
-        error.code === 'P2002'
+        (error as Record<string, any>).code === 'P2002'
       ) {
         throw new HttpException('Email já cadastrado', HttpStatus.CONFLICT);
       }

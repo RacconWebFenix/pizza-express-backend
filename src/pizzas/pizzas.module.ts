@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { PizzasService } from './pizzas.service';
 import { PizzasController } from './pizzas.controller';
 import { PrismaModule } from '../prisma.module';
-import { CloudinaryModule } from '../cloudinary/cloudinary.module';
+import { UploadModule } from '../upload/upload.module';
 
 @Module({
-  imports: [PrismaModule, CloudinaryModule],
+  imports: [PrismaModule, UploadModule],
   controllers: [PizzasController],
   providers: [PizzasService],
 })
