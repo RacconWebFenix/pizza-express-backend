@@ -156,14 +156,14 @@ export class PizzasController {
     @UploadedFile() file?: Express.Multer.File, // O arquivo é opcional
   ) {
     try {
-      const dataToUpdate: UpdatePizzaDto = { ...updatePizzaDto };
-
-      // Se um novo arquivo foi enviado, faz o upload e atualiza a imagemUrl
+      let image: string | undefined;
       if (file) {
-        const imageUrl = await this.cloudinaryService.uploadImage(file);
-        dataToUpdate.imagemUrl = imageUrl;
+        image = await this.uploadService.uploadImage(file, 'pizzas');
       }
-
+      const dataToUpdate: UpdatePizzaDto = {
+        ...updatePizzaDto,
+        ...(image ? { image } : {}),
+      };
       const pizza = await this.pizzasService.update(+id, dataToUpdate);
       return {
         statusCode: 200,
