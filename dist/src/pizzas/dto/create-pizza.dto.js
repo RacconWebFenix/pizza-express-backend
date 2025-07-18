@@ -15,7 +15,7 @@ class CreatePizzaDto {
     nome;
     descricao;
     preco;
-    imagemUrl;
+    image;
 }
 exports.CreatePizzaDto = CreatePizzaDto;
 __decorate([
@@ -37,5 +37,5 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreatePizzaDto.prototype, "imagemUrl", void 0);
+], CreatePizzaDto.prototype, "image", void 0);
 //# sourceMappingURL=create-pizza.dto.js.map

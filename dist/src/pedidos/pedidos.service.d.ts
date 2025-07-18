@@ -39,7 +39,7 @@ export declare class PedidosService {
             updatedAt: Date;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
+            image: string | null;
         }[];
     } & {
         id: number;
@@ -76,7 +76,7 @@ export declare class PedidosService {
             updatedAt: Date;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
+            image: string | null;
         }[];
     } & {
         id: number;

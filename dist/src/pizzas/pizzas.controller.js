@@ -49,13 +49,13 @@ let PizzasController = class PizzasController {
     }
     async createWithImage(createPizzaDto, file) {
         try {
-            let imagemUrl;
+            let image;
             if (file) {
-                imagemUrl = await this.uploadService.uploadImage(file, 'pizzas');
+                image = await this.uploadService.uploadImage(file, 'pizzas');
             }
             const pizzaData = {
                 ...createPizzaDto,
-                imagemUrl: imagemUrl || createPizzaDto.imagemUrl,
+                image: image || createPizzaDto.image,
             };
             const pizza = await this.pizzasService.create(pizzaData);
             return {
@@ -79,12 +79,12 @@ let PizzasController = class PizzasController {
             if (!file) {
                 throw new common_1.HttpException('Arquivo de imagem é obrigatório', common_1.HttpStatus.BAD_REQUEST);
             }
-            const imagemUrl = await this.uploadService.uploadImage(file, 'pizzas');
-            const pizza = await this.pizzasService.update(+id, { imagemUrl });
+            const image = await this.uploadService.uploadImage(file, 'pizzas');
+            const pizza = await this.pizzasService.update(+id, { image });
             return {
                 statusCode: 200,
                 message: 'Imagem da pizza atualizada com sucesso',
-                data: { imagemUrl: pizza.imagemUrl },
+                data: { image: pizza.image },
             };
         }
         catch (error) {
@@ -150,7 +150,7 @@ __decorate([
 ], PizzasController.prototype, "create", null);
 __decorate([
     (0, common_1.Post)('with-image'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('imagem'), file_validation_interceptor_1.FileValidationInterceptor),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image'), file_validation_interceptor_1.FileValidationInterceptor),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
@@ -159,7 +159,7 @@ __decorate([
 ], PizzasController.prototype, "createWithImage", null);
 __decorate([
     (0, common_1.Post)(':id/upload-image'),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('imagem'), file_validation_interceptor_1.FileValidationInterceptor),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image'), file_validation_interceptor_1.FileValidationInterceptor),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),

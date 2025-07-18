@@ -15,5 +15,5 @@ export class CreatePizzaDto {
 
   @IsOptional()
   @IsString()
-  imagemUrl?: string;
+  image?: string;
 }

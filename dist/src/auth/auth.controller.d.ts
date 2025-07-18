@@ -1,4 +1,5 @@
 import { AuthService } from './auth.service';
+import { CreateClienteDto } from '../clientes/dto/create-cliente.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
@@ -8,13 +9,7 @@ export declare class AuthController {
     }): Promise<{
         access_token: string;
     }>;
-    register(registerDto: {
-        nome: string;
-        email: string;
-        password: string;
-        telefone?: string;
-        endereco?: string;
-    }): Promise<{
+    register(registerDto: CreateClienteDto): Promise<{
         id: number;
         nome: string;
         email: string;

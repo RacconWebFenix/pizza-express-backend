@@ -11,7 +11,7 @@ export declare class PizzasService {
         updatedAt: Date;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
+        image: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     findAll(): import(".prisma/client").Prisma.PrismaPromise<{
         id: number;
@@ -20,7 +20,7 @@ export declare class PizzasService {
         updatedAt: Date;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
+        image: string | null;
     }[]>;
     findOne(id: number): import(".prisma/client").Prisma.Prisma__PizzaClient<{
         id: number;
@@ -29,7 +29,7 @@ export declare class PizzasService {
         updatedAt: Date;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
+        image: string | null;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     update(id: number, updatePizzaDto: UpdatePizzaDto): import(".prisma/client").Prisma.Prisma__PizzaClient<{
         id: number;
@@ -38,7 +38,7 @@ export declare class PizzasService {
         updatedAt: Date;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
+        image: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
     remove(id: number): import(".prisma/client").Prisma.Prisma__PizzaClient<{
         id: number;
@@ -47,6 +47,6 @@ export declare class PizzasService {
         updatedAt: Date;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
+        image: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs, import(".prisma/client").Prisma.PrismaClientOptions>;
 }

@@ -53,21 +53,21 @@ export class PizzasController {
   }
 
   @Post('with-image')
-  @UseInterceptors(FileInterceptor('imagem'), FileValidationInterceptor)
+  @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
   async createWithImage(
     @Body() createPizzaDto: CreatePizzaDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
     try {
-      let imagemUrl: string | undefined;
+      let image: string | undefined;
 
       if (file) {
-        imagemUrl = await this.uploadService.uploadImage(file, 'pizzas');
+        image = await this.uploadService.uploadImage(file, 'pizzas');
       }
 
       const pizzaData = {
         ...createPizzaDto,
-        imagemUrl: imagemUrl || createPizzaDto.imagemUrl,
+        image: image || createPizzaDto.image,
       };
 
       const pizza = await this.pizzasService.create(pizzaData);
@@ -92,7 +92,7 @@ export class PizzasController {
   }
 
   @Post(':id/upload-image')
-  @UseInterceptors(FileInterceptor('imagem'), FileValidationInterceptor)
+  @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
   async uploadImage(
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
@@ -105,14 +105,14 @@ export class PizzasController {
         );
       }
 
-      const imagemUrl = await this.uploadService.uploadImage(file, 'pizzas');
+      const image = await this.uploadService.uploadImage(file, 'pizzas');
 
-      const pizza = await this.pizzasService.update(+id, { imagemUrl });
+      const pizza = await this.pizzasService.update(+id, { image });
 
       return {
         statusCode: 200,
         message: 'Imagem da pizza atualizada com sucesso',
-        data: { imagemUrl: pizza.imagemUrl },
+        data: { image: (pizza as { image?: string }).image },
       };
     } catch (error) {
       if (error instanceof HttpException) {

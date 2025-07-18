@@ -16,7 +16,7 @@ export declare class PizzasController {
             updatedAt: Date;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
+            image: string | null;
         };
     }>;
     createWithImage(createPizzaDto: CreatePizzaDto, file: Express.Multer.File): Promise<{
@@ -29,14 +29,14 @@ export declare class PizzasController {
             updatedAt: Date;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
+            image: string | null;
         };
     }>;
     uploadImage(id: string, file: Express.Multer.File): Promise<{
         statusCode: number;
         message: string;
         data: {
-            imagemUrl: string | null;
+            image: string | undefined;
         };
     }>;
     findAll(): Promise<{
@@ -46,7 +46,7 @@ export declare class PizzasController {
         updatedAt: Date;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
+        image: string | null;
     }[]>;
     findOne(id: string): Promise<{
         id: number;
@@ -55,7 +55,7 @@ export declare class PizzasController {
         updatedAt: Date;
         descricao: string | null;
         preco: number;
-        imagemUrl: string | null;
+        image: string | null;
     } | null>;
     update(id: string, updatePizzaDto: UpdatePizzaDto): Promise<{
         statusCode: number;
@@ -67,7 +67,7 @@ export declare class PizzasController {
             updatedAt: Date;
             descricao: string | null;
             preco: number;
-            imagemUrl: string | null;
+            image: string | null;
         };
     }>;
     remove(id: string): Promise<{

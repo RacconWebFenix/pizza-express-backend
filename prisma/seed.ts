@@ -74,6 +74,7 @@ async function main() {
       nome: 'Margherita',
       descricao: 'Molho de tomate, mussarela, manjericão',
       preco: 39.9,
+      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
     },
   });
   console.log('Pizza 1 criada');
@@ -82,6 +83,7 @@ async function main() {
       nome: 'Calabresa',
       descricao: 'Calabresa, cebola, mussarela',
       preco: 44.9,
+      image: 'https://images.unsplash.com/photo-1548365328-8b849e6c7b8b',
     },
   });
   console.log('Pizza 2 criada');
@@ -90,6 +92,7 @@ async function main() {
       nome: 'Quatro Queijos',
       descricao: 'Mussarela, parmesão, provolone, gorgonzola',
       preco: 49.9,
+      image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591',
     },
   });
   console.log('Pizza 3 criada');

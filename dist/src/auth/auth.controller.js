@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
+const create_cliente_dto_1 = require("../clientes/dto/create-cliente.dto");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -28,21 +29,25 @@ let AuthController = class AuthController {
             }
             return this.authService.login(user);
         }
-        catch (error) {
+        catch {
             throw new common_1.HttpException('Credenciais inválidas', common_1.HttpStatus.UNAUTHORIZED);
         }
     }
     async register(registerDto) {
         try {
-            const dataToCreate = {
-                ...registerDto,
-                endereco: registerDto.endereco || '',
-            };
-            const result = await this.authService.register(dataToCreate);
+            const result = await this.authService.register(registerDto);
             return result;
         }
         catch (error) {
-            if (error.code === 'P2002') {
+            console.error('Erro no registro de cliente:', {
+                message: error instanceof Error ? error.message : error,
+                stack: error instanceof Error ? error.stack : undefined,
+                error,
+            });
+            if (typeof error === 'object' &&
+                error !== null &&
+                'code' in error &&
+                error.code === 'P2002') {
                 throw new common_1.HttpException('Email já cadastrado', common_1.HttpStatus.CONFLICT);
             }
             throw new common_1.HttpException('Erro interno do servidor', common_1.HttpStatus.INTERNAL_SERVER_ERROR);
@@ -61,7 +66,7 @@ __decorate([
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [create_cliente_dto_1.CreateClienteDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
 exports.AuthController = AuthController = __decorate([
