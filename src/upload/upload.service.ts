@@ -15,30 +15,37 @@ export class UploadService {
     file: Express.Multer.File,
     folder: string = 'pizzas',
   ): Promise<string> {
-    try {
-      // Para upload via buffer (quando não há path)
-      const uploadSource =
-        file.path ||
-        `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-
-      const result = await cloudinary.uploader.upload(uploadSource, {
-        folder: `pizza-express/${folder}`,
-        resource_type: 'image',
-        format: 'webp',
-        quality: 'auto',
-        fetch_format: 'auto',
-        transformation: [
-          { width: 800, height: 600, crop: 'fill' },
-          { quality: 'auto:good' },
-        ],
-      });
-
-      return result.secure_url;
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Erro desconhecido';
-      throw new Error(`Erro ao fazer upload da imagem: ${errorMessage}`);
-    }
+    return new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: `pizza-express/${folder}`,
+          resource_type: 'image',
+          format: 'webp',
+          quality: 'auto',
+          fetch_format: 'auto',
+          transformation: [
+            { width: 800, height: 600, crop: 'fill' },
+            { quality: 'auto:good' },
+          ],
+        },
+        (error: any, result: any) => {
+          if (error) {
+            console.error('==> [UploadService] uploadImage - error:', error);
+            reject(new Error(error.message || 'Upload failed'));
+          } else if (result?.secure_url) {
+            console.log('==> [UploadService] uploadImage - result:', result);
+            resolve(result.secure_url);
+          } else {
+            console.error(
+              '==> [UploadService] uploadImage - unknown error:',
+              result,
+            );
+            reject(new Error('Upload failed'));
+          }
+        },
+      );
+      uploadStream.end(file.buffer);
+    });
   }
 
   async deleteImage(publicId: string): Promise<void> {

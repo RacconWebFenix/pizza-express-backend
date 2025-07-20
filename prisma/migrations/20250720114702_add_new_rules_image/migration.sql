@@ -4,6 +4,7 @@ CREATE TABLE "Pizza" (
     "nome" TEXT NOT NULL,
     "descricao" TEXT,
     "preco" DOUBLE PRECISION NOT NULL,
+    "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

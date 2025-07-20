@@ -19,8 +19,4 @@ export class CreatePizzaDto {
   @IsNotEmpty({ message: "O campo 'preco' é obrigatório." })
   @IsNumber({}, { message: "O campo 'preco' deve ser um número." })
   preco: number;
-
-  @IsOptional()
-  @IsString()
-  image?: string;
 }
