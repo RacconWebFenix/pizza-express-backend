@@ -1,5 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { v2 as cloudinary } from 'cloudinary';
+import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  v2 as cloudinary,
+  UploadApiResponse,
+  UploadApiErrorResponse,
+} from 'cloudinary';
 
 @Injectable()
 export class UploadService {
@@ -15,6 +19,23 @@ export class UploadService {
     file: Express.Multer.File,
     folder: string = 'pizzas',
   ): Promise<string> {
+    // Validação de tipo e tamanho
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (!file) {
+      throw new BadRequestException('Arquivo de imagem não enviado.');
+    }
+    if (!allowedTypes.includes(file.mimetype)) {
+      throw new BadRequestException(
+        'Tipo de arquivo não permitido. Use apenas: JPG, PNG ou WEBP.',
+      );
+    }
+    if (file.size > maxSize) {
+      throw new BadRequestException(
+        'Arquivo muito grande. Tamanho máximo: 5MB.',
+      );
+    }
+
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
@@ -28,18 +49,15 @@ export class UploadService {
             { quality: 'auto:good' },
           ],
         },
-        (error: any, result: any) => {
+        (
+          error: UploadApiErrorResponse | undefined,
+          result: UploadApiResponse | undefined,
+        ) => {
           if (error) {
-            console.error('==> [UploadService] uploadImage - error:', error);
             reject(new Error(error.message || 'Upload failed'));
           } else if (result?.secure_url) {
-            console.log('==> [UploadService] uploadImage - result:', result);
             resolve(result.secure_url);
           } else {
-            console.error(
-              '==> [UploadService] uploadImage - unknown error:',
-              result,
-            );
             reject(new Error('Upload failed'));
           }
         },
@@ -51,8 +69,8 @@ export class UploadService {
   async deleteImage(publicId: string): Promise<void> {
     try {
       await cloudinary.uploader.destroy(publicId);
-    } catch (error) {
-      console.error('Erro ao deletar imagem do Cloudinary:', error);
+    } catch {
+      // Silenciar erro em produção
     }
   }
 

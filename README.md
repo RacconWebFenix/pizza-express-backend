@@ -1,391 +1,184 @@
-![CI](https://github.com/seu-usuario/pizza-express/actions/workflows/ci.yml/badge.svg)
+# 🍕 Pizza Express API & Frontend Guide
 
-# 🍕 Pizza Express API
+---
 
-Uma API completa para gerenciamento de pizzarias, desenvolvida com NestJS, Prisma e PostgreSQL com upload de imagens via Cloudinary.
+## 📦 Backend - Pizza Express
 
-## 🚀 Funcionalidades
+### 🚦 Funcionalidades
+- Autenticação JWT
+- CRUD de clientes, pizzas, pedidos, entregadores
+- Upload de imagens via Cloudinary
+- WebSockets para entregadores
+- Documentação Swagger
+- Docker Ready
 
-- **🔐 Autenticação JWT** - Sistema de login seguro para clientes
-- **👥 Gestão de Clientes** - CRUD completo para clientes
-- **🍕 Catálogo de Pizzas** - Gerenciamento do cardápio com upload de imagens
-- **📷 Upload de Imagens** - Integração com Cloudinary (processamento automático, CDN global)
-- **📋 Sistema de Pedidos** - Controle completo de pedidos
-- **🚚 Gestão de Entregadores** - Acompanhamento de entregas em tempo real via WebSockets
-- **📖 Documentação OpenAPI/Swagger** - Documentação interativa (desenvolvimento)
-- **🐳 Docker Ready** - Configurado para deploy com Docker
+### 🏗️ Arquitetura
+- NestJS + TypeScript
+- PostgreSQL + Prisma ORM
+- JWT Bearer Token
+- Cloudinary para imagens
+- Testes: Jest + Supertest
+- Deploy: Vercel
 
-## 🛠️ Tecnologias
-
-- **NestJS** - Framework Node.js robusto e escalável
-- **Prisma** - ORM moderno para bancos de dados
-- **PostgreSQL** - Banco de dados relacional
-- **Cloudinary** - Armazenamento e processamento de imagens na nuvem
-- **JWT** - Autenticação segura
-- **WebSockets** - Comunicação em tempo real para entregas
-- **TypeScript** - Linguagem tipada
-- **Jest** + **Supertest** - Testes automatizados
-- **Docker** - Containerização para produção
-
-## 📋 Pré-requisitos
-
-- Node.js 18+
-- PostgreSQL 15+ ou Docker
-- Conta no Cloudinary (gratuita)
-- npm ou yarn
-
-## 🔧 Instalação
-
-### 1. Clone e instale dependências
-
-```bash
-git clone <url-do-repositorio>
-cd pizza-express-backend
-npm install
+#### Estrutura de Módulos
+```
+src/
+├── auth/           [PROTEGIDO] - JWT, guards, estratégias
+├── clientes/       - CRUD de clientes
+├── entregadores/   - CRUD + WebSocket para localização
+├── pedidos/        - Sistema de pedidos
+├── pizzas/         - CRUD de pizzas + upload de imagens
+├── upload/         - Serviços de upload (Cloudinary)
+├── prisma.module.ts - Configuração do Prisma
+└── main.ts         [PROTEGIDO] - Bootstrap da aplicação
 ```
 
-### 2. Configure variáveis de ambiente
-
-```bash
-cp .env.example .env
+### 🛡️ Segurança & Políticas
+- Não editar arquivos protegidos sem permissão
+- Não commitar sem autorização
+- Endpoints protegidos com `@UseGuards(JwtAuthGuard)`
+- Respostas padronizadas:
+```typescript
+{
+  statusCode: 201,
+  message: "Descrição da ação",
+  data: objeto_retornado
+}
 ```
 
-Edite o arquivo `.env`:
+### 🧑‍💻 DTOs & Validação
+- Usar class-validator: `IsNotEmpty`, `IsString`, `IsNumber`, `IsOptional`, `IsUrl`
+- Imports organizados
 
-```env
-# Banco de dados
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/pizza_express"
+### 🐘 Banco de Dados (Prisma)
+- Cliente (id, nome, email, password, telefone)
+- Pizza (id, nome, descricao, preco, image)
+- Pedido (relaciona cliente + pizzas)
+- Entregador (id, nome, email, telefone)
 
-# JWT
-JWT_SECRET="seu-jwt-secret-super-seguro"
-
-# Servidor
-NODE_ENV="development"
-PORT=3005
-FRONTEND_URL="http://localhost:3000"
-
-# Cloudinary (obrigatório para upload de imagens)
-CLOUDINARY_CLOUD_NAME="seu-cloud-name"
-CLOUDINARY_API_KEY="sua-api-key"
-CLOUDINARY_API_SECRET="seu-api-secret"
-
-# Teste (desenvolvimento)
-TEST_CLIENTE_PASSWORD="senha123"
-```
-
-### 3. Configure o banco de dados
-
+#### Comandos úteis
 ```bash
-# Execute as migrações
+npx prisma migrate dev --name nome_da_migracao
 npx prisma migrate deploy
-
-# Seed do banco (opcional)
-npx prisma db seed
+npx prisma studio
 ```
 
-## 🚀 Execução
+### 🔐 Autenticação
+- JWT obrigatório em todos endpoints (exceto login/registro)
+- Payload: `{ sub: clienteId, email }`
 
-### Desenvolvimento
+### 🌍 CORS & Deploy
+- Dev: `http://localhost:3000`
+- Prod: `process.env.FRONTEND_URL`
+- Deploy: Vercel
+
+### 🧪 Testes
 ```bash
-npm run start:dev    # Modo watch com hot reload
-npm run start:debug  # Modo debug
+npm run test         # Testes unitários
+npm run test:e2e     # Testes e2e (sequencial)
+npm run test:cov     # Coverage
 ```
 
-### Produção
+---
+
+## 📤 Upload de Imagens (Cloudinary)
+
+### Endpoints
+- `POST /pizzas/with-image` - Criar pizza com imagem
+- `POST /pizzas/:id/upload-image` - Atualizar imagem
+- `POST /pizzas` - Criar pizza sem imagem
+
+#### Exemplo de uso (curl)
 ```bash
-npm run build        # Build da aplicação
-npm run start:prod   # Inicia em produção
+curl -X POST \
+  http://localhost:3005/pizzas/with-image \
+  -H 'Authorization: Bearer YOUR_JWT_TOKEN' \
+  -F 'nome=Pizza Margherita' \
+  -F 'descricao=Molho de tomate, mussarela e manjericão' \
+  -F 'preco=25.90' \
+  -F 'image=@/caminho/para/sua/imagem.jpg'
 ```
 
-### Docker
-```bash
-# Build da imagem
-docker build -t pizza-express-api .
+#### Validações
+- Tipos permitidos: JPG, JPEG, PNG, WEBP
+- Tamanho máximo: 5MB
+- JWT obrigatório
 
-# Executar container
-docker run -p 3005:3005 --env-file .env pizza-express-api
-```
+#### Configuração Cloudinary
+- Pasta: `pizza-express/pizzas/`
+- Redimensionamento: 800x600px
+- Formato: WEBP
+- Otimização automática
 
-## 📚 Documentação da API
-
-### Swagger (Desenvolvimento)
-```
-http://localhost:3005/docs
-```
-
-### Endpoints JSON/YAML
-- **JSON**: `http://localhost:3005/docs/json`
-- **YAML**: `http://localhost:3005/docs/yaml`
-
-## 📷 Upload de Imagens - Cloudinary
-
-### Configuração
-O projeto utiliza **Cloudinary** para armazenamento na nuvem com:
-- ✅ **CDN Global** - Entrega rápida mundial
-- ✅ **Processamento Automático** - Redimensionamento (800x600), otimização, WebP
-- ✅ **Backup Seguro** - Imagens protegidas na nuvem
-- ✅ **Escalabilidade** - Suporte a milhões de imagens
-
-### Endpoints de Upload
-
-#### 1. Upload Simples de Imagem
-```bash
-POST /pizzas/upload-image
-Authorization: Bearer <token>
-Content-Type: multipart/form-data
-
-# Campos:
-# - image: arquivo (JPEG, JPG, PNG, GIF - máx 5MB)
-```
-
-**Resposta:**
+#### Resposta de sucesso
 ```json
 {
-  "statusCode": 200,
-  "message": "Imagem enviada com sucesso",
+  "statusCode": 201,
+  "message": "Pizza criada com sucesso",
   "data": {
-    "imageUrl": "https://res.cloudinary.com/pizzariaexpress/image/upload/v1.../pizzas/nome.webp",
-    "originalname": "pizza-margherita.jpg",
-    "mimetype": "image/jpeg",
-    "size": 245760
+    "id": 1,
+    "nome": "Pizza Margherita",
+    "descricao": "Molho de tomate, mussarela e manjericão",
+    "preco": 25.90,
+    "image": "https://res.cloudinary.com/.../pizza-express/pizzas/abc123.webp"
   }
 }
 ```
 
-#### 2. Criar Pizza com Imagem
-```bash
-POST /pizzas/with-image
-Authorization: Bearer <token>
-Content-Type: multipart/form-data
+---
 
-# Campos:
-# - image: arquivo de imagem (opcional)
-# - nome: string
-# - descricao: string  
-# - preco: number
-```
+## 🖥️ Frontend - Guia de Integração Next.js
 
-### Exemplo Frontend (JavaScript)
-```javascript
-// Upload simples
-const formData = new FormData();
-formData.append('image', fileInput.files[0]);
+### URLs da API
+- Dev: `http://localhost:3005`
+- Prod: `https://pizza-express-backend.vercel.app`
 
-const response = await fetch('/api/pizzas/upload-image', {
-  method: 'POST',
-  headers: { 'Authorization': `Bearer ${token}` },
-  body: formData
-});
+### Fluxo de Pizzas com Imagens
+- Listar pizzas: `GET /pizzas`
+- Criar pizza sem imagem: `POST /pizzas` (JSON)
+- Criar pizza com imagem: `POST /pizzas/with-image` (form-data)
+- Upload de imagem: `POST /pizzas/:id/upload-image` (form-data)
+- Atualizar pizza: `PATCH /pizzas/:id`
+- Deletar pizza: `DELETE /pizzas/:id`
 
+#### Exemplo de integração (Next.js)
+```typescript
 // Criar pizza com imagem
-const pizzaData = new FormData();
-pizzaData.append('image', file);
-pizzaData.append('nome', 'Pizza Margherita');
-pizzaData.append('descricao', 'Molho, mussarela e manjericão');
-pizzaData.append('preco', '25.90');
+const formData = new FormData();
+formData.append('nome', pizza.nome);
+formData.append('descricao', pizza.descricao);
+formData.append('preco', pizza.preco.toString());
+formData.append('image', imagem);
 
 await fetch('/api/pizzas/with-image', {
   method: 'POST',
-  headers: { 'Authorization': `Bearer ${token}` },
-  body: pizzaData
+  headers: { Authorization: `Bearer ${token}` },
+  body: formData,
 });
 ```
 
-## 🔐 Autenticação
-
-### Login de Cliente
-```bash
-POST /auth/login
-Content-Type: application/json
-
-{
-  "email": "cliente@exemplo.com",
-  "password": "senha123"
-}
-```
-
-### Uso do Token
-```bash
-Authorization: Bearer <jwt-token>
-```
-
-## 🗄️ Principais Endpoints
-
-| Método | Endpoint | Descrição | Auth |
-|--------|----------|-----------|------|
-| POST | `/auth/login` | Login de cliente | ❌ |
-| GET | `/auth/me` | Dados do usuário logado | ✅ |
-| GET | `/pizzas` | Listar pizzas | ✅ |
-| POST | `/pizzas` | Criar pizza | ✅ |
-| POST | `/pizzas/upload-image` | Upload de imagem | ✅ |
-| POST | `/pizzas/with-image` | Criar pizza com imagem | ✅ |
-| GET | `/pedidos` | Listar pedidos | ✅ |
-| POST | `/pedidos` | Criar pedido | ✅ |
-| GET | `/clientes` | Listar clientes | ✅ |
-| POST | `/clientes` | Cadastrar cliente | ❌ |
-
-## 🧪 Testes
-
-```bash
-# Testes unitários
-npm run test
-
-# Testes e2e (sempre sequenciais)
-npm run test:e2e
-
-# Coverage
-npm run test:cov
-
-# Lint
-npm run lint
-```
-
-## 🗄️ Banco de Dados
-
-### Prisma Commands
-```bash
-# Nova migração
-npx prisma migrate dev --name nome-da-migracao
-
-# Aplicar migrações (produção)
-npx prisma migrate deploy
-
-# Reset banco (desenvolvimento)
-npx prisma migrate reset --force
-
-# Visualizar dados
-npx prisma studio
-```
-
-### Schema Principal
-```prisma
-model Pizza {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  descricao String
-  preco     Float
-  imagemUrl String?  // URL do Cloudinary
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Cliente {
-  id       Int    @id @default(autoincrement())
-  nome     String
-  email    String @unique
-  password String
-  // ... outros campos
-}
-```
-
-## 📁 Estrutura do Projeto
-
-```
-src/
-├── auth/              # 🔐 Módulo de autenticação JWT
-├── clientes/          # 👥 Módulo de clientes
-├── entregadores/      # 🚚 Módulo de entregadores + WebSockets
-├── pedidos/           # 📋 Módulo de pedidos
-├── pizzas/            # 🍕 Módulo de pizzas + upload
-├── cloudinary/        # 📷 Serviço de upload Cloudinary
-├── prisma.module.ts   # 🗄️ Configuração do Prisma
-├── app.module.ts      # 🏠 Módulo principal
-└── main.ts           # 🚀 Ponto de entrada
-
-prisma/
-├── migrations/        # 📝 Migrações do banco
-├── schema.prisma     # 🗄️ Schema do banco
-└── seed.ts           # 🌱 Dados iniciais
-
-docker/
-├── Dockerfile        # 🐳 Imagem Docker
-└── docker-compose.yml # 🐳 Orquestração
-```
-
-## 🌐 Deploy
-
-### Vercel (Recomendado)
-```bash
-# Deploy automático via GitHub
-# Configurar variáveis de ambiente no dashboard da Vercel
-```
-
-### Docker
-```bash
-# Build
-docker build -t pizza-express-api .
-
-# Run
-docker run -p 3005:3005 \
-  -e DATABASE_URL="..." \
-  -e JWT_SECRET="..." \
-  -e CLOUDINARY_CLOUD_NAME="..." \
-  pizza-express-api
-```
-
-### Variáveis de Ambiente (Produção)
-```env
-NODE_ENV=production
-DATABASE_URL=postgresql://...
-JWT_SECRET=super-secret-key
-FRONTEND_URL=https://meuapp.com,https://app.exemplo.com
-CLOUDINARY_CLOUD_NAME=pizzariaexpress
-CLOUDINARY_API_KEY=sua-api-key
-CLOUDINARY_API_SECRET=seu-api-secret
-```
-
-## 🔧 Scripts Disponíveis
-
-```bash
-npm run build          # 🏗️  Build da aplicação
-npm run start          # 🚀 Inicia em produção
-npm run start:dev      # 🔥 Desenvolvimento com hot reload
-npm run start:debug    # 🐛 Modo debug
-npm run lint           # 🧹 Linter + auto-fix
-npm run test           # 🧪 Testes unitários
-npm run test:e2e       # 🔄 Testes end-to-end
-npm run test:cov       # 📊 Coverage de testes
-```
-
-## 🎯 Recursos Avançados
-
-### WebSockets (Entregadores)
-```javascript
-// Conectar ao WebSocket
-const socket = io('http://localhost:3005');
-
-// Escutar atualizações de localização
-socket.on('location-update', (data) => {
-  console.log('Nova localização:', data);
-});
-```
-
-### Rate Limiting
-- **20 requests por minuto** por IP
-- Proteção contra spam e ataques
-
-### CORS Configurado
-- URLs do frontend permitidas via `FRONTEND_URL`
-- Suporte a múltiplos domínios
-
-## 🤝 Contribuição
-
-1. **Fork** o projeto
-2. **Crie** uma branch (`git checkout -b feature/MinhaFeature`)
-3. **Commit** suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
-4. **Push** para a branch (`git push origin feature/MinhaFeature`)
-5. **Abra** um Pull Request
-
-## 📝 Licença
-
-Este projeto está sob a licença **MIT**.
-
-## 🐛 Suporte
-
-- **Issues**: [GitHub Issues](https://github.com/seu-usuario/pizza-express-backend/issues)
-- **Wiki**: Documentação completa no GitHub
-- **Email**: suporte@pizzaexpress.com
+#### Dicas
+- Validar tipo/tamanho do arquivo no frontend
+- Mostrar feedback visual durante uploads
+- Tratar erros de API
+- Usar JWT em todas as requisições
 
 ---
 
-⚡ **Feito com ❤️ usando NestJS + Prisma + Cloudinary**
+## 📝 Workflow Recomendado
+1. Ler código existente antes de modificar
+2. Validar build/lint após mudanças
+3. Executar testes relevantes
+4. Atualizar documentação se necessário
+5. Solicitar permissão para alterações críticas
+
+---
+
+## 📚 Histórico e Contato
+- Última atualização: 28 de junho de 2025
+- Suporte: suporte@pizzaexpress.com
+- Issues: [GitHub Issues](https://github.com/seu-usuario/pizza-express-backend/issues)
+
+---
+
+**Feito com ❤️ usando NestJS + Prisma + Cloudinary**

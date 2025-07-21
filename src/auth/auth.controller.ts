@@ -38,12 +38,11 @@ export class AuthController {
       return result;
     } catch (error) {
       // Log detalhado para depuração
-      // eslint-disable-next-line no-console
+
       console.error('Erro no registro de cliente:', {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        message: error instanceof Error ? error.message : error,
+        message: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
-        error,
+        error: error instanceof Error ? error : undefined,
       });
       if (
         typeof error === 'object' &&
