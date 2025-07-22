@@ -52,9 +52,7 @@ async function bootstrap() {
 
     // CORS configuration
     app.enableCors({
-      origin: isDevelopment
-        ? 'http://localhost:3000'
-        : process.env.FRONTEND_URL, // Use apenas a string do .env
+      origin: '*', // Permite qualquer origem
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
       exposedHeaders: ['Authorization'],
@@ -74,4 +72,4 @@ async function bootstrap() {
   }
 }
 
-void bootstrap();
+void bootstrap();oid bootstrap();
