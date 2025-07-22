@@ -72,4 +72,4 @@ async function bootstrap() {
   }
 }
 
-void bootstrap();oid bootstrap();
+void bootstrap();
