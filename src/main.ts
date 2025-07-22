@@ -54,7 +54,7 @@ async function bootstrap() {
     app.enableCors({
       origin: isDevelopment
         ? 'http://localhost:3000'
-        : process.env.FRONTEND_URL?.split(',') || '*',
+        : process.env.FRONTEND_URL, // Use apenas a string do .env
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
       exposedHeaders: ['Authorization'],
