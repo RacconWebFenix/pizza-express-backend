@@ -52,10 +52,7 @@ async function bootstrap() {
 
     // CORS configuration
     app.enableCors({
-      origin: '*', // Permite qualquer origem
-      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
-      exposedHeaders: ['Authorization'],
+      origin: 'https://pizza-express-frontend.vercel.app',
       credentials: true,
     });
 
