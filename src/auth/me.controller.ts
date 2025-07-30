@@ -7,6 +7,7 @@ export class MeController {
   @Get()
   @UseGuards(JwtAuthGuard)
   getMe(@Req() req: Request) {
+    console.log('[MeController] /me endpoint chamado');
     return req.user;
   }
 }

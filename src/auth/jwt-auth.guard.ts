@@ -5,6 +5,13 @@ import { ExecutionContext } from '@nestjs/common/interfaces';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   canActivate(context: ExecutionContext) {
-    return super.canActivate(context);
+    const req = context.switchToHttp().getRequest();
+    console.log(
+      '[JwtAuthGuard][ANTES] Authorization:',
+      req.headers['authorization'],
+    );
+    const result = super.canActivate(context);
+    console.log('[JwtAuthGuard][DEPOIS] Resultado do canActivate:', result);
+    return result;
   }
 }
