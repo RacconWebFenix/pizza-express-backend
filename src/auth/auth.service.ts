@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma.service';
 import * as bcrypt from 'bcryptjs';
-import { Cliente } from '@prisma/client';
 
 interface JwtPayload {
   sub: number;
@@ -19,15 +18,22 @@ export class AuthService {
   async validateUser(
     email: string,
     password: string,
-  ): Promise<Omit<Cliente, 'password'> | null> {
-    const user = await this.prisma.cliente.findUnique({ where: { email } });
+  ): Promise<Record<string, any> | null> {
+    const user = await this.prisma.cliente.findUnique({
+      where: { email },
+      include: { enderecos: true },
+    });
     if (
       user &&
       typeof user.password === 'string' &&
       (await bcrypt.compare(password, user.password))
     ) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
+      const result: Omit<typeof user, 'password'> & { password?: string } = {
+        ...user,
+      };
+      if ('password' in result) {
+        delete result.password;
+      }
       return result;
     }
     return null;
@@ -45,13 +51,37 @@ export class AuthService {
     email: string;
     password: string;
     telefone?: string;
-    endereco: string;
-  }): Promise<Cliente> {
+    enderecos: Array<{
+      cep: string;
+      tipo: string;
+      logradouro: string;
+      numero: string;
+      bairro: string;
+      cidade: string;
+      estado: string;
+      principal?: boolean;
+      complemento?: string;
+    }>;
+  }): Promise<Record<string, any>> {
     if (!data.password) throw new Error('Campo password é obrigatório');
     const hash = await bcrypt.hash(data.password, 10);
+    const { enderecos, ...rest } = data;
     const user = await this.prisma.cliente.create({
-      data: { ...data, password: hash },
+      data: {
+        ...rest,
+        password: hash,
+        enderecos: {
+          create: enderecos,
+        },
+      },
+      include: { enderecos: true },
     });
-    return user;
+    const result: Omit<typeof user, 'password'> & { password?: string } = {
+      ...user,
+    };
+    if ('password' in result) {
+      delete result.password;
+    }
+    return result;
   }
 }

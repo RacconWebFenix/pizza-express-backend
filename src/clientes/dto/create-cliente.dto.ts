@@ -1,5 +1,20 @@
-import { IsString, IsEmail, MinLength, IsOptional } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  MinLength,
+  IsOptional,
+  ValidateNested,
+  IsEnum,
+  ArrayMinSize,
+} from 'class-validator';
 import { Type } from 'class-transformer';
+import { CreateEnderecoDto } from './create-endereco.dto';
+
+export enum Role {
+  CLIENTE = 'CLIENTE',
+  ADMIN = 'ADMIN',
+  FUNCIONARIO = 'FUNCIONARIO',
+}
 
 export class CreateClienteDto {
   @Type(() => String)
@@ -14,15 +29,19 @@ export class CreateClienteDto {
   @Type(() => String)
   @IsString()
   @MinLength(6)
-  password: string; // Padronizado para 'password' em vez de 'senha'
+  password: string;
 
   @IsOptional()
   @Type(() => String)
   @IsString()
   telefone?: string;
 
-  @Type(() => String)
-  @IsString()
-  @MinLength(5)
-  endereco: string;
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
+
+  @ValidateNested({ each: true })
+  @Type(() => CreateEnderecoDto)
+  @ArrayMinSize(1)
+  enderecos: CreateEnderecoDto[];
 }

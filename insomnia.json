@@ -91,6 +91,59 @@
       "_type": "request_group"
     },
     {
+      "_id": "fld_enderecos",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "🏠 Endereços",
+      "description": "CRUD de endereços (vinculados ao cliente)",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_enderecos_post",
+      "parentId": "fld_enderecos",
+      "modified": 0,
+      "created": 0,
+      "name": "Criar Endereço",
+      "url": "{{ base_url }}/enderecos",
+      "method": "POST",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"cep\": \"12345-678\",\n  \"tipo\": \"residencial\",\n  \"logradouro\": \"Rua dos Patos\",\n  \"numero\": \"99\",\n  \"bairro\": \"Centro\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"principal\": true,\n  \"clienteId\": 1\n}"
+      },
+      "description": "Cadastrar novo endereço para cliente",
+      "_type": "request"
+    },
+    {
+      "_id": "req_enderecos_patch",
+      "parentId": "fld_enderecos",
+      "modified": 0,
+      "created": 0,
+      "name": "Atualizar Endereço",
+      "url": "{{ base_url }}/enderecos/1",
+      "method": "PATCH",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"logradouro\": \"Rua dos Patos\",\n  \"numero\": \"100\"\n}"
+      },
+      "description": "Atualizar dados de endereço existente",
+      "_type": "request"
+    },
+    {
+      "_id": "req_enderecos_delete",
+      "parentId": "fld_enderecos",
+      "modified": 0,
+      "created": 0,
+      "name": "Deletar Endereço",
+      "url": "{{ base_url }}/enderecos/1",
+      "method": "DELETE",
+      "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
+      "description": "Remover endereço do cliente",
+      "_type": "request"
+    },
+    {
       "_id": "fld_pedidos",
       "parentId": "wrk_pizzaexpress",
       "modified": 0,
@@ -214,7 +267,10 @@
         "mimeType": "multipart/form-data",
         "params": [
           { "name": "nome", "value": "Pizza Margherita" },
-          { "name": "descricao", "value": "Molho de tomate, mussarela e manjericão" },
+          {
+            "name": "descricao",
+            "value": "Molho de tomate, mussarela e manjericão"
+          },
           { "name": "preco", "value": "25.90" },
           { "name": "imagem", "type": "file", "fileName": "pizza.jpg" }
         ]

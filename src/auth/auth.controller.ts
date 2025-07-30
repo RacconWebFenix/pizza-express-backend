@@ -19,13 +19,17 @@ export class AuthController {
         loginDto.email,
         loginDto.password,
       );
-      if (!user) {
+      if (
+        !user ||
+        typeof user.id !== 'number' ||
+        typeof user.email !== 'string'
+      ) {
         throw new HttpException(
           'Credenciais inválidas',
           HttpStatus.UNAUTHORIZED,
         );
       }
-      return this.authService.login(user);
+      return this.authService.login({ id: user.id, email: user.email });
     } catch {
       throw new HttpException('Credenciais inválidas', HttpStatus.UNAUTHORIZED);
     }
@@ -34,11 +38,21 @@ export class AuthController {
   @Post('register')
   async register(@Body() registerDto: CreateClienteDto) {
     try {
+      // Garante que o DTO tem o campo enderecos
+      if (
+        !registerDto.enderecos ||
+        !Array.isArray(registerDto.enderecos) ||
+        registerDto.enderecos.length === 0
+      ) {
+        throw new HttpException(
+          'É obrigatório informar ao menos um endereço',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
       const result = await this.authService.register(registerDto);
       return result;
     } catch (error) {
       // Log detalhado para depuração
-
       console.error('Erro no registro de cliente:', {
         message: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,

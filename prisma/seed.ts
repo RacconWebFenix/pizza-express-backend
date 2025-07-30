@@ -16,6 +16,7 @@ async function main() {
   await prisma.pedido.deleteMany();
   await prisma.pizza.deleteMany();
   await prisma.entregador.deleteMany();
+  await prisma.endereco.deleteMany();
   await prisma.cliente.deleteMany();
 
   // Clientes
@@ -27,7 +28,31 @@ async function main() {
       email: 'joao@email.com',
       password: senhaHash,
       telefone: '11999999999',
-      endereco: 'Rua das Flores, 123',
+      enderecos: {
+        create: [
+          {
+            cep: '12345-678',
+            tipo: 'residencial',
+            logradouro: 'Rua das Flores',
+            numero: '123',
+            bairro: 'Centro',
+            cidade: 'São Paulo',
+            estado: 'SP',
+            principal: true,
+          },
+          {
+            cep: '22222-222',
+            tipo: 'comercial',
+            logradouro: 'Rua dos Patos',
+            numero: '99',
+            bairro: 'Centro',
+            cidade: 'São Paulo',
+            estado: 'SP',
+            principal: false,
+            complemento: 'Sala 101',
+          },
+        ],
+      },
     },
   });
   console.log('Cliente 1 criado');
@@ -37,7 +62,20 @@ async function main() {
       email: 'maria@email.com',
       password: senhaHash,
       telefone: '11988887777',
-      endereco: 'Av. Paulista, 1000',
+      enderecos: {
+        create: [
+          {
+            cep: '98765-432',
+            tipo: 'comercial',
+            logradouro: 'Av. Paulista',
+            numero: '1000',
+            bairro: 'Jardins',
+            cidade: 'São Paulo',
+            estado: 'SP',
+            principal: true,
+          },
+        ],
+      },
     },
   });
   console.log('Cliente 2 criado');
@@ -47,7 +85,20 @@ async function main() {
       email: 'carlos@email.com',
       password: senhaHash,
       telefone: '11977776666',
-      endereco: 'Rua Verde, 321',
+      enderecos: {
+        create: [
+          {
+            cep: '54321-987',
+            tipo: 'residencial',
+            logradouro: 'Rua Verde',
+            numero: '321',
+            bairro: 'Vila Nova',
+            cidade: 'São Paulo',
+            estado: 'SP',
+            principal: true,
+          },
+        ],
+      },
     },
   });
   console.log('Cliente 3 criado');

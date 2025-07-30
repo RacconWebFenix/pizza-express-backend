@@ -10,9 +10,7 @@ interface JwtPayload {
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor() {
-    console.log('JWT Strategy initialized');
     const secret = process.env.JWT_SECRET || 'pizza-secret';
-    console.log('[JwtStrategy] JWT_SECRET usado:', secret);
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -21,12 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtPayload) {
-    console.log('[JwtStrategy] Payload JWT recebido:', payload);
     if (!payload.sub || !payload.email) {
-      console.error(
-        '[JwtStrategy] Token inválido: payload incompleto',
-        payload,
-      );
       throw new Error('Token inválido: payload incompleto');
     }
     return { userId: payload.sub, email: payload.email };
