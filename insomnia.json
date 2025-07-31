@@ -1,8 +1,8 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2025-06-28T00:00:00.000Z",
-  "__export_source": "pizza-express-nestjs-complete",
+  "__export_date": "2025-07-31T00:00:00.000Z",
+  "__export_source": "pizza-express-backend",
   "resources": [
     {
       "_id": "wrk_pizzaexpress",
@@ -197,9 +197,9 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"nome\": \"Marcos Silva\",\n  \"email\": \"marcos@email.com\",\n  \"password\": \"123456\",\n  \"telefone\": \"11999999999\",\n  \"endereco\": \"Rua das Flores, 123\"\n}"
+        "text": "{\n  \"nome\": \"Marcos Silva\",\n  \"email\": \"marcos@email.com\",\n  \"password\": \"123456\",\n  \"telefone\": \"11999999999\"\n}"
       },
-      "description": "Registrar um novo cliente no sistema",
+      "description": "Registrar um novo cliente no sistema (não pede endereço no signup; endereço será solicitado ao concluir a primeira compra)",
       "_type": "request"
     },
     {
@@ -359,9 +359,9 @@
       "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao@email.com\",\n  \"password\": \"123456\",\n  \"telefone\": \"11888888888\",\n  \"endereco\": \"Rua das Palmeiras, 456\"\n}"
+        "text": "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao@email.com\",\n  \"password\": \"123456\",\n  \"telefone\": \"11888888888\",\n  \"enderecos\": [\n    {\n      \"cep\": \"12345-678\",\n      \"tipo\": \"residencial\",\n      \"logradouro\": \"Rua das Palmeiras\",\n      \"numero\": \"456\",\n      \"bairro\": \"Centro\",\n      \"cidade\": \"São Paulo\",\n      \"estado\": \"SP\",\n      \"principal\": true\n    }\n  ]\n}"
       },
-      "description": "Criar novo cliente",
+      "description": "Criar novo cliente (endereços obrigatórios)",
       "_type": "request"
     },
     {
@@ -375,9 +375,9 @@
       "headers": [{ "name": "Authorization", "value": "Bearer {{ jwt }}" }],
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"nome\": \"João Silva Atualizado\",\n  \"telefone\": \"11777777777\"\n}"
+        "text": "{\n  \"nome\": \"João Silva Atualizado\",\n  \"telefone\": \"11777777777\",\n  \"enderecos\": [\n    {\n      \"cep\": \"98765-432\",\n      \"tipo\": \"comercial\",\n      \"logradouro\": \"Av. Brasil\",\n      \"numero\": \"1000\",\n      \"bairro\": \"Jardins\",\n      \"cidade\": \"São Paulo\",\n      \"estado\": \"SP\",\n      \"principal\": false\n    }\n  ]\n}"
       },
-      "description": "Atualizar dados do cliente",
+      "description": "Atualizar dados do cliente (endereços obrigatórios)",
       "_type": "request"
     },
     {

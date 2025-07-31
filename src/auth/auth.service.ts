@@ -51,7 +51,7 @@ export class AuthService {
     email: string;
     password: string;
     telefone?: string;
-    enderecos: Array<{
+    enderecos?: Array<{
       cep: string;
       tipo: string;
       logradouro: string;
@@ -66,16 +66,27 @@ export class AuthService {
     if (!data.password) throw new Error('Campo password é obrigatório');
     const hash = await bcrypt.hash(data.password, 10);
     const { enderecos, ...rest } = data;
-    const user = await this.prisma.cliente.create({
-      data: {
-        ...rest,
-        password: hash,
-        enderecos: {
-          create: enderecos,
+    let user;
+    if (enderecos && Array.isArray(enderecos) && enderecos.length > 0) {
+      user = await this.prisma.cliente.create({
+        data: {
+          ...rest,
+          password: hash,
+          enderecos: {
+            create: enderecos,
+          },
         },
-      },
-      include: { enderecos: true },
-    });
+        include: { enderecos: true },
+      });
+    } else {
+      user = await this.prisma.cliente.create({
+        data: {
+          ...rest,
+          password: hash,
+        },
+        include: { enderecos: true },
+      });
+    }
     const result: Omit<typeof user, 'password'> & { password?: string } = {
       ...user,
     };

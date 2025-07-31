@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateClienteDto } from '../clientes/dto/create-cliente.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -36,19 +36,8 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() registerDto: CreateClienteDto) {
+  async register(@Body() registerDto: CreateUserDto) {
     try {
-      // Garante que o DTO tem o campo enderecos
-      if (
-        !registerDto.enderecos ||
-        !Array.isArray(registerDto.enderecos) ||
-        registerDto.enderecos.length === 0
-      ) {
-        throw new HttpException(
-          'É obrigatório informar ao menos um endereço',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
       const result = await this.authService.register(registerDto);
       return result;
     } catch (error) {
