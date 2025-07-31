@@ -6,13 +6,11 @@ import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  // Se NODE_ENV não estiver definido ou for diferente de 'production', considera desenvolvimento
   const isDevelopment = process.env.NODE_ENV !== 'production';
 
   try {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-    // Servir arquivos estáticos
     app.useStaticAssets(join(__dirname, '..', 'uploads'), {
       prefix: '/uploads/',
     });
@@ -43,22 +41,26 @@ async function bootstrap() {
       new ValidationPipe({
         whitelist: true,
         forbidNonWhitelisted: true,
-        transform: true, // <-- ISTO RESOLVE O PROBLEMA
+        transform: true,
         transformOptions: {
-          enableImplicitConversion: true, // Garante a conversão de string para número
+          enableImplicitConversion: true,
         },
       }),
     );
 
-    // CORS configuration
     app.enableCors({
       origin: isDevelopment
-        ? true // Permite qualquer origem em desenvolvimento
+        ? true
         : 'https://pizza-express-frontend.vercel.app',
       credentials: true,
     });
 
-    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3005;
+    // **AJUSTE/CONFIRMAÇÃO 1**: Utiliza a variável de ambiente PORT fornecida pela Render.
+    // O fallback para 10000 é uma boa prática para alinhar com o padrão da Render.
+    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 10000;
+
+    // **AJUSTE/CONFIRMAÇÃO 2**: Escuta em '0.0.0.0' para ser acessível externamente pelo proxy da Render.
+    // Esta é a correção principal para o erro 502 Bad Gateway.
     await app.listen(port, '0.0.0.0');
 
     console.log(`🚀 Aplicação rodando na porta ${port}`);
@@ -67,8 +69,11 @@ async function bootstrap() {
     );
   } catch (error) {
     console.error('❌ Erro durante inicialização da aplicação:', error);
+    // Lançar o erro garante que o processo falhe se a inicialização não ocorrer bem.
     throw error;
   }
 }
 
+// O `void` é usado para indicar que não estamos aguardando a promessa aqui,
+// o que é comum para o ponto de entrada da aplicação.
 void bootstrap();
