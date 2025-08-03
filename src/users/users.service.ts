@@ -1,68 +1,71 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import * as bcrypt from 'bcryptjs';
-import { CreateClienteDto } from './dto/create-cliente.dto';
-import { UpdateClienteDto } from './dto/update-cliente.dto';
-import { Cliente } from '@prisma/client';
+import { IHasher } from '../common/interfaces/hasher.interface';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User, Endereco } from '@prisma/client';
 import { UpdateEnderecoDto } from './dto/update-endereco.dto';
+import { CreateEnderecoDto } from './dto/create-endereco.dto';
 
 @Injectable()
-export class ClientesService {
-  constructor(private readonly prisma: PrismaService) {}
+export class UsersService {
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject('HASHER') private readonly hasher: IHasher,
+  ) {}
 
   async create(
-    createClienteDto: CreateClienteDto,
-  ): Promise<Record<string, any> | null> {
-    const { enderecos, role, password, ...clienteData } = createClienteDto;
+    createUserDto: CreateUserDto,
+  ): Promise<User & { enderecos: Endereco[] }> {
+    const { enderecos, role, password, ...clienteData } = createUserDto;
     if (!password) throw new Error('Campo password é obrigatório');
     // Gera hash da senha antes de salvar
-    const hash = await bcrypt.hash(password, 10);
+    const hash = await this.hasher.hash(password);
     // Cria o cliente primeiro
-    const cliente = await this.prisma.cliente.create({
+    const user = await this.prisma.user.create({
       data: {
         ...clienteData,
+        nome: clienteData.nome,
         password: hash,
         role: role ?? 'CLIENTE',
       },
     });
     // Garante que pelo menos um endereço é principal
-    const enderecosAtualizados = (enderecos ?? []).map((endereco, idx) => ({
-      ...endereco,
-      principal: idx === 0 ? true : (endereco.principal ?? false),
-      clienteId: cliente.id,
-    }));
+    const enderecosAtualizados = (enderecos ?? []).map(
+      (endereco: CreateEnderecoDto, idx: number) => ({
+        ...endereco,
+        principal: idx === 0 ? true : (endereco.principal ?? false),
+        userId: user.id,
+      }),
+    );
     if (enderecosAtualizados.length > 0) {
       await this.prisma.endereco.createMany({ data: enderecosAtualizados });
     }
-    // Retorna cliente com endereços
-    const clienteComEnderecos = await this.prisma.cliente.findUnique({
-      where: { id: cliente.id },
+    // Retorna usuário com endereços
+    const userWithAddresses = await this.prisma.user.findUnique({
+      where: { id: user.id },
       include: { enderecos: true },
     });
-    return clienteComEnderecos;
+    return userWithAddresses!;
   }
 
-  async findAll(): Promise<Record<string, any>[]> {
-    const clientes = await this.prisma.cliente.findMany({
-      include: { enderecos: true },
-    });
-    return clientes.map(({ ...rest }) => rest);
+  async findAll(): Promise<(User & { enderecos: Endereco[] })[]> {
+    return this.prisma.user.findMany({ include: { enderecos: true } });
   }
 
-  async findOne(id: number): Promise<Record<string, any> | null> {
-    const cliente = await this.prisma.cliente.findUnique({
+  async findOne(
+    id: number,
+  ): Promise<(User & { enderecos: Endereco[] }) | null> {
+    return this.prisma.user.findUnique({
       where: { id },
       include: { enderecos: true },
     });
-    if (!cliente) return null;
-    const { ...rest } = cliente;
-    return rest;
   }
 
   async update(
     id: number,
-    updateClienteDto: UpdateClienteDto,
-  ): Promise<Record<string, any>> {
+    updateUserDto: UpdateUserDto,
+  ): Promise<User & { enderecos: Endereco[] }> {
     const {
       enderecos,
       nome,
@@ -70,7 +73,7 @@ export class ClientesService {
       password: pwd,
       telefone,
       role,
-    } = updateClienteDto;
+    } = updateUserDto;
     // Monta objeto de atualização sem tipagem explícita
     const updateData: Record<string, unknown> = {};
     if (nome) updateData.nome = nome;
@@ -137,20 +140,19 @@ export class ClientesService {
         };
       }
     }
-    const clienteAtualizado = await this.prisma.cliente.update({
+    const updatedUser = await this.prisma.user.update({
       where: { id },
       data: updateData,
       include: { enderecos: true },
     });
-    const { ...rest } = clienteAtualizado;
-    return rest;
+    return updatedUser;
   }
 
-  async remove(id: number): Promise<Cliente> {
-    return await this.prisma.cliente.delete({ where: { id } });
+  async remove(id: number): Promise<User> {
+    return this.prisma.user.delete({ where: { id } });
   }
 
-  async findByEmail(email: string): Promise<Cliente[]> {
-    return await this.prisma.cliente.findMany({ where: { email } });
+  async findByEmail(email: string): Promise<User[]> {
+    return this.prisma.user.findMany({ where: { email } });
   }
 }

@@ -1,7 +1,8 @@
 import { Endereco } from './endereco.entity';
-import { Role } from '../dto/create-cliente.dto';
+import { Role } from '../dto/create-user.dto';
+import { Pedido } from '../../pedidos/entities/pedido.entity';
 
-export class Cliente {
+export class User {
   id: number;
   nome: string;
   email: string;
@@ -9,7 +10,7 @@ export class Cliente {
   telefone?: string;
   role: Role;
   enderecos: Endereco[];
-  pedidos: any[]; // Substitua por entidade Pedido se existir
+  pedidos: Pedido[];
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma.service';
-import * as bcrypt from 'bcryptjs';
+import { IHasher } from '../common/interfaces/hasher.interface';
+import { User } from '@prisma/client';
 
 interface JwtPayload {
   sub: number;
@@ -13,27 +14,20 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    @Inject('HASHER') private readonly hasher: IHasher,
   ) {}
 
   async validateUser(
     email: string,
     password: string,
   ): Promise<Record<string, any> | null> {
-    const user = await this.prisma.cliente.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { email },
       include: { enderecos: true },
     });
-    if (
-      user &&
-      typeof user.password === 'string' &&
-      (await bcrypt.compare(password, user.password))
-    ) {
-      const result: Omit<typeof user, 'password'> & { password?: string } = {
-        ...user,
-      };
-      if ('password' in result) {
-        delete result.password;
-      }
+    if (user && (await this.hasher.compare(password, user.password))) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _, ...result } = user;
       return result;
     }
     return null;
@@ -64,35 +58,49 @@ export class AuthService {
     }>;
   }): Promise<Record<string, any>> {
     if (!data.password) throw new Error('Campo password é obrigatório');
-    const hash = await bcrypt.hash(data.password, 10);
+    const hash = await this.hasher.hash(data.password);
     const { enderecos, ...rest } = data;
-    let user;
-    if (enderecos && Array.isArray(enderecos) && enderecos.length > 0) {
-      user = await this.prisma.cliente.create({
+    const created = await this.prisma.user.create({
+      data: {
+        ...rest,
+        password: hash,
+        enderecos: enderecos ? { create: enderecos } : undefined,
+      },
+      include: { enderecos: true },
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _password, ...result } = created;
+    return result;
+  }
+
+  async findOrCreateGoogleUser(input: {
+    email: string;
+    nome: string;
+    avatar?: string;
+  }): Promise<Omit<User, 'password'>> {
+    let user = await this.prisma.user.findUnique({
+      where: { email: input.email },
+    });
+    
+    if (!user) {
+      user = await this.prisma.user.create({
         data: {
-          ...rest,
-          password: hash,
-          enderecos: {
-            create: enderecos,
-          },
+          nome: input.nome,
+          email: input.email,
+          password: await this.hasher.hash('google-oauth-user'),
+          role: 'CLIENTE',
+          avatar: input.avatar,
         },
-        include: { enderecos: true },
       });
-    } else {
-      user = await this.prisma.cliente.create({
-        data: {
-          ...rest,
-          password: hash,
-        },
-        include: { enderecos: true },
+    } else if (input.avatar && user.avatar !== input.avatar) {
+      user = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { avatar: input.avatar },
       });
     }
-    const result: Omit<typeof user, 'password'> & { password?: string } = {
-      ...user,
-    };
-    if ('password' in result) {
-      delete result.password;
-    }
+    
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...result } = user;
     return result;
   }
 }

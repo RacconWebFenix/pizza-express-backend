@@ -5,7 +5,16 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from '../clientes/dto/create-cliente.dto';
+import { Role } from '../users/dto/create-user.dto';
+import { Request } from 'express';
+
+interface AuthenticatedUser {
+  role: Role;
+}
+
+interface RequestWithUser {
+  user: AuthenticatedUser;
+}
 
 @Injectable()
 export class RolesGuard implements CanActivate {

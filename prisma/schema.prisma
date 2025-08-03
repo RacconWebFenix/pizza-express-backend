@@ -1,7 +1,8 @@
 enum Role {
   CLIENTE
-  ADMIN
+  USUARIO
   FUNCIONARIO
+  ADMIN
 }
 datasource db {
   provider = "postgresql"
@@ -24,12 +25,13 @@ model Pizza {
   updatedAt   DateTime @updatedAt
 }
 
-model Cliente {
+model User {
   id        Int      @id @default(autoincrement())
   nome      String
   email     String   @unique
   password  String
   telefone  String?
+  avatar    String?  // URL da foto do perfil do Google
   role      Role     @default(CLIENTE)
   enderecos Endereco[]
   pedidos   Pedido[]
@@ -38,9 +40,11 @@ model Cliente {
 }
 
 model Pedido {
-  id          Int      @id @default(autoincrement())
-  clienteId   Int
-  cliente     Cliente  @relation(fields: [clienteId], references: [id])
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User      @relation(fields: [userId], references: [id])
+  enderecoId Int
+  endereco   Endereco  @relation("PedidoEndereco", fields: [enderecoId], references: [id])
   pizzas      Pizza[]  @relation("PedidoPizzas")
   status      String
   entregador  Entregador? @relation(fields: [entregadorId], references: [id])
@@ -61,9 +65,9 @@ model Entregador {
 }
 
 model Endereco {
-  id          Int      @id @default(autoincrement())
-  clienteId   Int
-  cliente     Cliente  @relation(fields: [clienteId], references: [id])
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
   cep         String
   tipo        String
   logradouro  String
@@ -77,4 +81,5 @@ model Endereco {
   principal   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  pedidos     Pedido[] @relation("PedidoEndereco")
 }

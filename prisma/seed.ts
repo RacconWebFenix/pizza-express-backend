@@ -17,12 +17,12 @@ async function main() {
   await prisma.pizza.deleteMany();
   await prisma.entregador.deleteMany();
   await prisma.endereco.deleteMany();
-  await prisma.cliente.deleteMany();
+  await prisma.user.deleteMany();
 
-  // Clientes
+  // Usuários (role=CLIENTE)
   const senha = process.env.TEST_CLIENTE_PASSWORD;
   const senhaHash = await bcrypt.hash(senha, 10);
-  const cliente1 = await prisma.cliente.create({
+  const user1 = await prisma.user.create({
     data: {
       nome: 'João Silva',
       email: 'joao@email.com',
@@ -55,8 +55,8 @@ async function main() {
       },
     },
   });
-  console.log('Cliente 1 criado');
-  const cliente2 = await prisma.cliente.create({
+  console.log('Usuário CLIENTE 1 criado');
+  const user2 = await prisma.user.create({
     data: {
       nome: 'Maria Souza',
       email: 'maria@email.com',
@@ -78,8 +78,8 @@ async function main() {
       },
     },
   });
-  console.log('Cliente 2 criado');
-  await prisma.cliente.create({
+  console.log('Usuário CLIENTE 2 criado');
+  const user3 = await prisma.user.create({
     data: {
       nome: 'Carlos Lima',
       email: 'carlos@email.com',
@@ -101,8 +101,36 @@ async function main() {
       },
     },
   });
-  console.log('Cliente 3 criado');
+  console.log('Usuário CLIENTE 3 criado');
 
+  // Usuários para cada role diferente
+  const userRoleUsuario = await prisma.user.create({
+    data: {
+      nome: 'Usuário Genérico',
+      email: 'usuario@example.com',
+      password: senhaHash,
+      role: 'USUARIO',
+    },
+  });
+  console.log('Usuário USUARIO criado');
+  const userRoleFuncionario = await prisma.user.create({
+    data: {
+      nome: 'Funcionário Exemplo',
+      email: 'funcionario@example.com',
+      password: senhaHash,
+      role: 'FUNCIONARIO',
+    },
+  });
+  console.log('Usuário FUNCIONARIO criado');
+  const userRoleAdmin = await prisma.user.create({
+    data: {
+      nome: 'Administrador Exemplo',
+      email: 'admin@example.com',
+      password: senhaHash,
+      role: 'ADMIN',
+    },
+  });
+  console.log('Usuário ADMIN criado');
   // Entregadores
   const entregador1 = await prisma.entregador.create({
     data: {
@@ -149,9 +177,14 @@ async function main() {
   console.log('Pizza 3 criada');
 
   // Pedidos
+  // Busca primeiro endereço principal de cada usuário
+  const endereco1 = await prisma.endereco.findFirst({ where: { userId: user1.id, principal: true } });
+  const endereco2 = await prisma.endereco.findFirst({ where: { userId: user2.id, principal: true } });
+  
   await prisma.pedido.create({
     data: {
-      cliente: { connect: { id: cliente1.id } },
+      user: { connect: { id: user1.id } },
+      endereco: { connect: { id: endereco1!.id } },
       pizzas: { connect: [{ id: pizza1.id }, { id: pizza2.id }] },
       status: 'em preparo',
       entregador: { connect: { id: entregador1.id } },
@@ -162,7 +195,8 @@ async function main() {
   console.log('Pedido 1 criado');
   await prisma.pedido.create({
     data: {
-      cliente: { connect: { id: cliente2.id } },
+      user: { connect: { id: user2.id } },
+      endereco: { connect: { id: endereco2!.id } },
       pizzas: { connect: [{ id: pizza3.id }] },
       status: 'entregue',
       entregador: { connect: { id: entregador2.id } },
@@ -173,11 +207,11 @@ async function main() {
   console.log('Pedido 2 criado');
 
   // Logs para diagnóstico
-  const clientes = await prisma.cliente.count();
+  const usuarios = await prisma.user.count();
   const entregadores = await prisma.entregador.count();
   const pizzas = await prisma.pizza.count();
   const pedidos = await prisma.pedido.count();
-  console.log('Seed concluído:', { clientes, entregadores, pizzas, pedidos });
+  console.log('Seed concluído:', { usuarios, entregadores, pizzas, pedidos });
 }
 
 main()

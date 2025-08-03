@@ -27,4 +27,8 @@ export class CreatePedidoDto {
   @IsOptional()
   @IsNumber()
   entregadorId?: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  enderecoId: number;
 }

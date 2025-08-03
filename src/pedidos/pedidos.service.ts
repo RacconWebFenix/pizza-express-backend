@@ -8,10 +8,11 @@ export class PedidosService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createPedidoDto: CreatePedidoDto) {
-    const { clienteId, pizzasIds, status, entregadorId } = createPedidoDto;
+    const { clienteId, pizzasIds, status, entregadorId, enderecoId } = createPedidoDto;
     return this.prisma.pedido.create({
       data: {
-        cliente: { connect: { id: clienteId } },
+        user: { connect: { id: clienteId } },
+        endereco: { connect: { id: enderecoId } },
         pizzas: { connect: pizzasIds.map((id) => ({ id })) },
         status,
         entregador: entregadorId
@@ -23,14 +24,14 @@ export class PedidosService {
 
   findAll() {
     return this.prisma.pedido.findMany({
-      include: { cliente: true, pizzas: true, entregador: true },
+      include: { user: true, pizzas: true, entregador: true },
     });
   }
 
   findOne(id: number) {
     return this.prisma.pedido.findUnique({
       where: { id },
-      include: { cliente: true, pizzas: true, entregador: true },
+      include: { user: true, pizzas: true, entregador: true },
     });
   }
 
@@ -40,7 +41,7 @@ export class PedidosService {
     return this.prisma.pedido.update({
       where: { id },
       data: {
-        cliente: clienteId ? { connect: { id: clienteId } } : undefined,
+        user: clienteId ? { connect: { id: clienteId } } : undefined,
         pizzas: pizzasIds
           ? { set: pizzasIds.map((id) => ({ id })) }
           : undefined,

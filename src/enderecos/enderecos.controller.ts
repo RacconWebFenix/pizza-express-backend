@@ -8,8 +8,8 @@ import {
   Body,
 } from '@nestjs/common';
 import { EnderecosService } from './enderecos.service';
-import { CreateEnderecoDto } from '../clientes/dto/create-endereco.dto';
-import { UpdateEnderecoDto } from '../clientes/dto/update-endereco.dto';
+import { CreateEnderecoDto } from '../users/dto/create-endereco.dto';
+import { UpdateEnderecoDto } from '../users/dto/update-endereco.dto';
 
 @Controller('enderecos')
 export class EnderecosController {

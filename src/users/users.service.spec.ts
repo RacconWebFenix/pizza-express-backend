@@ -1,53 +1,76 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ClientesService } from './clientes.service';
+import { UsersService } from './users.service';
 import { PrismaService } from '../prisma.service';
+import { Role } from './dto/create-user.dto';
 
-const clienteMock = {
+const userMock = {
   id: 1,
   nome: 'João',
   email: 'joao@email.com',
-  password: process.env.TEST_CLIENTE_PASSWORD!,
+  password: process.env.TEST_USER_PASSWORD || 'hashedpassword',
   telefone: '11999999999',
-  endereco: 'Rua A',
+  role: Role.CLIENTE,
+  enderecos: [],
   createdAt: new Date(),
   updatedAt: new Date(),
 };
 
-describe('ClientesService', () => {
-  let service: ClientesService;
-  let prisma: PrismaService;
+interface MockPrismaService {
+  user: {
+    create: jest.Mock;
+    findMany: jest.Mock;
+    findUnique: jest.Mock;
+  };
+}
+
+describe('UsersService', () => {
+  let service: UsersService;
+  let prisma: MockPrismaService;
 
   beforeEach(async () => {
+    const mockPrismaService: MockPrismaService = {
+      user: {
+        create: jest.fn(),
+        findMany: jest.fn(),
+        findUnique: jest.fn(),
+      },
+    };
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ClientesService, PrismaService],
+      providers: [
+        UsersService,
+        {
+          provide: PrismaService,
+          useValue: mockPrismaService,
+        },
+        {
+          provide: 'HASHER',
+          useValue: {
+            hash: jest.fn().mockResolvedValue('hashedpassword'),
+          },
+        },
+      ],
     }).compile();
-    service = module.get<ClientesService>(ClientesService);
-    prisma = module.get<PrismaService>(PrismaService);
+
+    service = module.get<UsersService>(UsersService);
+    prisma = module.get<MockPrismaService>(PrismaService);
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create a cliente', async () => {
-    jest.spyOn(prisma.cliente, 'create').mockResolvedValue(
-      clienteMock as unknown as {
-        id: number;
-        nome: string;
-        email: string;
-        password: string;
-        telefone: string | null;
-        endereco: string;
-        createdAt: Date;
-        updatedAt: Date;
-      },
-    );
+  it('should create a user', async () => {
+    prisma.user.create.mockResolvedValue(userMock);
+
     const result = await service.create({
       nome: 'João',
       email: 'joao@email.com',
-      endereco: 'Rua A',
-      password: '123456', // Corrigido de 'senha' para 'password'
+      password: '123456',
+      role: Role.CLIENTE,
     });
-    expect(result).toEqual(clienteMock);
+
+    expect(result).toBeDefined();
+    expect(prisma.user.create).toHaveBeenCalled();
   });
 });

@@ -4,7 +4,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PizzasModule } from './pizzas/pizzas.module';
 import { PedidosModule } from './pedidos/pedidos.module';
-import { ClientesModule } from './clientes/clientes.module';
+import { CommonModule } from './common/common.module';
+import { UsersModule } from './users/users.module';
 import { EntregadoresModule } from './entregadores/entregadores.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
@@ -22,9 +23,10 @@ import { ThrottlerModule } from '@nestjs/throttler';
         },
       ],
     }),
+    CommonModule,
     PizzasModule,
     PedidosModule,
-    ClientesModule,
+    UsersModule,
     EntregadoresModule,
     AuthModule,
   ],

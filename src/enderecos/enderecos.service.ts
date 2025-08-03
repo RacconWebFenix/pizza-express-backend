@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { CreateEnderecoDto } from '../clientes/dto/create-endereco.dto';
+import { CreateEnderecoDto } from '../users/dto/create-endereco.dto';
 import { Endereco } from '@prisma/client';
-import { UpdateEnderecoDto } from '../clientes/dto/update-endereco.dto';
+import { UpdateEnderecoDto } from '../users/dto/update-endereco.dto';
 
 @Injectable()
 export class EnderecosService {
@@ -13,12 +13,12 @@ export class EnderecosService {
   }
 
   async create(dto: CreateEnderecoDto) {
-    if (!dto.clienteId) throw new Error('Campo clienteId é obrigatório');
-    const { clienteId, ...data } = dto;
+    if (!dto.userId) throw new Error('Campo userId é obrigatório');
+    const { userId, ...data } = dto;
     return this.prisma.endereco.create({
       data: {
         ...data,
-        cliente: { connect: { id: clienteId } },
+        user: { connect: { id: userId } },
       },
     });
   }

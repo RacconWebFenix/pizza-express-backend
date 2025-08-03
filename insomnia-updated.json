@@ -1,0 +1,804 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-08-03T00:00:00.000Z",
+  "__export_source": "pizza-express-backend-updated",
+  "resources": [
+    {
+      "_id": "wrk_pizzaexpress",
+      "parentId": null,
+      "modified": 0,
+      "created": 0,
+      "name": "Pizza Express API - Atualizada",
+      "description": "Coleção atualizada de rotas para o backend NestJS do Pizza Express. Inclui autenticação JWT, OAuth Google, CRUDs protegidos com users (não clientes), upload de imagens com Cloudinary, monitoramento de entrega e exemplos de uso.",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "Base Environment",
+      "data": {},
+      "_type": "environment"
+    },
+    {
+      "_id": "env_localhost",
+      "parentId": "env_base",
+      "modified": 0,
+      "created": 0,
+      "name": "Localhost",
+      "data": {
+        "base_url": "http://localhost:3005",
+        "jwt": "your_jwt_token_here",
+        "user_id": "1",
+        "pizza_id": "1",
+        "pedido_id": "1",
+        "entregador_id": "1",
+        "endereco_id": "1"
+      },
+      "_type": "environment"
+    },
+    {
+      "_id": "env_production",
+      "parentId": "env_base",
+      "modified": 0,
+      "created": 0,
+      "name": "Production",
+      "data": {
+        "base_url": "https://pizza-express-backend.vercel.app",
+        "jwt": "your_jwt_token_here",
+        "user_id": "1",
+        "pizza_id": "1",
+        "pedido_id": "1",
+        "entregador_id": "1",
+        "endereco_id": "1"
+      },
+      "_type": "environment"
+    },
+    {
+      "_id": "fld_app",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "🏠 App",
+      "description": "Endpoints gerais da aplicação",
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "🔐 Autenticação",
+      "description": "Endpoints para login, registro, OAuth Google e informações do usuário",
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_users",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "👥 Usuários",
+      "description": "CRUD de usuários (antigo clientes)",
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_pizzas",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "🍕 Pizzas",
+      "description": "CRUD de pizzas + upload de imagens",
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_enderecos",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "🏠 Endereços",
+      "description": "CRUD de endereços (vinculados ao usuário)",
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_pedidos",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "📦 Pedidos",
+      "description": "CRUD de pedidos",
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_entregadores",
+      "parentId": "wrk_pizzaexpress",
+      "modified": 0,
+      "created": 0,
+      "name": "🚴 Entregadores",
+      "description": "CRUD de entregadores + rastreamento em tempo real",
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_app_status",
+      "parentId": "fld_app",
+      "modified": 0,
+      "created": 0,
+      "name": "📊 Status da API",
+      "description": "Verificar se a API está funcionando",
+      "url": "{{ _.base_url }}",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_register",
+      "parentId": "fld_auth",
+      "modified": 0,
+      "created": 0,
+      "name": "📝 Registrar Usuário",
+      "description": "Criar uma nova conta de usuário",
+      "url": "{{ _.base_url }}/auth/register",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"João Silva\",\n  \"email\": \"joao@example.com\",\n  \"password\": \"123456\",\n  \"telefone\": \"11999999999\",\n  \"role\": \"CLIENTE\",\n  \"enderecos\": [\n    {\n      \"cep\": \"01234-567\",\n      \"tipo\": \"residencial\",\n      \"logradouro\": \"Rua das Flores\",\n      \"numero\": \"123\",\n      \"bairro\": \"Centro\",\n      \"cidade\": \"São Paulo\",\n      \"estado\": \"SP\",\n      \"complemento\": \"Apto 45\",\n      \"principal\": true\n    }\n  ]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_login",
+      "parentId": "fld_auth",
+      "modified": 0,
+      "created": 0,
+      "name": "🔑 Login",
+      "description": "Fazer login e obter token JWT",
+      "url": "{{ _.base_url }}/auth/login",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"joao@example.com\",\n  \"password\": \"123456\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_google",
+      "parentId": "fld_auth",
+      "modified": 0,
+      "created": 0,
+      "name": "🌐 Login Google",
+      "description": "Iniciar login com Google OAuth",
+      "url": "{{ _.base_url }}/auth/google",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "_type": "request"
+    },
+    {
+      "_id": "req_auth_me",
+      "parentId": "fld_auth",
+      "modified": 0,
+      "created": 0,
+      "name": "👤 Meu Perfil",
+      "description": "Obter informações do usuário logado",
+      "url": "{{ _.base_url }}/me",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_create",
+      "parentId": "fld_users",
+      "modified": 0,
+      "created": 0,
+      "name": "➕ Criar Usuário",
+      "description": "Criar um novo usuário",
+      "url": "{{ _.base_url }}/users",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Maria Santos\",\n  \"email\": \"maria@example.com\",\n  \"password\": \"123456\",\n  \"telefone\": \"11888888888\",\n  \"role\": \"CLIENTE\",\n  \"enderecos\": [\n    {\n      \"cep\": \"12345-678\",\n      \"tipo\": \"comercial\",\n      \"logradouro\": \"Av. Paulista\",\n      \"numero\": \"1000\",\n      \"bairro\": \"Bela Vista\",\n      \"cidade\": \"São Paulo\",\n      \"estado\": \"SP\",\n      \"principal\": true\n    }\n  ]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_list",
+      "parentId": "fld_users",
+      "modified": 0,
+      "created": 0,
+      "name": "📋 Listar Usuários",
+      "description": "Listar todos os usuários",
+      "url": "{{ _.base_url }}/users",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_find_by_email",
+      "parentId": "fld_users",
+      "modified": 0,
+      "created": 0,
+      "name": "🔍 Buscar por Email",
+      "description": "Buscar usuário por email",
+      "url": "{{ _.base_url }}/users",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "email",
+          "value": "joao@example.com"
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_get",
+      "parentId": "fld_users",
+      "modified": 0,
+      "created": 0,
+      "name": "👤 Obter Usuário",
+      "description": "Obter usuário por ID",
+      "url": "{{ _.base_url }}/users/{{ _.user_id }}",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_update",
+      "parentId": "fld_users",
+      "modified": 0,
+      "created": 0,
+      "name": "✏️ Atualizar Usuário",
+      "description": "Atualizar dados do usuário",
+      "url": "{{ _.base_url }}/users/{{ _.user_id }}",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"João Silva Santos\",\n  \"telefone\": \"11777777777\",\n  \"enderecos\": [\n    {\n      \"id\": 1,\n      \"cep\": \"01234-567\",\n      \"tipo\": \"residencial\",\n      \"logradouro\": \"Rua das Flores Atualizada\",\n      \"numero\": \"123A\",\n      \"bairro\": \"Centro\",\n      \"cidade\": \"São Paulo\",\n      \"estado\": \"SP\",\n      \"complemento\": \"Apto 45 - Bloco B\",\n      \"principal\": true\n    }\n  ]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_delete",
+      "parentId": "fld_users",
+      "modified": 0,
+      "created": 0,
+      "name": "🗑️ Deletar Usuário",
+      "description": "Deletar usuário por ID",
+      "url": "{{ _.base_url }}/users/{{ _.user_id }}",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pizzas_create",
+      "parentId": "fld_pizzas",
+      "modified": 0,
+      "created": 0,
+      "name": "➕ Criar Pizza",
+      "description": "Criar uma nova pizza",
+      "url": "{{ _.base_url }}/pizzas",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Margherita\",\n  \"descricao\": \"Pizza tradicional com molho de tomate, mozzarella e manjericão\",\n  \"preco\": 35.90\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pizzas_upload_image",
+      "parentId": "fld_pizzas",
+      "modified": 0,
+      "created": 0,
+      "name": "📷 Upload Imagem Pizza",
+      "description": "Fazer upload da imagem de uma pizza",
+      "url": "{{ _.base_url }}/pizzas/{{ _.pizza_id }}/upload",
+      "method": "POST",
+      "body": {
+        "mimeType": "multipart/form-data",
+        "params": [
+          {
+            "name": "file",
+            "type": "file",
+            "fileName": "pizza.jpg"
+          }
+        ]
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pizzas_list",
+      "parentId": "fld_pizzas",
+      "modified": 0,
+      "created": 0,
+      "name": "📋 Listar Pizzas",
+      "description": "Listar todas as pizzas",
+      "url": "{{ _.base_url }}/pizzas",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pizzas_get",
+      "parentId": "fld_pizzas",
+      "modified": 0,
+      "created": 0,
+      "name": "🍕 Obter Pizza",
+      "description": "Obter pizza por ID",
+      "url": "{{ _.base_url }}/pizzas/{{ _.pizza_id }}",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pizzas_update",
+      "parentId": "fld_pizzas",
+      "modified": 0,
+      "created": 0,
+      "name": "✏️ Atualizar Pizza",
+      "description": "Atualizar dados da pizza",
+      "url": "{{ _.base_url }}/pizzas/{{ _.pizza_id }}",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Margherita Especial\",\n  \"descricao\": \"Pizza tradicional com molho de tomate, mozzarella de búfala e manjericão fresco\",\n  \"preco\": 42.90\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pizzas_delete",
+      "parentId": "fld_pizzas",
+      "modified": 0,
+      "created": 0,
+      "name": "🗑️ Deletar Pizza",
+      "description": "Deletar pizza por ID",
+      "url": "{{ _.base_url }}/pizzas/{{ _.pizza_id }}",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_enderecos_create",
+      "parentId": "fld_enderecos",
+      "modified": 0,
+      "created": 0,
+      "name": "➕ Criar Endereço",
+      "description": "Criar um novo endereço",
+      "url": "{{ _.base_url }}/enderecos",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"userId\": {{ _.user_id }},\n  \"cep\": \"04567-890\",\n  \"tipo\": \"trabalho\",\n  \"logradouro\": \"Rua do Trabalho\",\n  \"numero\": \"500\",\n  \"bairro\": \"Vila Olímpia\",\n  \"cidade\": \"São Paulo\",\n  \"estado\": \"SP\",\n  \"complemento\": \"Sala 1001\",\n  \"principal\": false\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_enderecos_get",
+      "parentId": "fld_enderecos",
+      "modified": 0,
+      "created": 0,
+      "name": "🏠 Obter Endereço",
+      "description": "Obter endereço por ID",
+      "url": "{{ _.base_url }}/enderecos/{{ _.endereco_id }}",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_enderecos_update",
+      "parentId": "fld_enderecos",
+      "modified": 0,
+      "created": 0,
+      "name": "✏️ Atualizar Endereço",
+      "description": "Atualizar dados do endereço",
+      "url": "{{ _.base_url }}/enderecos/{{ _.endereco_id }}",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"complemento\": \"Sala 1002 - Atualizado\",\n  \"principal\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_enderecos_delete",
+      "parentId": "fld_enderecos",
+      "modified": 0,
+      "created": 0,
+      "name": "🗑️ Deletar Endereço",
+      "description": "Deletar endereço por ID",
+      "url": "{{ _.base_url }}/enderecos/{{ _.endereco_id }}",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pedidos_create",
+      "parentId": "fld_pedidos",
+      "modified": 0,
+      "created": 0,
+      "name": "➕ Criar Pedido",
+      "description": "Criar um novo pedido",
+      "url": "{{ _.base_url }}/pedidos",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"userId\": {{ _.user_id }},\n  \"enderecoId\": {{ _.endereco_id }},\n  \"pizzas\": [{{ _.pizza_id }}],\n  \"status\": \"PENDENTE\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pedidos_list",
+      "parentId": "fld_pedidos",
+      "modified": 0,
+      "created": 0,
+      "name": "📋 Listar Pedidos",
+      "description": "Listar todos os pedidos",
+      "url": "{{ _.base_url }}/pedidos",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pedidos_get",
+      "parentId": "fld_pedidos",
+      "modified": 0,
+      "created": 0,
+      "name": "📦 Obter Pedido",
+      "description": "Obter pedido por ID",
+      "url": "{{ _.base_url }}/pedidos/{{ _.pedido_id }}",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pedidos_update",
+      "parentId": "fld_pedidos",
+      "modified": 0,
+      "created": 0,
+      "name": "✏️ Atualizar Pedido",
+      "description": "Atualizar status do pedido",
+      "url": "{{ _.base_url }}/pedidos/{{ _.pedido_id }}",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"EM_PREPARO\",\n  \"entregadorId\": {{ _.entregador_id }}\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_pedidos_delete",
+      "parentId": "fld_pedidos",
+      "modified": 0,
+      "created": 0,
+      "name": "🗑️ Deletar Pedido",
+      "description": "Deletar pedido por ID",
+      "url": "{{ _.base_url }}/pedidos/{{ _.pedido_id }}",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_entregadores_create",
+      "parentId": "fld_entregadores",
+      "modified": 0,
+      "created": 0,
+      "name": "➕ Criar Entregador",
+      "description": "Criar um novo entregador",
+      "url": "{{ _.base_url }}/entregadores",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Carlos Deliveryman\",\n  \"telefone\": \"11666666666\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_entregadores_list",
+      "parentId": "fld_entregadores",
+      "modified": 0,
+      "created": 0,
+      "name": "📋 Listar Entregadores",
+      "description": "Listar todos os entregadores",
+      "url": "{{ _.base_url }}/entregadores",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_entregadores_get",
+      "parentId": "fld_entregadores",
+      "modified": 0,
+      "created": 0,
+      "name": "🚴 Obter Entregador",
+      "description": "Obter entregador por ID",
+      "url": "{{ _.base_url }}/entregadores/{{ _.entregador_id }}",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_entregadores_update",
+      "parentId": "fld_entregadores",
+      "modified": 0,
+      "created": 0,
+      "name": "✏️ Atualizar Entregador",
+      "description": "Atualizar dados do entregador",
+      "url": "{{ _.base_url }}/entregadores/{{ _.entregador_id }}",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Carlos Silva Deliveryman\",\n  \"telefone\": \"11555555555\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_entregadores_update_location",
+      "parentId": "fld_entregadores",
+      "modified": 0,
+      "created": 0,
+      "name": "📍 Atualizar Localização",
+      "description": "Atualizar localização do entregador em tempo real",
+      "url": "{{ _.base_url }}/entregadores/{{ _.entregador_id }}/location",
+      "method": "PATCH",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"latitude\": -23.5505,\n  \"longitude\": -46.6333\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    },
+    {
+      "_id": "req_entregadores_delete",
+      "parentId": "fld_entregadores",
+      "modified": 0,
+      "created": 0,
+      "name": "🗑️ Deletar Entregador",
+      "description": "Deletar entregador por ID",
+      "url": "{{ _.base_url }}/entregadores/{{ _.entregador_id }}",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt }}"
+        }
+      ],
+      "_type": "request"
+    }
+  ]
+}

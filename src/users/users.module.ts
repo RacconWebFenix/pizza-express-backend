@@ -1,11 +1,19 @@
 import { Module } from '@nestjs/common';
-import { ClientesService } from './clientes.service';
-import { ClientesController } from './clientes.controller';
+import { UsersService } from './users.service';
+import { UsersController } from './users.controller';
 import { PrismaModule } from '../prisma.module';
+import { CommonModule } from '../common/common.module';
+import { BcryptAdapter } from '../common/adapters/bcrypt.adapter';
 
 @Module({
-  imports: [PrismaModule],
-  controllers: [ClientesController],
-  providers: [ClientesService],
+  imports: [PrismaModule, CommonModule],
+  controllers: [UsersController],
+  providers: [
+    UsersService,
+    {
+      provide: 'HASHER',
+      useClass: BcryptAdapter,
+    },
+  ],
 })
-export class ClientesModule {}
+export class UsersModule {}

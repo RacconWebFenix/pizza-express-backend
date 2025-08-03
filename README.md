@@ -5,8 +5,8 @@
 ## 📦 Backend - Pizza Express
 
 ### 🚦 Funcionalidades
-- Autenticação JWT
-- CRUD de clientes, pizzas, pedidos, entregadores
+- Autenticação JWT + Google OAuth com captura de avatar
+- CRUD de usuários (migrado de clientes), pizzas, pedidos, entregadores
 - Upload de imagens via Cloudinary
 - WebSockets para entregadores
 - Documentação Swagger
@@ -15,7 +15,7 @@
 ### 🏗️ Arquitetura
 - NestJS + TypeScript
 - PostgreSQL + Prisma ORM
-- JWT Bearer Token
+- JWT Bearer Token + Google OAuth Strategy
 - Cloudinary para imagens
 - Testes: Jest + Supertest
 - Deploy: Vercel
@@ -23,10 +23,11 @@
 #### Estrutura de Módulos
 ```
 src/
-├── auth/           [PROTEGIDO] - JWT, guards, estratégias
-├── clientes/       - CRUD de clientes
+├── auth/           [PROTEGIDO] - JWT, OAuth Google, guards, estratégias
+├── users/          - CRUD de usuários (migrado de clientes)
 ├── entregadores/   - CRUD + WebSocket para localização
-├── pedidos/        - Sistema de pedidos
+├── enderecos/      - CRUD de endereços (vinculados ao usuário)
+├── pedidos/        - Sistema de pedidos com enderecoId
 ├── pizzas/         - CRUD de pizzas + upload de imagens
 ├── upload/         - Serviços de upload (Cloudinary)
 ├── prisma.module.ts - Configuração do Prisma
@@ -37,6 +38,7 @@ src/
 - Não editar arquivos protegidos sem permissão
 - Não commitar sem autorização
 - Endpoints protegidos com `@UseGuards(JwtAuthGuard)`
+- **PROIBIDO uso de tipagem do tipo `any`!**
 - Respostas padronizadas:
 ```typescript
 {
@@ -49,28 +51,35 @@ src/
 ### 🧑‍💻 DTOs & Validação
 - Usar class-validator: `IsNotEmpty`, `IsString`, `IsNumber`, `IsOptional`, `IsUrl`
 - Imports organizados
+- **Tipagem rigorosa**: Evitar `any`, usar tipos específicos
 
 ### 🐘 Banco de Dados (Prisma)
-- Cliente (id, nome, email, password, telefone)
-- Pizza (id, nome, descricao, preco, image)
-- Pedido (relaciona cliente + pizzas)
-- Entregador (id, nome, email, telefone)
+- **User** (id, nome, email, password, telefone, avatar?, role)
+- **Endereco** (id, userId, cep, tipo, logradouro, numero, bairro, cidade, estado, principal)
+- **Pizza** (id, nome, descricao, preco, imagemUrl?)
+- **Pedido** (id, userId, enderecoId, pizzas[], status, observacoes, total, createdAt)
+- **Entregador** (id, nome, email, telefone, veiculo, placa)
 
 #### Comandos úteis
 ```bash
 npx prisma migrate dev --name nome_da_migracao
 npx prisma migrate deploy
 npx prisma studio
+npx prisma migrate reset --force  # Para resetar em dev
 ```
 
 ### 🔐 Autenticação
-- JWT obrigatório em todos endpoints (exceto login/registro)
-- Payload: `{ sub: clienteId, email }`
+- JWT obrigatório em todos endpoints (exceto `/auth/register`, `/auth/login`, `/auth/google`)
+- **Google OAuth**: `/auth/google` (redireciona) → `/auth/google/callback` (processa)
+- Avatar capturado automaticamente do Google e salvo no campo `User.avatar`
+- Payload JWT: `{ sub: userId, email, role }`
+- Endpoint `/me` retorna dados do usuário logado incluindo avatar
 
 ### 🌍 CORS & Deploy
 - Dev: `http://localhost:3000`
 - Prod: `process.env.FRONTEND_URL`
 - Deploy: Vercel
+- Google OAuth: Callback configurado para produção
 
 ### 🧪 Testes
 ```bash
@@ -81,12 +90,37 @@ npm run test:cov     # Coverage
 
 ---
 
+## 🔄 Mudanças da Migração (Clientes → Users)
+
+### ✅ Alterações Implementadas
+- **Tabela `Cliente` → `User`**: Renomeação completa no banco
+- **Campo `avatar`**: Adicionado para armazenar URL da foto do Google
+- **Rotas atualizadas**: `/clientes/*` → `/users/*`
+- **DTOs migrados**: `CreateClienteDto` → `CreateUserDto`, etc.
+- **Relacionamentos**: `clienteId` → `userId` nos pedidos
+- **Campo `enderecoId`**: Adicionado nos pedidos (substitui `enderecoEntrega`)
+- **Google OAuth**: Estratégia completa com captura de avatar
+- **Testes**: Todos os arquivos de teste atualizados
+
+### 🔗 Endpoints Atualizados
+- `POST /auth/register` - Registro de usuário
+- `POST /auth/login` - Login tradicional
+- `GET /auth/google` - Início do OAuth Google
+- `GET /auth/google/callback` - Callback do Google
+- `GET /me` - Dados do usuário logado (inclui avatar)
+- `GET /users` - Listar usuários
+- `POST /users` - Criar usuário
+- `PATCH /users/:id` - Atualizar usuário
+- `DELETE /users/:id` - Deletar usuário
+
+---
+
 ## 📤 Upload de Imagens (Cloudinary)
 
 ### Endpoints
-- `POST /pizzas/with-image` - Criar pizza com imagem
-- `POST /pizzas/:id/upload-image` - Atualizar imagem
-- `POST /pizzas` - Criar pizza sem imagem
+- `POST /pizzas` - Criar pizza (JSON sem imagem)
+- `POST /pizzas/with-image` - Criar pizza com upload de imagem
+- `POST /pizzas/:id/upload-image` - Fazer upload/atualizar imagem de pizza existente
 
 #### Exemplo de uso (curl)
 ```bash
@@ -96,7 +130,7 @@ curl -X POST \
   -F 'nome=Pizza Margherita' \
   -F 'descricao=Molho de tomate, mussarela e manjericão' \
   -F 'preco=25.90' \
-  -F 'image=@/caminho/para/sua/imagem.jpg'
+  -F 'imagem=@/caminho/para/sua/imagem.jpg'
 ```
 
 #### Validações
@@ -120,7 +154,7 @@ curl -X POST \
     "nome": "Pizza Margherita",
     "descricao": "Molho de tomate, mussarela e manjericão",
     "preco": 25.90,
-    "image": "https://res.cloudinary.com/.../pizza-express/pizzas/abc123.webp"
+    "imagemUrl": "https://res.cloudinary.com/.../pizza-express/pizzas/abc123.webp"
   }
 }
 ```
@@ -133,6 +167,19 @@ curl -X POST \
 - Dev: `http://localhost:3005`
 - Prod: `https://pizza-express-backend.vercel.app`
 
+### Fluxo de Autenticação
+- Login tradicional: `POST /auth/login`
+- Registro: `POST /auth/register`
+- **Google OAuth**: Redirecionar para `GET /auth/google`
+- Dados do usuário: `GET /me` (inclui avatar se logado via Google)
+
+### Fluxo de Usuários (Users)
+- Listar usuários: `GET /users`
+- Criar usuário: `POST /users` (JSON com endereços obrigatórios)
+- Buscar usuário: `GET /users/:id`
+- Atualizar usuário: `PATCH /users/:id`
+- Deletar usuário: `DELETE /users/:id`
+
 ### Fluxo de Pizzas com Imagens
 - Listar pizzas: `GET /pizzas`
 - Criar pizza sem imagem: `POST /pizzas` (JSON)
@@ -141,19 +188,44 @@ curl -X POST \
 - Atualizar pizza: `PATCH /pizzas/:id`
 - Deletar pizza: `DELETE /pizzas/:id`
 
+### Fluxo de Pedidos (Atualizado)
+- Criar pedido: `POST /pedidos` (com `userId` e `enderecoId`)
+- Listar pedidos: `GET /pedidos`
+- Atualizar pedido: `PATCH /pedidos/:id`
+
 #### Exemplo de integração (Next.js)
 ```typescript
+// Login com Google OAuth
+const handleGoogleLogin = () => {
+  window.location.href = `${API_URL}/auth/google`;
+};
+
 // Criar pizza com imagem
 const formData = new FormData();
 formData.append('nome', pizza.nome);
 formData.append('descricao', pizza.descricao);
 formData.append('preco', pizza.preco.toString());
-formData.append('image', imagem);
+formData.append('imagem', imagem);
 
-await fetch('/api/pizzas/with-image', {
+await fetch(`${API_URL}/pizzas/with-image`, {
   method: 'POST',
   headers: { Authorization: `Bearer ${token}` },
   body: formData,
+});
+
+// Criar pedido (nova estrutura)
+await fetch(`${API_URL}/pedidos`, {
+  method: 'POST',
+  headers: { 
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    userId: user.id,
+    pizzaIds: [1, 2, 3],
+    enderecoId: endereco.id, // ← Novo campo obrigatório
+    observacoes: 'Sem cebola'
+  }),
 });
 ```
 
@@ -162,23 +234,26 @@ await fetch('/api/pizzas/with-image', {
 - Mostrar feedback visual durante uploads
 - Tratar erros de API
 - Usar JWT em todas as requisições
+- **Avatar do Google**: Acessível via endpoint `/me` após login OAuth
 
 ---
 
 ## 📝 Workflow Recomendado
 1. Ler código existente antes de modificar
-2. Validar build/lint após mudanças
-3. Executar testes relevantes
-4. Atualizar documentação se necessário
-5. Solicitar permissão para alterações críticas
+2. **Seguir regras de tipagem**: Nunca usar `any`
+3. Validar build/lint após mudanças (0 erros obrigatório)
+4. Executar testes relevantes
+5. Atualizar documentação se necessário
+6. Solicitar permissão para alterações críticas
 
 ---
 
 ## 📚 Histórico e Contato
-- Última atualização: 28 de junho de 2025
+- **Última atualização**: 3 de agosto de 2025
+- **Versão**: 2.0 (Migração Users + OAuth Google)
 - Suporte: suporte@pizzaexpress.com
-- Issues: [GitHub Issues](https://github.com/seu-usuario/pizza-express-backend/issues)
+- Issues: [GitHub Issues](https://github.com/RacconWebFenix/pizza-express-backend/issues)
 
 ---
 
-**Feito com ❤️ usando NestJS + Prisma + Cloudinary**
+**Feito com ❤️ usando NestJS + Prisma + Cloudinary + Google OAuth**

@@ -9,7 +9,7 @@ import {
 
 export class CreateEnderecoDto {
   @IsOptional()
-  clienteId?: number;
+  userId?: number;
   @IsString({ message: 'O CEP deve ser um texto' })
   @IsNotEmpty({ message: 'O CEP é obrigatório' })
   @Matches(/^\d{5}-?\d{3}$/, {

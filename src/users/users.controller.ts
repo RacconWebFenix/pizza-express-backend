@@ -11,28 +11,32 @@ import {
   HttpStatus,
   Query,
 } from '@nestjs/common';
-import { ClientesService } from './clientes.service';
-import { CreateClienteDto } from './dto/create-cliente.dto';
-import { UpdateClienteDto } from './dto/update-cliente.dto';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Controller('clientes')
-export class ClientesController {
-  constructor(private readonly clientesService: ClientesService) {}
+interface PrismaError {
+  code: string;
+}
+
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() createClienteDto: CreateClienteDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
     try {
-      const cliente = await this.clientesService.create(createClienteDto);
-      return cliente;
+      const user = await this.usersService.create(createUserDto);
+      return user;
     } catch (error: unknown) {
       if (
         typeof error === 'object' &&
         error !== null &&
         'code' in error &&
-        error.code === 'P2002'
+        (error as { code: string }).code === 'P2002'
       ) {
-        throw new HttpException('Email já cadastrado', HttpStatus.CONFLICT);
+        throw new HttpException('E-mail já cadastrado', HttpStatus.BAD_REQUEST);
       }
       throw new HttpException(
         'Erro interno do servidor',
@@ -45,34 +49,30 @@ export class ClientesController {
   @UseGuards(JwtAuthGuard)
   async findAll(@Query('email') email?: string) {
     if (email) {
-      return this.clientesService.findByEmail(email);
+      return this.usersService.findByEmail(email);
     }
-    return this.clientesService.findAll();
+    return this.usersService.findAll();
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string) {
-    return this.clientesService.findOne(+id);
+    return this.usersService.findOne(+id);
   }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
-  async update(
-    @Param('id') id: string,
-    @Body() updateClienteDto: UpdateClienteDto,
-  ) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     try {
-      const cliente = await this.clientesService.update(+id, updateClienteDto);
-      return cliente;
+      const user = await this.usersService.update(+id, updateUserDto);
+      return user;
     } catch (error: unknown) {
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        error.code === 'P2025'
-      ) {
-        throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+      const prismaError = error as PrismaError;
+      if (prismaError.code === 'P2025') {
+        throw new HttpException(
+          'Registro não encontrado',
+          HttpStatus.NOT_FOUND,
+        );
       }
       throw new HttpException(
         'Erro interno do servidor',
@@ -85,16 +85,15 @@ export class ClientesController {
   @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string) {
     try {
-      await this.clientesService.remove(+id);
-      return { message: 'Cliente removido com sucesso' };
+      await this.usersService.remove(+id);
+      return { message: 'Usuário removido com sucesso' };
     } catch (error: unknown) {
-      if (
-        typeof error === 'object' &&
-        error !== null &&
-        'code' in error &&
-        error.code === 'P2025'
-      ) {
-        throw new HttpException('Cliente não encontrado', HttpStatus.NOT_FOUND);
+      const prismaError = error as PrismaError;
+      if (prismaError.code === 'P2025') {
+        throw new HttpException(
+          'Registro não encontrado',
+          HttpStatus.NOT_FOUND,
+        );
       }
       throw new HttpException(
         'Erro interno do servidor',

@@ -4,9 +4,15 @@ import {
   Body,
   HttpException,
   HttpStatus,
+  Get,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+import { Request } from 'express';
+import { User } from '@prisma/client';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -60,5 +66,18 @@ export class AuthController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {
+    // Inicia fluxo OAuth com Google
+  }
+
+  @Get('google/redirect')
+  @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@Req() req: Request & { user: Omit<User, 'password'> }) {
+    const user = req.user;
+    return this.authService.login({ id: user.id, email: user.email });
   }
 }
