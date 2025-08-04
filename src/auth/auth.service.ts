@@ -81,7 +81,7 @@ export class AuthService {
     let user = await this.prisma.user.findUnique({
       where: { email: input.email },
     });
-    
+
     if (!user) {
       user = await this.prisma.user.create({
         data: {
@@ -98,7 +98,7 @@ export class AuthService {
         data: { avatar: input.avatar },
       });
     }
-    
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password: _, ...result } = user;
     return result;

@@ -7,8 +7,9 @@ import {
   Get,
   Req,
   UseGuards,
+  Res,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { User } from '@prisma/client';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
@@ -76,8 +77,39 @@ export class AuthController {
 
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req: Request & { user: Omit<User, 'password'> }) {
-    const user = req.user;
-    return this.authService.login({ id: user.id, email: user.email });
+  googleAuthRedirect(
+    @Req() req: Request & { user: Omit<User, 'password'> },
+    @Res() res: Response,
+  ) {
+    try {
+      const user = req.user;
+      const { access_token } = this.authService.login({
+        id: user.id,
+        email: user.email,
+      });
+
+      // Determina a URL do frontend baseada no ambiente
+      const frontendUrl =
+        process.env.NODE_ENV === 'production'
+          ? process.env.FRONTEND_URL
+          : process.env.FRONTEND_URL_DEV || 'http://localhost:3000';
+
+      // Redireciona para o frontend com o token
+      const redirectUrl = `${frontendUrl}/auth-callback?token=${access_token}`;
+
+      return res.redirect(redirectUrl);
+    } catch (error) {
+      console.error('Erro na autenticação Google:', error);
+
+      // Redireciona para o frontend com erro
+      const frontendUrl =
+        process.env.NODE_ENV === 'production'
+          ? process.env.FRONTEND_URL
+          : process.env.FRONTEND_URL_DEV || 'http://localhost:3000';
+
+      const errorUrl = `${frontendUrl}/auth-callback?error=authentication_failed`;
+
+      return res.redirect(errorUrl);
+    }
   }
 }

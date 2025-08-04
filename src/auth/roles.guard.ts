@@ -12,7 +12,7 @@ interface AuthenticatedUser {
   role: Role;
 }
 
-interface RequestWithUser {
+interface RequestWithUser extends Request {
   user: AuthenticatedUser;
 }
 
@@ -28,7 +28,7 @@ export class RolesGuard implements CanActivate {
     if (!requiredRoles || requiredRoles.length === 0) {
       return true;
     }
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
     if (!user || !user.role) {
       throw new ForbiddenException('Usuário sem papel definido.');

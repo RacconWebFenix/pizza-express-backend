@@ -8,7 +8,8 @@ export class PedidosService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createPedidoDto: CreatePedidoDto) {
-    const { clienteId, pizzasIds, status, entregadorId, enderecoId } = createPedidoDto;
+    const { clienteId, pizzasIds, status, entregadorId, enderecoId } =
+      createPedidoDto;
     return this.prisma.pedido.create({
       data: {
         user: { connect: { id: clienteId } },
