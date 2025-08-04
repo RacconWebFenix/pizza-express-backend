@@ -7,13 +7,13 @@ import { AuthService } from './auth.service';
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(private readonly authService: AuthService) {
-    console.log('GoogleStrategy initialized with callback URL:', process.env.GOOGLE_CALLBACK_URL);
     super({
       clientID: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
       callbackURL:
-        process.env.GOOGLE_CALLBACK_URL ||
-        'http://localhost:10000/auth/google/redirect',
+        process.env.NODE_ENV === 'development'
+          ? 'http://localhost:10000/auth/google/redirect'
+          : process.env.GOOGLE_CALLBACK_URL || '',
       scope: ['email', 'profile'],
     });
   }
@@ -30,7 +30,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     }
     const nome = profile.displayName;
     const avatar = profile.photos?.[0]?.value;
-    
+
     try {
       const user = await this.authService.findOrCreateGoogleUser({
         email,
