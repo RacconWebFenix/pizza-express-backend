@@ -48,10 +48,17 @@ async function bootstrap() {
       }),
     );
 
+    // Configure CORS to allow specific origins
+    const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:3000'];
     app.enableCors({
-      origin: isDevelopment
-        ? true
-        : 'https://pizza-express-frontend.vercel.app',
+      origin: (origin, callback) => {
+        // allow requests with no origin (e.g. mobile apps, curl)
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error(`Origin ${origin} not allowed by CORS`));
+        }
+      },
       credentials: true,
     });
 
