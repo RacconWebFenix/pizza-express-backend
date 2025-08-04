@@ -53,12 +53,20 @@ async function bootstrap() {
       process.env.FRONTEND_URL,
       process.env.FRONTEND_URL_DEV || 'http://localhost:3000',
     ];
+    
+    console.log('🌐 CORS Debug:', {
+      NODE_ENV: process.env.NODE_ENV,
+      allowedOrigins,
+    });
+    
     app.enableCors({
       origin: (origin, callback) => {
+        console.log('🔍 CORS Origin Check:', { origin, allowedOrigins });
         // allow requests with no origin (e.g. mobile apps, curl)
         if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);
         } else {
+          console.log('❌ CORS Origin Rejected:', origin);
           callback(new Error(`Origin ${origin} not allowed by CORS`));
         }
       },

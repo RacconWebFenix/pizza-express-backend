@@ -75,6 +75,23 @@ export class AuthController {
     // Inicia fluxo OAuth com Google
   }
 
+  @Get('config')
+  getAuthConfig() {
+    return {
+      environment: process.env.NODE_ENV,
+      frontendUrl: process.env.NODE_ENV === 'production' 
+        ? process.env.FRONTEND_URL 
+        : process.env.FRONTEND_URL_DEV || 'http://localhost:3000',
+      googleCallbackUrl: process.env.NODE_ENV === 'production'
+        ? process.env.GOOGLE_CALLBACK_URL
+        : 'http://localhost:10000/auth/google/redirect',
+      corsOrigins: [
+        process.env.FRONTEND_URL,
+        process.env.FRONTEND_URL_DEV || 'http://localhost:3000',
+      ],
+    };
+  }
+
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
   googleAuthRedirect(
@@ -88,6 +105,14 @@ export class AuthController {
         email: user.email,
       });
 
+      // Log para debug
+      console.log('🔍 Google Auth Debug:', {
+        NODE_ENV: process.env.NODE_ENV,
+        FRONTEND_URL: process.env.FRONTEND_URL,
+        FRONTEND_URL_DEV: process.env.FRONTEND_URL_DEV,
+        user: { id: user.id, email: user.email },
+      });
+
       // Determina a URL do frontend baseada no ambiente
       const frontendUrl =
         process.env.NODE_ENV === 'production'
@@ -97,9 +122,11 @@ export class AuthController {
       // Redireciona para o frontend com o token
       const redirectUrl = `${frontendUrl}/auth-callback?token=${access_token}`;
 
+      console.log('🚀 Redirecting to:', redirectUrl);
+
       return res.redirect(redirectUrl);
     } catch (error) {
-      console.error('Erro na autenticação Google:', error);
+      console.error('❌ Erro na autenticação Google:', error);
 
       // Redireciona para o frontend com erro
       const frontendUrl =
@@ -108,6 +135,8 @@ export class AuthController {
           : process.env.FRONTEND_URL_DEV || 'http://localhost:3000';
 
       const errorUrl = `${frontendUrl}/auth-callback?error=authentication_failed`;
+
+      console.log('🚨 Redirecting to error page:', errorUrl);
 
       return res.redirect(errorUrl);
     }
