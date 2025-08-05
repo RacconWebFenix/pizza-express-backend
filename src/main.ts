@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 async function bootstrap() {
   const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -47,38 +48,27 @@ async function bootstrap() {
         },
       }),
     );
-
-    // Configure CORS to allow specific origins
     const allowedOrigins = [
-      process.env.FRONTEND_URL,
-      process.env.FRONTEND_URL_DEV || 'http://localhost:3000',
-    ];
-    
-    console.log('🌐 CORS Debug:', {
-      NODE_ENV: process.env.NODE_ENV,
-      allowedOrigins,
-    });
-    
-    app.enableCors({
+      process.env.FRONTEND_URL, // Sua URL de produção (Vercel)
+      process.env.FRONTEND_URL_DEV, // Sua URL de desenvolvimento (localhost:3000)
+    ].filter(Boolean); // Este filtro remove valores vazios ou nulos
+
+    const corsOptions: CorsOptions = {
       origin: (origin, callback) => {
-        console.log('🔍 CORS Origin Check:', { origin, allowedOrigins });
-        // allow requests with no origin (e.g. mobile apps, curl)
-        if (!origin || allowedOrigins.includes(origin)) {
+        // Permite requisições sem 'origin' (ex: de apps mobile ou Insomnia)
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
           callback(null, true);
         } else {
-          console.log('❌ CORS Origin Rejected:', origin);
-          callback(new Error(`Origin ${origin} not allowed by CORS`));
+          callback(new Error('Not allowed by CORS'));
         }
       },
       credentials: true,
-    });
+    };
 
-    // **AJUSTE/CONFIRMAÇÃO 1**: Utiliza a variável de ambiente PORT fornecida pela Render.
-    // O fallback para 10000 é uma boa prática para alinhar com o padrão da Render.
+    app.enableCors(corsOptions);
+
     const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 10000;
 
-    // **AJUSTE/CONFIRMAÇÃO 2**: Escuta em '0.0.0.0' para ser acessível externamente pelo proxy da Render.
-    // Esta é a correção principal para o erro 502 Bad Gateway.
     await app.listen(port, '0.0.0.0');
 
     console.log(`🚀 Aplicação rodando na porta ${port}`);

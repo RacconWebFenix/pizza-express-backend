@@ -9,14 +9,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(private readonly authService: AuthService) {
     const callbackURL =
       process.env.NODE_ENV === 'production'
-        ? process.env.GOOGLE_CALLBACK_URL || ''
-        : 'http://localhost:10000/auth/google/redirect';
-
-    console.log('🔧 Google Strategy Config:', {
-      NODE_ENV: process.env.NODE_ENV,
-      clientID: process.env.GOOGLE_CLIENT_ID?.substring(0, 10) + '...',
-      callbackURL,
-    });
+        ? process.env.GOOGLE_CALLBACK_URL
+        : process.env.GOOGLE_CALLBACK_URL_DEV;
 
     super({
       clientID: process.env.GOOGLE_CLIENT_ID || '',
