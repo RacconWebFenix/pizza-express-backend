@@ -17,7 +17,7 @@ export class UsersService {
   async create(
     createUserDto: CreateUserDto,
   ): Promise<User & { enderecos: Endereco[] }> {
-    const { enderecos, role, password, ...clienteData } = createUserDto;
+    const { enderecos, password, ...clienteData } = createUserDto;
     if (!password) throw new Error('Campo password é obrigatório');
     // Gera hash da senha antes de salvar
     const hash = await this.hasher.hash(password);
@@ -27,7 +27,7 @@ export class UsersService {
         ...clienteData,
         nome: clienteData.nome,
         password: hash,
-        role: role ?? 'CLIENTE',
+        role: 'CLIENTE',
       },
     });
     // Garante que pelo menos um endereço é principal

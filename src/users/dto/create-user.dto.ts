@@ -29,8 +29,9 @@ export class CreateUserDto {
   @Type(() => CreateEnderecoDto)
   enderecos?: CreateEnderecoDto[];
 
+  @IsOptional()
   @IsEnum(Role)
-  role: Role;
+  role?: Role;
 
   @IsOptional()
   @IsString()
