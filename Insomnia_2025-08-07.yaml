@@ -1,0 +1,1006 @@
+type: collection.insomnia.rest/5.0
+name: Pizza Express API - Atualizada
+meta:
+  id: wrk_90231a43c55348908a22c3416aff64f0
+  created: 1754253067014
+  modified: 1754342928430
+  description: ""
+collection:
+  - name: 📦 Pedidos
+    meta:
+      id: fld_1883e2b5f8cb45b58538247d64cd40b6
+      created: 0
+      modified: 1754342928420
+      sortKey: -1754253067023
+      description: CRUD de pedidos
+    children:
+      - url: "{{ _.base_url }}/pedidos/{{ _.pedido_id }}"
+        name: 🗑️ Deletar Pedido
+        meta:
+          id: req_012b858d86054f398db167dba1103a19
+          created: 0
+          modified: 1754342928421
+          isPrivate: false
+          description: Deletar pedido por ID
+          sortKey: -1754253067042
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pedidos"
+        name: ➕ Criar Pedido
+        meta:
+          id: req_10d55fac12ab4c1b82cd43eab44e688d
+          created: 0
+          modified: 1754342928422
+          isPrivate: false
+          description: Criar um novo pedido. O status padrão será PENDENTE se não for especificado.
+          sortKey: -1754253067040
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "clienteId": {{ _.user_id }},
+              "enderecoId": {{ _.endereco_id }},
+              "pizzasIds": [{{ _.pizza_id }}]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pedidos"
+        name: 📋 Listar Pedidos
+        meta:
+          id: req_44d6be4a33fa45039daf3c883ed9b951
+          created: 0
+          modified: 1754342928423
+          isPrivate: false
+          description: Listar todos os pedidos
+          sortKey: -1754253067040
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pedidos/{{ _.pedido_id }}"
+        name: 📦 Obter Pedido
+        meta:
+          id: req_bc458ab49fad47ed956db32b5ef6d1bf
+          created: 0
+          modified: 1754342928426
+          isPrivate: false
+          description: Obter pedido por ID
+          sortKey: -1754253067041
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pedidos/{{ _.pedido_id }}"
+        name: ✏️ Atualizar Pedido (Geral)
+        meta:
+          id: req_c20f09af5f594fa582ab8231c7824329
+          created: 0
+          modified: 1754342928426
+          isPrivate: false
+          description: Atualizar dados gerais do pedido, como atribuir um entregador.
+          sortKey: -1754253067042
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "entregadorId": {{ _.entregador_id }}
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pedidos/{{ _.pedido_id }}/status"
+        name: ✏️ Atualizar Status do Pedido
+        meta:
+          id: req_e587a89f81d14e04811a43a067086e3f
+          created: 1754598765432
+          modified: 1754598765432
+          isPrivate: false
+          description: |-
+            Muda o status de um pedido.
+            Status válidos: PENDENTE, EM_PREPARO, A_CAMINHO, ENTREGUE, CANCELADO.
+
+            A transição deve seguir a lógica de negócio:
+            - PENDENTE -> EM_PREPARO ou CANCELADO
+            - EM_PREPARO -> A_CAMINHO ou CANCELADO
+            - A_CAMINHO -> ENTREGUE
+            - ENTREGUE e CANCELADO são estados finais.
+          sortKey: -1754253067041.5
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "status": "A_CAMINHO"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: 🍕 Pizzas
+    meta:
+      id: fld_2c26f4138c104b8ba290a45a3a27b5f5
+      created: 0
+      modified: 1754342928420
+      sortKey: -1754253067022
+      description: CRUD de pizzas + upload de imagens
+    children:
+      - url: "{{ _.base_url }}/pizzas/{{ _.pizza_id }}"
+        name: 🍕 Obter Pizza
+        meta:
+          id: req_220324aaeacb446da09f710343f4ffd6
+          created: 0
+          modified: 1754342928422
+          isPrivate: false
+          description: Obter pizza por ID
+          sortKey: -1754253067035
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pizzas/{{ _.pizza_id }}"
+        name: 🗑️ Deletar Pizza
+        meta:
+          id: req_42bcd2516c174d1c82cf65ef92cee280
+          created: 0
+          modified: 1754342928423
+          isPrivate: false
+          description: Deletar pizza por ID
+          sortKey: -1754253067037
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pizzas"
+        name: ➕ Criar Pizza
+        meta:
+          id: req_6aa88b46263649ebb2aeeea0515d9366
+          created: 0
+          modified: 1754342928424
+          isPrivate: false
+          description: Criar uma nova pizza
+          sortKey: -1754253067033
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "nome": "Margherita",
+              "descricao": "Pizza tradicional com molho de tomate, mozzarella e manjericão",
+              "preco": 35.90
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pizzas"
+        name: 📋 Listar Pizzas
+        meta:
+          id: req_88833cf64957413bb23119d9bc399ce5
+          created: 0
+          modified: 1754342928425
+          isPrivate: false
+          description: Listar todas as pizzas
+          sortKey: -1754253067035
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pizzas/{{ _.pizza_id }}/upload"
+        name: 📷 Upload Imagem Pizza
+        meta:
+          id: req_aa7c48976e524bbcb9c7bee269a00b9c
+          created: 0
+          modified: 1754342928425
+          isPrivate: false
+          description: Fazer upload da imagem de uma pizza
+          sortKey: -1754253067034
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - fileName: pizza.jpg
+              name: file
+              type: file
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/pizzas/{{ _.pizza_id }}"
+        name: ✏️ Atualizar Pizza
+        meta:
+          id: req_fccc4931348c41b5847025315866c618
+          created: 0
+          modified: 1754342928429
+          isPrivate: false
+          description: Atualizar dados da pizza
+          sortKey: -1754253067036
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "nome": "Margherita Especial",
+              "descricao": "Pizza tradicional com molho de tomate, mozzarella de búfala e manjericão fresco",
+              "preco": 42.90
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: 🚴 Entregadores
+    meta:
+      id: fld_811a9b12990a403da6d1165e400aec07
+      created: 0
+      modified: 1754342928420
+      sortKey: -1754253067024
+      description: CRUD de entregadores + rastreamento em tempo real
+    children:
+      - url: "{{ _.base_url }}/entregadores/{{ _.entregador_id }}"
+        name: ✏️ Atualizar Entregador
+        meta:
+          id: req_22721a14966c4ceb964fbb6273bdc63c
+          created: 0
+          modified: 1754342928423
+          isPrivate: false
+          description: Atualizar dados do entregador
+          sortKey: -1754253067045
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "Carlos Silva Deliveryman",
+              "telefone": "11555555555"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/entregadores"
+        name: 📋 Listar Entregadores
+        meta:
+          id: req_3435e1eb41bb4441a398a187a931c4b9
+          created: 0
+          modified: 1754342928423
+          isPrivate: false
+          description: Listar todos os entregadores
+          sortKey: -1754253067044
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/entregadores/{{ _.entregador_id }}"
+        name: 🗑️ Deletar Entregador
+        meta:
+          id: req_821980572a634a21aeffb6d0462ab4c9
+          created: 0
+          modified: 1754342928424
+          isPrivate: false
+          description: Deletar entregador por ID
+          sortKey: -1754253067046
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/entregadores/{{ _.entregador_id }}/location"
+        name: 📍 Atualizar Localização
+        meta:
+          id: req_853e6023fb2e42d1b230ce2ae8df2c1e
+          created: 0
+          modified: 1754342928425
+          isPrivate: false
+          description: Atualizar localização do entregador em tempo real
+          sortKey: -1754253067046
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "latitude": -23.5505,
+              "longitude": -46.6333
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/entregadores"
+        name: ➕ Criar Entregador
+        meta:
+          id: req_a060f0b604f844398b14628642053b1d
+          created: 0
+          modified: 1754342928425
+          isPrivate: false
+          description: Criar um novo entregador
+          sortKey: -1754253067043
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "Carlos Deliveryman",
+              "telefone": "11666666666"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/entregadores/{{ _.entregador_id }}"
+        name: 🚴 Obter Entregador
+        meta:
+          id: req_f0e89d3c3d2e46b4b11d8c986e87f346
+          created: 0
+          modified: 1754342928427
+          isPrivate: false
+          description: Obter entregador por ID
+          sortKey: -1754253067044
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: 🏠 Endereços
+    meta:
+      id: fld_b11b1ea828b44774a98868ede1a81a53
+      created: 0
+      modified: 1754342928421
+      sortKey: -1754253067022
+      description: CRUD de endereços (vinculados ao usuário)
+    children:
+      - url: "{{ _.base_url }}/enderecos/{{ _.endereco_id }}"
+        name: ✏️ Atualizar Endereço
+        meta:
+          id: req_06ef7be4e0a143c6a58ff4bfa5677997
+          created: 0
+          modified: 1754342928422
+          isPrivate: false
+          description: Atualizar dados do endereço
+          sortKey: -1754253067039
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "complemento": "Sala 1002 - Atualizado",
+              "principal": true
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/enderecos"
+        name: ➕ Criar Endereço
+        meta:
+          id: req_2dd81dc0901e4371913b73570f220a2a
+          created: 0
+          modified: 1754342928423
+          isPrivate: false
+          description: Criar um novo endereço
+          sortKey: -1754253067037
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "userId": {{ _.user_id }},
+              "cep": "04567-890",
+              "tipo": "trabalho",
+              "logradouro": "Rua do Trabalho",
+              "numero": "500",
+              "bairro": "Vila Olímpia",
+              "cidade": "São Paulo",
+              "estado": "SP",
+              "complemento": "Sala 1001",
+              "principal": false
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/enderecos/{{ _.endereco_id }}"
+        name: 🗑️ Deletar Endereço
+        meta:
+          id: req_8868e1560df74015b37d347a958eb95e
+          created: 0
+          modified: 1754342928425
+          isPrivate: false
+          description: Deletar endereço por ID
+          sortKey: -1754253067039
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/enderecos/{{ _.endereco_id }}"
+        name: 🏠 Obter Endereço
+        meta:
+          id: req_cb947ea0a057452faa8a000d0f7fb41f
+          created: 0
+          modified: 1754342928427
+          isPrivate: false
+          description: Obter endereço por ID
+          sortKey: -1754253067038
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: 👥 Usuários
+    meta:
+      id: fld_c66d3254f67142dca2a8dddf09b1be86
+      created: 0
+      modified: 1754342928421
+      sortKey: -1754253067021
+      description: CRUD de usuários (antigo clientes)
+    children:
+      - url: "{{ _.base_url }}/users"
+        name: 🔍 Buscar por Email
+        meta:
+          id: req_11fa9754448f4e88933650ca99bcd8fb
+          created: 0
+          modified: 1754342928422
+          isPrivate: false
+          description: Buscar usuário por email
+          sortKey: -1754253067031
+        method: GET
+        parameters:
+          - name: email
+            value: joao@example.com
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/users/{{ _.user_id }}"
+        name: ✏️ Atualizar Usuário
+        meta:
+          id: req_770c3a4d1ac04083969cc873a0ea63a4
+          created: 0
+          modified: 1754342928424
+          isPrivate: false
+          description: Atualizar dados do usuário
+          sortKey: -1754253067032
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "João Silva Santos",
+              "telefone": "11777777777",
+              "enderecos": [
+                {
+                  "id": 1,
+                  "cep": "01234-567",
+                  "tipo": "residencial",
+                  "logradouro": "Rua das Flores Atualizada",
+                  "numero": "123A",
+                  "bairro": "Centro",
+                  "cidade": "São Paulo",
+                  "estado": "SP",
+                  "complemento": "Apto 45 - Bloco B",
+                  "principal": true
+                }
+              ]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/users"
+        name: 📋 Listar Usuários
+        meta:
+          id: req_81f53c0233664df0a210f5607fd8f13d
+          created: 0
+          modified: 1754342945408
+          isPrivate: false
+          description: Listar todos os usuários
+          sortKey: -1754253067030
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/users/{{ _.user_id }}"
+        name: 👤 Obter Usuário
+        meta:
+          id: req_b2dd26b8c22b45b0b451ca4c217d5f9c
+          created: 0
+          modified: 1754342928425
+          isPrivate: false
+          description: Obter usuário por ID
+          sortKey: -1754253067031
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/users"
+        name: ➕ Criar Usuário
+        meta:
+          id: req_bed7cec57d604c57a3bc55c7aa701a4d
+          created: 0
+          modified: 1754342928426
+          isPrivate: false
+          description: Criar um novo usuário
+          sortKey: -1754253067029
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "Maria Santos",
+              "email": "maria@example.com",
+              "password": "123456",
+              "telefone": "11888888888",
+              "role": "CLIENTE",
+              "enderecos": [
+                {
+                  "cep": "12345-678",
+                  "tipo": "comercial",
+                  "logradouro": "Av. Paulista",
+                  "numero": "1000",
+                  "bairro": "Bela Vista",
+                  "cidade": "São Paulo",
+                  "estado": "SP",
+                  "principal": true
+                }
+              ]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/users/{{ _.user_id }}"
+        name: 🗑️ Deletar Usuário
+        meta:
+          id: req_dd268b388dca403fa94e9f6b5dda8f4a
+          created: 0
+          modified: 1754342928427
+          isPrivate: false
+          description: Deletar usuário por ID
+          sortKey: -1754253067033
+        method: DELETE
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: 🏠 App
+    meta:
+      id: fld_c83700d8eecd4f01991d0fd62a0df2ee
+      created: 0
+      modified: 1754342928421
+      sortKey: -1754253067019
+      description: Endpoints gerais da aplicação
+    children:
+      - url: "{{ _.base_url }}"
+        name: 📊 Status da API
+        meta:
+          id: req_f6b053bb07e34afabf50f091fbb8b694
+          created: 0
+          modified: 1754342982690
+          isPrivate: false
+          description: Verificar se a API está funcionando
+          sortKey: -1754253067025
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: 🔐 Autenticação
+    meta:
+      id: fld_cb69e1268c514358aca82354d203086e
+      created: 0
+      modified: 1754342928421
+      sortKey: -1754253067020
+      description: Endpoints para login, registro, OAuth Google e informações do usuário
+    children:
+      - url: "{{ _.base_url }}/me"
+        name: 👤 Meu Perfil
+        meta:
+          id: req_102f18b48bfa4d2cab52bda523458428
+          created: 0
+          modified: 1754430873454
+          isPrivate: false
+          description: Obter informações do usuário logado
+          sortKey: -1754253067029
+        method: GET
+        headers:
+          - name: Authorization
+            value: Bearer {{ _.jwt }}
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsImVtYWlsIjoiZGZlbml4d2ViQGdtYWlsLmNvbSIsImlhdCI6MTc1NDQzMDc0NCwiZXhwIjoxNzU0NTE3MTQ0fQ.-sAlGT6VfOheI_D4D6fpEw_78_8Pq1YhkKAOEP31Wzo
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/auth/login"
+        name: 🔑 Login
+        meta:
+          id: req_6dba49a4ee464093b4b49586555ba96f
+          created: 0
+          modified: 1754342928424
+          isPrivate: false
+          description: Fazer login e obter token JWT
+          sortKey: -1754253067026
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "email": "joao@example.com",
+              "password": "123456"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/auth/google"
+        name: 🌐 Login Google
+        meta:
+          id: req_b874974f009f4ce7bfe924a80346eea5
+          created: 0
+          modified: 1754429433364
+          isPrivate: false
+          description: Iniciar login com Google OAuth
+          sortKey: -1754253067028
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: off
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/auth/register"
+        name: 📝 Registrar Usuário
+        meta:
+          id: req_ed24a644c36246bb831276d0ed008986
+          created: 0
+          modified: 1754342928427
+          isPrivate: false
+          description: Criar uma nova conta de usuário
+          sortKey: -1754253067025
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "João Silva",
+              "email": "joao@example.com",
+              "password": "123456",
+              "telefone": "11999999999",
+              "role": "CLIENTE",
+              "enderecos": [
+                {
+                  "cep": "01234-567",
+                  "tipo": "residencial",
+                  "logradouro": "Rua das Flores",
+                  "numero": "123",
+                  "bairro": "Centro",
+                  "cidade": "São Paulo",
+                  "estado": "SP",
+                  "complemento": "Apto 45",
+                  "principal": true
+                }
+              ]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_fc114a1b3b1978859d79bb12142c57c0f4e2bc56
+    created: 1754342928452
+    modified: 1754344738452
+  cookies:
+    - key: __Host-GAPS
+      value: 1:wCWfryw0EjX0wGv_XUqSptdU6jz0yg:3I2WHZ0I7JAIdPxz
+      domain: localhost
+      path: /
+      secure: true
+      httpOnly: true
+      extensions:
+        - Priority=HIGH
+      hostOnly: true
+      creation: 2025-08-04T21:30:10.731Z
+      lastAccessed: 2025-08-04T21:58:58.452Z
+      id: 9e7a5e26-9603-4bc4-9af5-beab34648e67
+    - key: GEM
+      value: CgptaW51dGVtYWlkELOV4biHMw==
+      domain: localhost
+      path: /
+      secure: true
+      httpOnly: true
+      hostOnly: true
+      creation: 2025-08-04T21:58:24.568Z
+      lastAccessed: 2025-08-04T21:58:58.452Z
+      id: 242a182f-ed9a-4713-93df-2d1c84b6d32d
+environments:
+  name: Base Environment
+  meta:
+    id: env_c9b9e8e8fd6d45698752568a29eb1d32
+    created: 0
+    modified: 1754342928420
+    isPrivate: false
+  subEnvironments:
+    - name: Localhost
+      meta:
+        id: env_07bbad62cc684b5db53005cbcf85bea5
+        created: 0
+        modified: 1754430915396
+        isPrivate: false
+        sortKey: 1754253067017
+      data:
+        base_url: http://localhost:10000
+        endereco_id: "1"
+        entregador_id: "1"
+        jwt: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjcsImVtYWlsIjoiZGZlbml4d2ViQGdtYWlsLmNvbSIsImlhdCI6MTc1NDQzMDc0NCwiZXhwIjoxNzU0NTE3MTQ0fQ.-sAlGT6VfOheI_D4D6fpEw_78_8Pq1YhkKAOEP31Wzo
+        pedido_id: "1"
+        pizza_id: "1"
+        user_id: "1"
+    - name: Production
+      meta:
+        id: env_41040ae0a9e54cf5958d0881aafe6106
+        created: 0
+        modified: 1754343984955
+        isPrivate: false
+        sortKey: 1754253067018
+      data:
+        base_url: https://pizza-express-backend-1.onrender.com
+        endereco_id: "1"
+        entregador_id: "1"
+        jwt: your_jwt_token_here
+        pedido_id: "1"
+        pizza_id: "1"
+        user_id: "1"

@@ -4,7 +4,9 @@ import {
   IsOptional,
   IsArray,
   IsString,
+  IsEnum,
 } from 'class-validator';
+import { StatusPedido } from '@prisma/client';
 
 export class CreatePedidoDto {
   @IsNotEmpty()
@@ -20,9 +22,13 @@ export class CreatePedidoDto {
   @IsString()
   observacoes?: string;
 
-  @IsNotEmpty()
-  @IsString()
-  status: string;
+  @IsOptional() // Status agora é opcional na criação
+  @IsEnum(StatusPedido, {
+    message: `Status inválido. Use um dos seguintes valores: ${Object.values(
+      StatusPedido,
+    ).join(', ')}`,
+  })
+  status?: StatusPedido;
 
   @IsOptional()
   @IsNumber()

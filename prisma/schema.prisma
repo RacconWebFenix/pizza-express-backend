@@ -4,6 +4,16 @@ enum Role {
   FUNCIONARIO
   ADMIN
 }
+
+// Enum para os status do pedido
+enum StatusPedido {
+  PENDENTE
+  EM_PREPARO
+  A_CAMINHO
+  ENTREGUE
+  CANCELADO
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -19,7 +29,7 @@ model Pizza {
   nome        String
   descricao   String?
   preco       Float
-  image       String?  // URL da imagem da pizza
+  image       String? // URL da imagem da pizza
   pedidos     Pedido[] @relation("PedidoPizzas")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -31,7 +41,7 @@ model User {
   email     String   @unique
   password  String
   telefone  String?
-  avatar    String?  // URL da foto do perfil do Google
+  avatar    String? // URL da foto do perfil do Google
   role      Role     @default(CLIENTE)
   enderecos Endereco[]
   pedidos   Pedido[]
@@ -40,19 +50,19 @@ model User {
 }
 
 model Pedido {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  user       User      @relation(fields: [userId], references: [id])
-  enderecoId Int
-  endereco   Endereco  @relation("PedidoEndereco", fields: [enderecoId], references: [id])
-  pizzas      Pizza[]  @relation("PedidoPizzas")
-  status      String
-  entregador  Entregador? @relation(fields: [entregadorId], references: [id])
+  id           Int          @id @default(autoincrement())
+  userId       Int
+  user         User         @relation(fields: [userId], references: [id])
+  enderecoId   Int
+  endereco     Endereco     @relation("PedidoEndereco", fields: [enderecoId], references: [id])
+  pizzas       Pizza[]      @relation("PedidoPizzas")
+  status       StatusPedido // Alterado de String para o Enum
+  entregador   Entregador?  @relation(fields: [entregadorId], references: [id])
   entregadorId Int?
-  latitude    Float?
-  longitude   Float?
-  criadoEm    DateTime @default(now())
-  atualizadoEm DateTime @updatedAt
+  latitude     Float?
+  longitude    Float?
+  criadoEm     DateTime     @default(now())
+  atualizadoEm DateTime     @updatedAt
 }
 
 model Entregador {
@@ -65,9 +75,9 @@ model Entregador {
 }
 
 model Endereco {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
   cep         String
   tipo        String
   logradouro  String

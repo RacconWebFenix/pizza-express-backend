@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, StatusPedido } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -104,7 +104,7 @@ async function main() {
   console.log('Usuário CLIENTE 3 criado');
 
   // Usuários para cada role diferente
-  const userRoleUsuario = await prisma.user.create({
+  await prisma.user.create({
     data: {
       nome: 'Usuário Genérico',
       email: 'usuario@example.com',
@@ -113,7 +113,7 @@ async function main() {
     },
   });
   console.log('Usuário USUARIO criado');
-  const userRoleFuncionario = await prisma.user.create({
+  await prisma.user.create({
     data: {
       nome: 'Funcionário Exemplo',
       email: 'funcionario@example.com',
@@ -122,7 +122,7 @@ async function main() {
     },
   });
   console.log('Usuário FUNCIONARIO criado');
-  const userRoleAdmin = await prisma.user.create({
+  await prisma.user.create({
     data: {
       nome: 'Administrador Exemplo',
       email: 'admin@example.com',
@@ -177,34 +177,66 @@ async function main() {
   console.log('Pizza 3 criada');
 
   // Pedidos
-  // Busca primeiro endereço principal de cada usuário
-  const endereco1 = await prisma.endereco.findFirst({ where: { userId: user1.id, principal: true } });
-  const endereco2 = await prisma.endereco.findFirst({ where: { userId: user2.id, principal: true } });
-  
+  const endereco1 = await prisma.endereco.findFirst({
+    where: { userId: user1.id, principal: true },
+  });
+  const endereco2 = await prisma.endereco.findFirst({
+    where: { userId: user2.id, principal: true },
+  });
+  const endereco3 = await prisma.endereco.findFirst({
+    where: { userId: user3.id, principal: true },
+  });
+
+  if (!endereco1 || !endereco2 || !endereco3) {
+    throw new Error('Endereços principais não encontrados para os usuários.');
+  }
+
   await prisma.pedido.create({
     data: {
       user: { connect: { id: user1.id } },
-      endereco: { connect: { id: endereco1!.id } },
+      endereco: { connect: { id: endereco1.id } },
       pizzas: { connect: [{ id: pizza1.id }, { id: pizza2.id }] },
-      status: 'em preparo',
+      status: StatusPedido.EM_PREPARO, // Usando o Enum
       entregador: { connect: { id: entregador1.id } },
       latitude: -23.55052,
       longitude: -46.633308,
     },
   });
-  console.log('Pedido 1 criado');
+  console.log('Pedido 1 criado (EM_PREPARO)');
+
   await prisma.pedido.create({
     data: {
       user: { connect: { id: user2.id } },
-      endereco: { connect: { id: endereco2!.id } },
+      endereco: { connect: { id: endereco2.id } },
       pizzas: { connect: [{ id: pizza3.id }] },
-      status: 'entregue',
+      status: StatusPedido.ENTREGUE, // Usando o Enum
       entregador: { connect: { id: entregador2.id } },
       latitude: -23.55111,
       longitude: -46.634444,
     },
   });
-  console.log('Pedido 2 criado');
+  console.log('Pedido 2 criado (ENTREGUE)');
+
+  await prisma.pedido.create({
+    data: {
+      user: { connect: { id: user3.id } },
+      endereco: { connect: { id: endereco3.id } },
+      pizzas: { connect: [{ id: pizza1.id }] },
+      status: StatusPedido.A_CAMINHO, // Usando o Enum
+      entregador: { connect: { id: entregador1.id } },
+    },
+  });
+  console.log('Pedido 3 criado (A_CAMINHO)');
+
+  await prisma.pedido.create({
+    data: {
+      user: { connect: { id: user1.id } },
+      endereco: { connect: { id: endereco1.id } },
+      pizzas: { connect: [{ id: pizza2.id }] },
+      status: StatusPedido.PENDENTE, // Usando o Enum
+    },
+  });
+  console.log('Pedido 4 criado (PENDENTE)');
 
   // Logs para diagnóstico
   const usuarios = await prisma.user.count();

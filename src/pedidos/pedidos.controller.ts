@@ -9,11 +9,13 @@ import {
   UseGuards,
   HttpException,
   HttpStatus,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PedidosService } from './pedidos.service';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { UpdatePedidoStatusDto } from './dto/update-pedido-status.dto';
 
 @Controller('pedidos')
 @UseGuards(JwtAuthGuard)
@@ -53,9 +55,9 @@ export class PedidosController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', ParseIntPipe) id: number) {
     try {
-      const pedido = await this.pedidosService.findOne(+id);
+      const pedido = await this.pedidosService.findOne(id);
       if (!pedido) {
         throw new HttpException('Pedido não encontrado', HttpStatus.NOT_FOUND);
       }
@@ -73,11 +75,11 @@ export class PedidosController {
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updatePedidoDto: UpdatePedidoDto,
   ) {
     try {
-      const pedido = await this.pedidosService.update(+id, updatePedidoDto);
+      const pedido = await this.pedidosService.update(id, updatePedidoDto);
       return {
         statusCode: 200,
         message: 'Pedido atualizado com sucesso',
@@ -88,7 +90,7 @@ export class PedidosController {
         typeof error === 'object' &&
         error !== null &&
         'code' in error &&
-        error.code === 'P2025'
+        (error as { code: string }).code === 'P2025'
       ) {
         throw new HttpException('Pedido não encontrado', HttpStatus.NOT_FOUND);
       }
@@ -99,10 +101,37 @@ export class PedidosController {
     }
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string) {
+  // NOVA ROTA PARA ATUALIZAR APENAS O STATUS
+  @Patch(':id/status')
+  async updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePedidoStatusDto: UpdatePedidoStatusDto,
+  ) {
     try {
-      await this.pedidosService.remove(+id);
+      const pedido = await this.pedidosService.updateStatus(
+        id,
+        updatePedidoStatusDto,
+      );
+      return {
+        statusCode: 200,
+        message: `Status do pedido #${id} atualizado com sucesso`,
+        data: pedido,
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Delete(':id')
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    try {
+      await this.pedidosService.remove(id);
       return {
         statusCode: 200,
         message: 'Pedido removido com sucesso',
@@ -112,7 +141,7 @@ export class PedidosController {
         typeof error === 'object' &&
         error !== null &&
         'code' in error &&
-        error.code === 'P2025'
+        (error as { code: string }).code === 'P2025'
       ) {
         throw new HttpException('Pedido não encontrado', HttpStatus.NOT_FOUND);
       }
