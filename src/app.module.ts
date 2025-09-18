@@ -10,6 +10,7 @@ import { EntregadoresModule } from './entregadores/entregadores.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { EnderecosModule } from './enderecos/enderecos.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { EnderecosModule } from './enderecos/enderecos.module';
     EntregadoresModule,
     EnderecosModule,
     AuthModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

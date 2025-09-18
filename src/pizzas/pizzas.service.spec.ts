@@ -7,6 +7,7 @@ const pizzaMock = {
   nome: 'Margherita',
   descricao: 'Clássica',
   preco: 39.9,
+  image: null,
   createdAt: new Date(),
   updatedAt: new Date(),
 };
@@ -28,17 +29,12 @@ describe('PizzasService', () => {
   });
 
   it('should create a pizza', async () => {
-    jest.spyOn(prisma.pizza, 'create').mockResolvedValue(
-      pizzaMock as unknown as {
-        id: number;
-        nome: string;
-        descricao: string | null;
-        preco: number;
-        createdAt: Date;
-        updatedAt: Date;
-      },
-    );
-    const result = await service.create({ nome: 'Margherita', preco: 39.9 });
+    jest.spyOn(prisma.pizza, 'create').mockResolvedValue(pizzaMock as any);
+    const result = await service.create({
+      nome: 'Margherita',
+      descricao: 'Pizza clássica',
+      preco: 39.9,
+    });
     expect(result).toEqual(pizzaMock);
   });
 });

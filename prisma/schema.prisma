@@ -50,19 +50,21 @@ model User {
 }
 
 model Pedido {
-  id           Int          @id @default(autoincrement())
-  userId       Int
-  user         User         @relation(fields: [userId], references: [id])
-  enderecoId   Int
-  endereco     Endereco     @relation("PedidoEndereco", fields: [enderecoId], references: [id])
-  pizzas       Pizza[]      @relation("PedidoPizzas")
-  status       StatusPedido // Alterado de String para o Enum
-  entregador   Entregador?  @relation(fields: [entregadorId], references: [id])
-  entregadorId Int?
-  latitude     Float?
-  longitude    Float?
-  criadoEm     DateTime     @default(now())
-  atualizadoEm DateTime     @updatedAt
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  user           User         @relation(fields: [userId], references: [id])
+  enderecoId     Int
+  endereco       Endereco     @relation("PedidoEndereco", fields: [enderecoId], references: [id])
+  pizzas         Pizza[]      @relation("PedidoPizzas")
+  status         StatusPedido // Alterado de String para o Enum
+  entregador     Entregador?  @relation(fields: [entregadorId], references: [id])
+  entregadorId   Int?
+  latitude       Float?
+  longitude      Float?
+  total          Float?       // Total do pedido em reais
+  paymentIntentId String?     // ID do Payment Intent do Stripe
+  criadoEm       DateTime     @default(now())
+  atualizadoEm   DateTime     @updatedAt
 }
 
 model Entregador {

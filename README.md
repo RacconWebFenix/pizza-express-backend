@@ -90,7 +90,105 @@ npm run test:cov     # Coverage
 
 ---
 
-## 🔄 Mudanças da Migração (Clientes → Users)
+## � Documentação da API - Insomnia Collection
+
+### 📁 Arquivos Disponíveis
+- **`Insomnia_complete.yaml`** - Coleção completa com TODOS os endpoints
+- **`WebSocket_Documentation.md`** - Documentação específica do WebSocket
+
+### 🚀 Como Usar
+
+#### 1. Importar no Insomnia
+1. Abra o Insomnia
+2. **Application > Preferences > Data > Import Data > From File**
+3. Selecione `Insomnia_complete.yaml`
+4. Clique em "Import"
+
+#### 2. Configurar Ambiente
+- **Localhost**: Para desenvolvimento local
+- **Production**: Para ambiente de produção
+- Configure as variáveis:
+  - `base_url`: URL da API
+  - `jwt`: Token JWT (obtenha fazendo login)
+  - `user_id`, `pizza_id`, etc.: IDs para testes
+
+#### 3. Fluxo de Teste Recomendado
+1. **Login**: `POST /auth/login` → Copie o token JWT
+2. **Configure JWT**: Cole o token na variável `jwt` do ambiente
+3. **Teste endpoints**: Comece pelos GETs, depois POSTs
+4. **Para WebSocket**: Use Postman ou Thunder Client (não suportado no Insomnia)
+
+### 📊 Endpoints Documentados
+
+#### 🔐 Autenticação (5 endpoints)
+- Login tradicional e Google OAuth
+- Configurações e perfil do usuário
+
+#### 👥 Usuários (6 endpoints)
+- CRUD completo + busca por email
+
+#### 🏠 Endereços (5 endpoints)
+- CRUD de endereços vinculados ao usuário
+
+#### 🍕 Pizzas (7 endpoints)
+- CRUD + upload de imagens (3 formas diferentes)
+
+#### 📦 Pedidos (6 endpoints)
+- CRUD + atualização de status + cálculo automático de total
+
+#### 🚴 Entregadores (5 endpoints)
+- CRUD de entregadores
+
+#### 💳 Pagamentos (2 endpoints)
+- Stripe Payment Intents + Webhooks
+
+#### 🏠 App (1 endpoint)
+- Status da API
+
+### 🔧 Exemplos de Uso
+
+#### Login e obtenção de token
+```bash
+# 1. Fazer login
+POST /auth/login
+{
+  "email": "admin@admin.com",
+  "password": "123456"
+}
+
+# 2. Copiar token da resposta e colar na variável 'jwt'
+```
+
+#### Criar pedido completo
+```bash
+# Headers
+Authorization: Bearer {{jwt}}
+
+# Body
+{
+  "clienteId": 1,
+  "enderecoId": 1,
+  "pizzasIds": [1, 2],
+  "paymentIntentId": "pi_stripe_..."
+}
+```
+
+### ⚠️ Considerações Importantes
+- **JWT obrigatório** em quase todos os endpoints
+- **Upload de imagens**: Use `multipart/form-data`
+- **WebSocket**: Documentado separadamente em `WebSocket_Documentation.md`
+- **Rate limiting**: Implementado nos endpoints de upload
+- **Validações**: Todos os campos obrigatórios estão documentados
+
+### 🐛 Troubleshooting
+- **Erro 401**: Verifique se o JWT está configurado corretamente
+- **Erro 400**: Campos obrigatórios faltando ou formato inválido
+- **Erro 413**: Imagem muito grande (máx. 5MB)
+- **WebSocket não conecta**: Verifique CORS e autenticação
+
+---
+
+## �🔄 Mudanças da Migração (Clientes → Users)
 
 ### ✅ Alterações Implementadas
 - **Tabela `Cliente` → `User`**: Renomeação completa no banco

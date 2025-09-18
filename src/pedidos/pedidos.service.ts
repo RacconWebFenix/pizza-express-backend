@@ -23,19 +23,44 @@ export class PedidosService {
   };
 
   async create(createPedidoDto: CreatePedidoDto): Promise<Pedido> {
-    const { clienteId, pizzasIds, status, entregadorId, enderecoId } =
-      createPedidoDto;
-    return this.prisma.pedido.create({
-      data: {
-        user: { connect: { id: clienteId } },
-        endereco: { connect: { id: enderecoId } },
-        pizzas: { connect: pizzasIds.map((id) => ({ id })) },
-        status: status || StatusPedido.PENDENTE, // Define PENDENTE como padrão
-        entregador: entregadorId
-          ? { connect: { id: entregadorId } }
-          : undefined,
-      },
-    });
+    try {
+      // Buscar preços das pizzas para calcular total
+      const pizzas = await this.prisma.pizza.findMany({
+        where: { id: { in: createPedidoDto.pizzasIds } },
+        select: { id: true, preco: true },
+      });
+
+      // Calcular total (assumindo quantidade 1 por pizza por enquanto)
+      let total = 0;
+      for (const pizza of pizzas) {
+        total += pizza.preco;
+      }
+
+      // Criar pedido com total calculado
+      const pedido = await this.prisma.pedido.create({
+        data: {
+          userId: createPedidoDto.clienteId,
+          enderecoId: createPedidoDto.enderecoId,
+          status: createPedidoDto.status || StatusPedido.PENDENTE,
+          total: total,
+          paymentIntentId: createPedidoDto.paymentIntentId,
+          pizzas: {
+            connect: createPedidoDto.pizzasIds.map((id: number) => ({ id })),
+          },
+          entregadorId: createPedidoDto.entregadorId,
+        },
+        include: {
+          user: true,
+          endereco: true,
+          pizzas: true,
+          entregador: true,
+        },
+      });
+
+      return pedido;
+    } catch (error) {
+      throw error;
+    }
   }
 
   findAll() {
@@ -97,6 +122,21 @@ export class PedidosService {
         status: novoStatus,
       },
     });
+  }
+
+  async updatePedidoStatus(pedidoId: number, paymentIntentId: string) {
+    try {
+      const pedido = await this.prisma.pedido.update({
+        where: { id: pedidoId },
+        data: {
+          status: 'EM_PREPARO',
+          paymentIntentId: paymentIntentId,
+        },
+      });
+      return pedido;
+    } catch (error) {
+      throw error;
+    }
   }
 
   remove(id: number) {

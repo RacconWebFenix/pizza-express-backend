@@ -1,18 +1,23 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PedidosService } from './pedidos.service';
 import { PrismaService } from '../prisma.service';
+import { StatusPedido } from '@prisma/client';
 
 const pedidoMock = {
   id: 1,
-  clienteId: 1,
-  status: 'aberto',
+  userId: 1,
+  enderecoId: 1,
+  status: StatusPedido.PENDENTE,
   entregadorId: null,
   latitude: null,
   longitude: null,
+  total: 35,
+  paymentIntentId: null,
   criadoEm: new Date(),
   atualizadoEm: new Date(),
   pizzas: [],
-  cliente: {},
+  user: {},
+  endereco: {},
   entregador: null,
 };
 
@@ -33,22 +38,12 @@ describe('PedidosService', () => {
   });
 
   it('should create a pedido', async () => {
-    jest.spyOn(prisma.pedido, 'create').mockResolvedValue(
-      pedidoMock as unknown as {
-        id: number;
-        clienteId: number;
-        status: string;
-        entregadorId: number | null;
-        latitude: number | null;
-        longitude: number | null;
-        criadoEm: Date;
-        atualizadoEm: Date;
-      },
-    );
+    jest.spyOn(prisma.pedido, 'create').mockResolvedValue(pedidoMock as any);
     const result = await service.create({
       clienteId: 1,
       pizzasIds: [],
-      status: 'aberto',
+      enderecoId: 1,
+      status: StatusPedido.PENDENTE,
     });
     expect(result).toEqual(pedidoMock);
   });

@@ -37,4 +37,8 @@ export class CreatePedidoDto {
   @IsNotEmpty()
   @IsNumber()
   enderecoId: number;
+
+  @IsOptional()
+  @IsString()
+  paymentIntentId?: string;
 }
