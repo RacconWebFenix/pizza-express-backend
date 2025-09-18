@@ -6,32 +6,71 @@ import {
   Delete,
   Param,
   Body,
+  UseGuards,
+  Request,
+  BadRequestException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { EnderecosService } from './enderecos.service';
 import { CreateEnderecoDto } from '../users/dto/create-endereco.dto';
 import { UpdateEnderecoDto } from '../users/dto/update-endereco.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+
+interface AuthenticatedUser {
+  userId?: number;
+  id?: number;
+}
+
+interface AuthenticatedRequest extends Request {
+  user?: AuthenticatedUser;
+}
 
 @Controller('enderecos')
+@UseGuards(JwtAuthGuard)
 export class EnderecosController {
+  // ← CERTIFIQUE-SE DE TER O "export" AQUI
   constructor(private readonly enderecosService: EnderecosService) {}
 
+  @Get()
+  async findUserEnderecos(@Request() req: AuthenticatedRequest) {
+    const userId = req.user?.userId ?? req.user?.id;
+
+    if (!userId) {
+      throw new BadRequestException('Usuário não identificado no token');
+    }
+
+    return this.enderecosService.findByUserId(userId);
+  }
+
   @Get(':id')
-  async findOne(@Param('id') id: number) {
-    return this.enderecosService.findOne(Number(id));
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.enderecosService.findOne(id);
   }
 
   @Post()
-  async create(@Body() dto: CreateEnderecoDto) {
-    return this.enderecosService.create(dto);
+  async create(
+    @Request() req: AuthenticatedRequest,
+    @Body() dto: CreateEnderecoDto,
+  ) {
+    const userId = req.user?.userId ?? req.user?.id;
+
+    if (!userId) {
+      throw new BadRequestException('Usuário não identificado no token');
+    }
+
+    return this.enderecosService.create({ ...dto, userId });
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() dto: UpdateEnderecoDto) {
-    return this.enderecosService.update(Number(id), dto);
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateEnderecoDto,
+  ) {
+    return this.enderecosService.update(id, dto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number) {
-    return this.enderecosService.remove(Number(id));
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return this.enderecosService.remove(id);
   }
 }

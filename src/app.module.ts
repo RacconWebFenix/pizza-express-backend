@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { EntregadoresModule } from './entregadores/entregadores.module';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { EnderecosModule } from './enderecos/enderecos.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
     PedidosModule,
     UsersModule,
     EntregadoresModule,
+    EnderecosModule,
     AuthModule,
   ],
   controllers: [AppController],
