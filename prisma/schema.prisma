@@ -63,6 +63,7 @@ model Pedido {
   longitude      Float?
   total          Float?       // Total do pedido em reais
   paymentIntentId String?     // ID do Payment Intent do Stripe
+  observacoes    String?      // Observações do pedido
   criadoEm       DateTime     @default(now())
   atualizadoEm   DateTime     @updatedAt
 }

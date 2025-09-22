@@ -23,7 +23,6 @@ import { UploadService } from '../upload/upload.service';
 import { FileValidationInterceptor } from '../upload/file-validation.interceptor';
 
 @Controller('pizzas')
-@UseGuards(JwtAuthGuard)
 export class PizzasController {
   constructor(
     private readonly pizzasService: PizzasService,
@@ -31,6 +30,7 @@ export class PizzasController {
   ) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async create(@Body() createPizzaDto: CreatePizzaDto) {
     try {
       const pizza = await this.pizzasService.create(createPizzaDto);
@@ -149,6 +149,7 @@ export class PizzasController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('image')) // Espera um campo opcional 'image'
   async update(
     @Param('id') id: string,
@@ -182,6 +183,7 @@ export class PizzasController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string) {
     try {
       await this.pizzasService.remove(+id);

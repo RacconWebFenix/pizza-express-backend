@@ -8,9 +8,18 @@
 - Autenticação JWT + Google OAuth com captura de avatar
 - CRUD de usuários (migrado de clientes), pizzas, pedidos, entregadores
 - Upload de imagens via Cloudinary
+- **💳 Sistema de pagamentos Stripe completo com webhooks**
 - WebSockets para entregadores
 - Documentação Swagger
 - Docker Ready
+
+### 💳 Sistema de Pagamentos
+- **Payment Intents** do Stripe para processamento seguro
+- **Webhooks** para confirmação automática de pagamentos
+- **Integração completa** com fluxo de pedidos
+- **Atualização automática** de status após pagamento confirmado
+
+**📖 Documentação detalhada:** Ver `Payment_Flow_Documentation.md`
 
 ### 🏗️ Arquitetura
 - NestJS + TypeScript

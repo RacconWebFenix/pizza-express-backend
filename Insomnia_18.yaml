@@ -194,7 +194,31 @@ collection:
       created: 1758233809514
       modified: 1758233809514
       sortKey: -1754253067023
-      description: Sistema de pagamentos com Stripe - Payment Intents e Webhooks
+      description: >-
+        Sistema de pagamentos com Stripe - Payment Intents e Webhooks
+
+        🔧 CONFIGURAÇÃO FRONTEND:
+        1. Instalar Stripe: npm install @stripe/stripe-js @stripe/react-stripe-js
+        2. Obter chave publicável do Stripe Dashboard (pk_test_... ou pk_live_...)
+        3. Configurar StripeProvider no App.js:
+        ```javascript
+        import { Elements } from '@stripe/react-stripe-js';
+        import { loadStripe } from '@stripe/stripe-js';
+
+        const stripePromise = loadStripe('pk_test_...'); // Sua chave publicável
+
+        function App() {
+          return (
+            <StripeProvider stripe={stripePromise}>
+              {/* Seu app aqui */}
+            </StripeProvider>
+          );
+        }
+        ```
+
+        ⚠️ IMPORTANTE: Nunca use chaves secretas no frontend!
+        - pk_test_* para desenvolvimento
+        - pk_live_* para produção
     children:
       - url: "{{ _.base_url }}/payments/create-intent"
         name: 💳 Criar Payment Intent
@@ -203,7 +227,50 @@ collection:
           created: 1758233809514
           modified: 1758233809514
           isPrivate: false
-          description: Criar um Payment Intent do Stripe para processar pagamentos
+          description: >-
+            Criar um Payment Intent do Stripe para processar pagamentos.
+
+            FLUXO TÍPICO:
+            1. Cliente seleciona pizzas e calcula total
+            2. Sistema cria Payment Intent com o valor total
+            3. Frontend usa client_secret para processar pagamento
+            4. Stripe confirma pagamento via webhook
+            5. Sistema atualiza status do pedido para EM_PREPARO
+
+            O valor deve ser enviado em centavos (ex: R$ 75,00 = 7500)
+
+            📱 IMPLEMENTAÇÃO FRONTEND:
+            - Quando? Quando o usuário clica em "Ir para Pagamento" ou "Finalizar Pedido" (antes de mostrar a tela de cartão)
+            - Por que? O backend precisa do total para criar o Payment Intent no Stripe. O frontend não deve criar intents diretamente
+            - Chamada: POST /payments/create-intent com {"amount": 7500}
+            - Resposta: Backend retorna client_secret (ex: "pi_xxx_secret_xxx")
+            - Próximo passo: Usar client_secret no Stripe Elements para coletar dados do cartão
+
+            📝 EXEMPLO DE CÓDIGO FRONTEND (JavaScript/React):
+            ```javascript
+            // 1. Calcular total do pedido (em centavos)
+            const totalInCents = cartItems.reduce((sum, item) => sum + (item.price * item.quantity * 100), 0);
+
+            // 2. Criar Payment Intent no backend
+            const response = await fetch('/api/payments/create-intent', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userToken}`
+              },
+              body: JSON.stringify({ amount: totalInCents })
+            });
+
+            const { client_secret } = await response.json();
+
+            // 3. Usar client_secret no Stripe Elements
+            const stripe = await stripePromise;
+            const elements = stripe.elements({ clientSecret: client_secret });
+
+            // 4. Montar elementos de pagamento
+            const paymentElement = elements.create('payment');
+            paymentElement.mount('#payment-element');
+            ```
           sortKey: -1754253067023.1
         method: POST
         body:
@@ -235,21 +302,89 @@ collection:
           created: 1758233809514
           modified: 1758233809514
           isPrivate: false
-          description: Endpoint para receber webhooks do Stripe (payment_intent.succeeded, etc.)
+          description: >-
+            Endpoint para receber webhooks do Stripe.
+
+            EVENTOS SUPORTADOS:
+            - payment_intent.succeeded: Pagamento confirmado
+            - payment_intent.payment_failed: Pagamento falhou
+
+            QUANDO RECEBE payment_intent.succeeded:
+            1. Busca pedido pelo paymentIntentId
+            2. Atualiza status do pedido para EM_PREPARO
+            3. Permite que o restaurante comece a preparar
+
+            Este endpoint é chamado automaticamente pelo Stripe.
           sortKey: -1754253067023.2
         method: POST
         body:
           mimeType: application/json
           text: |-
             {
-              "type": "payment_intent.succeeded",
+              "id": "evt_test_webhook",
+              "object": "event",
+              "api_version": "2020-08-27",
+              "created": 1326853478,
               "data": {
                 "object": {
                   "id": "pi_test_payment_intent_id",
+                  "object": "payment_intent",
+                  "amount": 7500,
+                  "amount_capturable": 0,
+                  "amount_received": 7500,
+                  "application": null,
+                  "application_fee_amount": null,
+                  "automatic_payment_methods": {
+                    "enabled": true
+                  },
+                  "canceled_at": null,
+                  "cancellation_reason": null,
+                  "capture_method": "automatic",
+                  "client_secret": "pi_test_client_secret",
+                  "confirmation_method": "automatic",
+                  "created": 1672531200,
+                  "currency": "brl",
+                  "customer": null,
+                  "description": null,
+                  "invoice": null,
+                  "last_payment_error": null,
+                  "latest_charge": "ch_test_charge_id",
+                  "livemode": false,
+                  "metadata": {},
+                  "next_action": null,
+                  "on_behalf_of": null,
+                  "payment_method": "pm_test_payment_method",
+                  "payment_method_options": {
+                    "card": {
+                      "installments": null,
+                      "mandate_options": null,
+                      "network": null,
+                      "request_three_d_secure": "automatic"
+                    }
+                  },
+                  "payment_method_types": [
+                    "card"
+                  ],
+                  "processing": null,
+                  "receipt_email": null,
+                  "review": null,
+                  "setup_future_usage": null,
+                  "shipping": null,
+                  "source": null,
+                  "statement_descriptor": null,
+                  "statement_descriptor_suffix": null,
                   "status": "succeeded",
-                  "amount": 7500
+                  "transfer_data": null,
+                  "transfer_group": null
                 }
-              }
+              },
+              "livemode": false,
+              "pending_webhooks": 1,
+              "request": {
+                "id": "req_test_request",
+                "idempotency_key": null
+              },
+              "type": "payment_intent.succeeded"
             }
         headers:
           - name: Content-Type
@@ -868,8 +1003,16 @@ collection:
           isPrivate: false
           description: >-
             Criar um novo pedido com cálculo automático de total baseado nos preços das pizzas.
-            O status padrão será PENDENTE se não for especificado.
-            O total é calculado automaticamente somando os preços de todas as pizzas selecionadas.
+
+            FLUXO COMPLETO DE PAGAMENTO:
+            1. Cliente seleciona pizzas → calcula total automaticamente
+            2. Sistema cria Payment Intent (/payments/create-intent) → retorna client_secret
+            3. Frontend processa pagamento com Stripe usando client_secret
+            4. Cliente cria pedido incluindo paymentIntentId
+            5. Stripe confirma pagamento → webhook atualiza status para EM_PREPARO
+
+            O status inicial será PENDENTE até confirmação do pagamento.
+            O campo paymentIntentId é obrigatório para pedidos pagos.
           sortKey: -1754253067040
         method: POST
         body:
@@ -878,8 +1021,9 @@ collection:
             {
               "clienteId": {{ _.user_id }},
               "enderecoId": {{ _.endereco_id }},
-              "pizzasIds": [{{ _.pizza_id }}],
-              "paymentIntentId": "pi_stripe_payment_intent_id"
+              "pizzasIds": [{{ _.pizza_id }}, 2, 3],
+              "paymentIntentId": "pi_test_payment_intent_abc123",
+              "observacoes": "Sem cebola, por favor"
             }
         headers:
           - name: Content-Type
