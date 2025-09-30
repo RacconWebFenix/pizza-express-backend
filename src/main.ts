@@ -5,6 +5,8 @@ import helmet from 'helmet';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { CustomLoggerService } from './common/logger/logger.service';
+import { APP_CONSTANTS } from './common/constants/app.constants';
 
 async function bootstrap() {
   const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -67,17 +69,22 @@ async function bootstrap() {
 
     app.enableCors(corsOptions);
 
-    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 10000;
+    const port = process.env.PORT
+      ? parseInt(process.env.PORT, 10)
+      : APP_CONSTANTS.DEFAULT_PORT;
+
+    const logger = app.get(CustomLoggerService);
 
     await app.listen(port, '0.0.0.0');
 
-    console.log(`🚀 Aplicação rodando na porta ${port}`);
-    console.log(
-      `🌍 Ambiente: ${isDevelopment ? 'desenvolvimento' : 'produção'}`,
+    logger.log(`Application running on port ${port}`, 'Application');
+    logger.log(
+      `Environment: ${isDevelopment ? 'development' : 'production'}`,
+      'Application',
     );
   } catch (error) {
-    console.error('❌ Erro durante inicialização da aplicação:', error);
-    // Lançar o erro garante que o processo falhe se a inicialização não ocorrer bem.
+    // Fallback to console.error since logger might not be available
+    console.error('❌ Application startup error:', error);
     throw error;
   }
 }

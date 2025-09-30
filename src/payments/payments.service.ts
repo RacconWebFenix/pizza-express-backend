@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
 import { PrismaService } from '../prisma.service';
 import { StatusPedido } from '@prisma/client';
+import { CustomLoggerService } from '../common/logger/logger.service';
 
 @Injectable()
 export class PaymentsService {
@@ -11,6 +12,7 @@ export class PaymentsService {
   constructor(
     private configService: ConfigService,
     private prismaService: PrismaService,
+    private logger: CustomLoggerService,
   ) {
     const secretKey = this.configService.get<string>('STRIPE_SECRET_KEY');
     if (!secretKey) {
@@ -37,7 +39,7 @@ export class PaymentsService {
   }
 
   async handleWebhook(event: Stripe.Event) {
-    console.log(`Webhook recebido: ${event.type}`, { eventId: event.id });
+    this.logger.log(`Webhook received: ${event.type}`, 'PaymentsService');
 
     try {
       switch (event.type) {
@@ -58,12 +60,16 @@ export class PaymentsService {
           break;
 
         default:
-          console.log(`Evento não tratado: ${event.type}`);
+          this.logger.warn(`Unhandled event: ${event.type}`, 'PaymentsService');
       }
 
       return { received: true, eventType: event.type };
     } catch (error) {
-      console.error('Erro no processamento do webhook:', error);
+      this.logger.error(
+        'Webhook processing error',
+        String(error),
+        'PaymentsService',
+      );
       throw error;
     }
   }
@@ -71,9 +77,10 @@ export class PaymentsService {
   private async handlePaymentIntentSucceeded(
     paymentIntent: Stripe.PaymentIntent,
   ) {
-    console.log(`💰 Pagamento confirmado: ${paymentIntent.id}`, {
+    this.logger.logPayment('Payment confirmed', {
+      id: paymentIntent.id,
       amount: paymentIntent.amount,
-      currency: paymentIntent.currency,
+      status: 'succeeded',
     });
 
     try {
@@ -88,21 +95,31 @@ export class PaymentsService {
             status: StatusPedido.EM_PREPARO,
           },
         });
-        console.log(`✅ Pedido ${pedido.id} atualizado para EM_PREPARO`);
+        this.logger.logOrder('Order updated to EM_PREPARO', {
+          id: pedido.id,
+          status: 'EM_PREPARO',
+        });
       } else {
-        console.error(
-          `❌ Pedido não encontrado para PaymentIntent: ${paymentIntent.id}`,
+        this.logger.error(
+          `Order not found for PaymentIntent: ${paymentIntent.id}`,
+          undefined,
+          'PaymentsService',
         );
       }
     } catch (error) {
-      console.error('Erro ao atualizar pedido:', error);
+      this.logger.error(
+        'Error updating order',
+        String(error),
+        'PaymentsService',
+      );
       throw error;
     }
   }
 
   private async handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
-    console.log(`❌ Pagamento falhou: ${paymentIntent.id}`, {
-      lastError: paymentIntent.last_payment_error,
+    this.logger.logPayment('Payment failed', {
+      id: paymentIntent.id,
+      status: 'failed',
     });
 
     try {
@@ -117,12 +134,17 @@ export class PaymentsService {
             status: StatusPedido.CANCELADO,
           },
         });
-        console.log(
-          `🚫 Pedido ${pedido.id} cancelado devido a falha no pagamento`,
-        );
+        this.logger.logOrder('Order cancelled due to payment failure', {
+          id: pedido.id,
+          status: 'CANCELADO',
+        });
       }
     } catch (error) {
-      console.error('Erro ao cancelar pedido:', error);
+      this.logger.error(
+        'Error cancelling order',
+        String(error),
+        'PaymentsService',
+      );
       throw error;
     }
   }
@@ -130,7 +152,10 @@ export class PaymentsService {
   private async handlePaymentIntentCanceled(
     paymentIntent: Stripe.PaymentIntent,
   ) {
-    console.log(`🚫 Pagamento cancelado: ${paymentIntent.id}`);
+    this.logger.logPayment('Payment cancelled', {
+      id: paymentIntent.id,
+      status: 'cancelled',
+    });
 
     try {
       const pedido = await this.prismaService.pedido.findFirst({
@@ -144,10 +169,17 @@ export class PaymentsService {
             status: StatusPedido.CANCELADO,
           },
         });
-        console.log(`🚫 Pedido ${pedido.id} cancelado`);
+        this.logger.logOrder('Order cancelled', {
+          id: pedido.id,
+          status: 'CANCELADO',
+        });
       }
     } catch (error) {
-      console.error('Erro ao cancelar pedido:', error);
+      this.logger.error(
+        'Error cancelling order',
+        String(error),
+        'PaymentsService',
+      );
       throw error;
     }
   }
@@ -155,8 +187,9 @@ export class PaymentsService {
   private handlePaymentIntentRequiresAction(
     paymentIntent: Stripe.PaymentIntent,
   ) {
-    console.log(`⚠️ Pagamento requer ação adicional: ${paymentIntent.id}`, {
-      nextAction: paymentIntent.next_action,
+    this.logger.logPayment('Payment requires additional action', {
+      id: paymentIntent.id,
+      status: 'requires_action',
     });
     // Aqui você pode implementar lógica para 3D Secure ou outras ações
   }

@@ -1,5 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { BcryptAdapter } from './adapters/bcrypt.adapter';
+import { CustomLoggerService } from './logger/logger.service';
 
 @Global()
 @Module({
@@ -8,7 +9,8 @@ import { BcryptAdapter } from './adapters/bcrypt.adapter';
       provide: 'HASHER',
       useClass: BcryptAdapter,
     },
+    CustomLoggerService,
   ],
-  exports: ['HASHER'],
+  exports: ['HASHER', CustomLoggerService],
 })
 export class CommonModule {}
