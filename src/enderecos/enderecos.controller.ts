@@ -18,6 +18,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Resource } from '../common/decorators/resource.decorator';
 import { ResourceOwner } from '../common/decorators/auth.decorators';
+import { ResponseBuilder } from '../common/builders/response.builder';
 
 interface AuthenticatedUser {
   userId?: number;
@@ -42,12 +43,14 @@ export class EnderecosController {
       throw new BadRequestException('Usuário não identificado no token');
     }
 
-    return this.enderecosService.findByUserId(userId);
+    const enderecos = await this.enderecosService.findByUserId(userId);
+    return ResponseBuilder.list(enderecos, 'Endereços listados com sucesso');
   }
 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.enderecosService.findOne(id);
+    const endereco = await this.enderecosService.findOne(id);
+    return ResponseBuilder.success(endereco, 'Endereço encontrado');
   }
 
   @Post()
@@ -61,7 +64,8 @@ export class EnderecosController {
       throw new BadRequestException('Usuário não identificado no token');
     }
 
-    return this.enderecosService.create({ ...dto, userId });
+    const endereco = await this.enderecosService.create({ ...dto, userId });
+    return ResponseBuilder.created(endereco, 'Endereço criado com sucesso');
   }
 
   @Patch(':id')
@@ -71,13 +75,15 @@ export class EnderecosController {
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateEnderecoDto,
   ) {
-    return this.enderecosService.update(id, dto);
+    const endereco = await this.enderecosService.update(id, dto);
+    return ResponseBuilder.updated(endereco, 'Endereço atualizado com sucesso');
   }
 
   @Delete(':id')
   @ResourceOwner()
   @Resource('endereco')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return this.enderecosService.remove(id);
+    await this.enderecosService.remove(id);
+    return ResponseBuilder.deleted('Endereço removido com sucesso');
   }
 }

@@ -343,15 +343,17 @@ include: { user: true, pizzas: true, entregador: true, endereco: true }
 - [ ] **Próximo**: Global Exception Filter + Response Builder  
 - [ ] **Pendente**: Validação e ajustes
 
-**Status**: ✅ FASES 1.1, 1.2, 2.1, 2.2 e 3.1 CONCLUÍDAS (30/09/2025)  
-**Entregável**: Domain Services + Logger + Constants + Response Builder + Guard Decorators implementados
+**Status**: ✅ FASES 1.1, 1.2, 2.1, 2.2, 3.1 e 3.2 CONCLUÍDAS (30/09/2025)  
+**Entregável**: Domain Services + Logger + Constants + Response Builder + Guard Decorators + Padronização Response DTOs implementados
 **Testes**: ✅ Upload de imagem real testado com sucesso (201 Created)
 **Phase 3.1**: ✅ Decorators compostos eliminaram 14+ linhas de duplicação em 4 controllers
+**Phase 3.2**: ✅ Response DTOs padronizados em TODOS os 5 controllers principais
 
 ### **SPRINT 2 (10 dias úteis)** - Arquitetura Core
 - [x] ✅ **CONCLUÍDO**: Services anêmicos → Domain services (PizzasService)
 - [x] ✅ **CONCLUÍDO**: Response Builder Pattern + Controller refactoring (30/09/2025)
 - [x] ✅ **CONCLUÍDO**: Guard Decorators - Eliminou duplicação em 4 controllers (30/09/2025)
+- [x] ✅ **CONCLUÍDO**: Response DTOs - Padronizados em 5 controllers (30/09/2025)
 - [x] **Dia 1-5**: PizzasService transformado em domain service robusto
 - [x] **Dia 6-10**: Controllers refatorados + Error handling
 

@@ -17,6 +17,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '@prisma/client';
+import { EntregadorResponseBuilder } from '../common/builders/response.builder';
 
 @Controller('entregadores')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -29,11 +30,7 @@ export class EntregadoresController {
     try {
       const entregador =
         await this.entregadoresService.create(createEntregadoreDto);
-      return {
-        statusCode: 201,
-        message: 'Entregador criado com sucesso',
-        data: entregador,
-      };
+      return EntregadorResponseBuilder.entregadorCreated(entregador);
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -92,11 +89,7 @@ export class EntregadoresController {
         +id,
         updateEntregadoreDto,
       );
-      return {
-        statusCode: 200,
-        message: 'Entregador atualizado com sucesso',
-        data: entregador,
-      };
+      return EntregadorResponseBuilder.entregadorUpdated(entregador);
     } catch (error: unknown) {
       if (
         typeof error === 'object' &&
@@ -121,10 +114,7 @@ export class EntregadoresController {
   async remove(@Param('id') id: string) {
     try {
       await this.entregadoresService.remove(+id);
-      return {
-        statusCode: 200,
-        message: 'Entregador removido com sucesso',
-      };
+      return EntregadorResponseBuilder.entregadorDeleted();
     } catch (error: unknown) {
       if (
         typeof error === 'object' &&

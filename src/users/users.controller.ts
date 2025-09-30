@@ -14,6 +14,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AdminOnly } from '../common/decorators/auth.decorators';
+import { UserResponseBuilder } from '../common/builders/response.builder';
 
 interface PrismaError {
   code: string;
@@ -48,15 +49,18 @@ export class UsersController {
   @AdminOnly()
   async findAll(@Query('email') email?: string) {
     if (email) {
-      return this.usersService.findByEmail(email);
+      const user = await this.usersService.findByEmail(email);
+      return UserResponseBuilder.userFound(user);
     }
-    return this.usersService.findAll();
+    const users = await this.usersService.findAll();
+    return UserResponseBuilder.usersList(users);
   }
 
   @Get(':id')
   @AdminOnly()
   async findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+    const user = await this.usersService.findOne(+id);
+    return UserResponseBuilder.userFound(user);
   }
 
   @Patch(':id')
@@ -64,7 +68,7 @@ export class UsersController {
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     try {
       const user = await this.usersService.update(+id, updateUserDto);
-      return user;
+      return UserResponseBuilder.userUpdated(user);
     } catch (error: unknown) {
       const prismaError = error as PrismaError;
       if (prismaError.code === 'P2025') {
@@ -85,7 +89,7 @@ export class UsersController {
   async remove(@Param('id') id: string) {
     try {
       await this.usersService.remove(+id);
-      return { message: 'Usuário removido com sucesso' };
+      return UserResponseBuilder.userDeleted();
     } catch (error: unknown) {
       const prismaError = error as PrismaError;
       if (prismaError.code === 'P2025') {

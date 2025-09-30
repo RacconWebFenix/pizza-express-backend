@@ -135,3 +135,108 @@ export class PizzaResponseBuilder extends ResponseBuilder {
     return ResponseBuilder.success(pizza, 'Pizza encontrada');
   }
 }
+
+// Specific builders para Pedido domain - mensagens customizadas
+export class PedidoResponseBuilder extends ResponseBuilder {
+  static pedidoCreated(pedido: unknown) {
+    return ResponseBuilder.created(pedido, 'Pedido criado com sucesso');
+  }
+
+  static pedidoUpdated(pedido: unknown) {
+    return ResponseBuilder.updated(pedido, 'Pedido atualizado com sucesso');
+  }
+
+  static pedidoDeleted() {
+    return ResponseBuilder.deleted('Pedido removido com sucesso');
+  }
+
+  static pedidosList(pedidos: unknown[]) {
+    return ResponseBuilder.list(pedidos, 'Pedidos listados com sucesso');
+  }
+
+  static pedidoFound(pedido: unknown) {
+    return ResponseBuilder.success(pedido, 'Pedido encontrado');
+  }
+
+  static statusUpdated(pedido: unknown) {
+    return ResponseBuilder.updated(
+      pedido,
+      'Status do pedido atualizado com sucesso',
+    );
+  }
+}
+
+// Specific builders para Entregador domain - mensagens customizadas
+export class EntregadorResponseBuilder extends ResponseBuilder {
+  static entregadorCreated(entregador: unknown) {
+    return ResponseBuilder.created(entregador, 'Entregador criado com sucesso');
+  }
+
+  static entregadorUpdated(entregador: unknown) {
+    return ResponseBuilder.updated(
+      entregador,
+      'Entregador atualizado com sucesso',
+    );
+  }
+
+  static entregadorDeleted() {
+    return ResponseBuilder.deleted('Entregador removido com sucesso');
+  }
+
+  static entregadoresList(entregadores: unknown[]) {
+    return ResponseBuilder.list(
+      entregadores,
+      'Entregadores listados com sucesso',
+    );
+  }
+
+  static entregadorFound(entregador: unknown) {
+    return ResponseBuilder.success(entregador, 'Entregador encontrado');
+  }
+}
+
+// Specific builders para User domain - mensagens customizadas
+export class UserResponseBuilder extends ResponseBuilder {
+  static userCreated(user: unknown) {
+    return ResponseBuilder.created(user, 'Usuário criado com sucesso');
+  }
+
+  static userUpdated(user: unknown) {
+    return ResponseBuilder.updated(user, 'Usuário atualizado com sucesso');
+  }
+
+  static userDeleted() {
+    return ResponseBuilder.deleted('Usuário removido com sucesso');
+  }
+
+  static usersList(users: unknown[]) {
+    return ResponseBuilder.list(users, 'Usuários listados com sucesso');
+  }
+
+  static userFound(user: unknown) {
+    return ResponseBuilder.success(user, 'Usuário encontrado');
+  }
+}
+
+// Specific builders para Endereco domain - mensagens customizadas
+export class EnderecoResponseBuilder extends ResponseBuilder {
+  static enderecoCreated(endereco: unknown) {
+    return ResponseBuilder.created(endereco, 'Endereço criado com sucesso');
+  }
+
+  static enderecoUpdated(endereco: unknown) {
+    return ResponseBuilder.updated(endereco, 'Endereço atualizado com sucesso');
+  }
+
+  static enderecoDeleted() {
+    return ResponseBuilder.deleted('Endereço removido com sucesso');
+  }
+
+  static enderecosList(enderecos: unknown[]) {
+    return ResponseBuilder.list(enderecos, 'Endereços listados com sucesso');
+  }
+
+  static enderecoFound(endereco: unknown) {
+    return ResponseBuilder.success(endereco, 'Endereço encontrado');
+  }
+}

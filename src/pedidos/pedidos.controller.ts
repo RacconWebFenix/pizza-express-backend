@@ -24,6 +24,7 @@ import { Resource } from '../common/decorators/resource.decorator';
 import { Role } from '@prisma/client';
 import { ResourceOwner } from '../common/decorators/auth.decorators';
 import { RequestWithUser } from '../common/interfaces/authenticated-user.interface';
+import { PedidoResponseBuilder } from '../common/builders/response.builder';
 
 @Controller('pedidos')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -34,11 +35,7 @@ export class PedidosController {
   async create(@Body() createPedidoDto: CreatePedidoDto) {
     try {
       const pedido = await this.pedidosService.create(createPedidoDto);
-      return {
-        statusCode: 201,
-        message: 'Pedido criado com sucesso',
-        data: pedido,
-      };
+      return PedidoResponseBuilder.pedidoCreated(pedido);
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -54,7 +51,8 @@ export class PedidosController {
   @Roles(Role.FUNCIONARIO, Role.ADMIN)
   async findAll() {
     try {
-      return await this.pedidosService.findAll();
+      const pedidos = await this.pedidosService.findAll();
+      return PedidoResponseBuilder.pedidosList(pedidos);
     } catch {
       throw new HttpException(
         'Erro interno do servidor',
@@ -84,7 +82,7 @@ export class PedidosController {
       if (!pedido) {
         throw new HttpException('Pedido não encontrado', HttpStatus.NOT_FOUND);
       }
-      return pedido;
+      return PedidoResponseBuilder.pedidoFound(pedido);
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -104,11 +102,7 @@ export class PedidosController {
   ) {
     try {
       const pedido = await this.pedidosService.update(id, updatePedidoDto);
-      return {
-        statusCode: 200,
-        message: 'Pedido atualizado com sucesso',
-        data: pedido,
-      };
+      return PedidoResponseBuilder.pedidoUpdated(pedido);
     } catch (error: unknown) {
       if (
         typeof error === 'object' &&
@@ -137,11 +131,7 @@ export class PedidosController {
         id,
         updatePedidoStatusDto,
       );
-      return {
-        statusCode: 200,
-        message: `Status do pedido #${id} atualizado com sucesso`,
-        data: pedido,
-      };
+      return PedidoResponseBuilder.statusUpdated(pedido);
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -158,10 +148,7 @@ export class PedidosController {
   async remove(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.pedidosService.remove(id);
-      return {
-        statusCode: 200,
-        message: 'Pedido removido com sucesso',
-      };
+      return PedidoResponseBuilder.pedidoDeleted();
     } catch (error: unknown) {
       if (
         typeof error === 'object' &&
