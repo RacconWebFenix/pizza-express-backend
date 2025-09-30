@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
   UseInterceptors,
   UploadedFile,
   ParseIntPipe,
@@ -17,13 +16,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
 import { UpdatePizzaDto } from './dto/update-pizza.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../auth/roles.guard';
 import { UploadService } from '../upload/upload.service';
 import { FileValidationInterceptor } from '../upload/file-validation.interceptor';
-import { Roles } from '../common/decorators/roles.decorator';
-import { Role } from '@prisma/client';
 import { PizzaResponseBuilder } from '../common/builders/response.builder';
+import { AdminOnly } from '../common/decorators/auth.decorators';
 
 @Controller('pizzas')
 export class PizzasController {
@@ -33,16 +29,14 @@ export class PizzasController {
   ) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @AdminOnly()
   async create(@Body() createPizzaDto: CreatePizzaDto) {
     const pizza = await this.pizzasService.create(createPizzaDto);
     return PizzaResponseBuilder.pizzaCreated(pizza);
   }
 
   @Post('with-image')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @AdminOnly()
   @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
   async createWithImage(
     @Body() createPizzaDto: CreatePizzaDto,
@@ -64,8 +58,7 @@ export class PizzasController {
   }
 
   @Post(':id/upload-image')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @AdminOnly()
   @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
   async uploadImage(
     @Param('id', ParseIntPipe) id: number,
@@ -100,8 +93,7 @@ export class PizzasController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @AdminOnly()
   @UseInterceptors(FileInterceptor('image'))
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -123,8 +115,7 @@ export class PizzasController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.ADMIN)
+  @AdminOnly()
   async remove(@Param('id', ParseIntPipe) id: number) {
     const result = await this.pizzasService.remove(id);
     return PizzaResponseBuilder.deleted(result.message);

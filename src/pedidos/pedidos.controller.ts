@@ -17,11 +17,12 @@ import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
-import { ResourceOwnerGuard } from '../common/guards/resource-owner.guard';
+
 import { UpdatePedidoStatusDto } from './dto/update-pedido-status.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Resource } from '../common/decorators/resource.decorator';
 import { Role } from '@prisma/client';
+import { ResourceOwner } from '../common/decorators/auth.decorators';
 import { RequestWithUser } from '../common/interfaces/authenticated-user.interface';
 
 @Controller('pedidos')
@@ -75,7 +76,7 @@ export class PedidosController {
   }
 
   @Get(':id')
-  @UseGuards(ResourceOwnerGuard)
+  @ResourceOwner()
   @Resource('pedido')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     try {
