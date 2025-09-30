@@ -3,9 +3,10 @@ import { PizzasService } from './pizzas.service';
 import { PizzasController } from './pizzas.controller';
 import { PrismaModule } from '../prisma.module';
 import { UploadModule } from '../upload/upload.module';
+import { CommonModule } from '../common/common.module';
 
 @Module({
-  imports: [PrismaModule, UploadModule],
+  imports: [PrismaModule, UploadModule, CommonModule],
   controllers: [PizzasController],
   providers: [PizzasService],
 })

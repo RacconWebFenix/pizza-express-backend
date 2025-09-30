@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PizzasService } from './pizzas.service';
 import { PrismaService } from '../prisma.service';
+import { CustomLoggerService } from '../common/logger/logger.service';
 
 const pizzaMock = {
   id: 1,
@@ -12,13 +13,28 @@ const pizzaMock = {
   updatedAt: new Date(),
 };
 
+const mockLoggerService = {
+  log: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+  debug: jest.fn(),
+  verbose: jest.fn(),
+};
+
 describe('PizzasService', () => {
   let service: PizzasService;
   let prisma: PrismaService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PizzasService, PrismaService],
+      providers: [
+        PizzasService,
+        PrismaService,
+        {
+          provide: CustomLoggerService,
+          useValue: mockLoggerService,
+        },
+      ],
     }).compile();
     service = module.get<PizzasService>(PizzasService);
     prisma = module.get<PrismaService>(PrismaService);

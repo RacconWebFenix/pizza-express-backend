@@ -12,12 +12,13 @@ const pizzas_service_1 = require("./pizzas.service");
 const pizzas_controller_1 = require("./pizzas.controller");
 const prisma_module_1 = require("../prisma.module");
 const upload_module_1 = require("../upload/upload.module");
+const common_module_1 = require("../common/common.module");
 let PizzasModule = class PizzasModule {
 };
 exports.PizzasModule = PizzasModule;
 exports.PizzasModule = PizzasModule = __decorate([
     (0, common_1.Module)({
-        imports: [prisma_module_1.PrismaModule, upload_module_1.UploadModule],
+        imports: [prisma_module_1.PrismaModule, upload_module_1.UploadModule, common_module_1.CommonModule],
         controllers: [pizzas_controller_1.PizzasController],
         providers: [pizzas_service_1.PizzasService],
     })

@@ -63,24 +63,28 @@ export class CustomLoggerService implements LoggerService {
     }
   }
 
-  log(message: string, context?: string) {
-    this.logger.info(message, { context });
+  log(message: string, meta?: Record<string, unknown> | string) {
+    const logData = typeof meta === 'string' ? { context: meta } : meta;
+    this.logger.info(message, logData);
   }
 
   error(message: string, trace?: string, context?: string) {
     this.logger.error(message, { trace, context });
   }
 
-  warn(message: string, context?: string) {
-    this.logger.warn(message, { context });
+  warn(message: string, meta?: Record<string, unknown> | string) {
+    const logData = typeof meta === 'string' ? { context: meta } : meta;
+    this.logger.warn(message, logData);
   }
 
-  debug(message: string, context?: string) {
-    this.logger.debug(message, { context });
+  debug(message: string, meta?: Record<string, unknown> | string) {
+    const logData = typeof meta === 'string' ? { context: meta } : meta;
+    this.logger.debug(message, logData);
   }
 
-  verbose(message: string, context?: string) {
-    this.logger.verbose(message, { context });
+  verbose(message: string, meta?: Record<string, unknown> | string) {
+    const logData = typeof meta === 'string' ? { context: meta } : meta;
+    this.logger.verbose(message, logData);
   }
 
   // Métodos específicos para casos de uso do projeto

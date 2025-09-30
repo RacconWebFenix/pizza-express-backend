@@ -21,9 +21,17 @@ export const APP_CONSTANTS = {
   MIN_PASSWORD_LENGTH: 6,
   MAX_PIZZA_PRICE: 999.99,
   MIN_PIZZA_PRICE: 0.01,
-} as const;
 
-export const ERROR_MESSAGES = {
+  // Regras de Negócio
+  BUSINESS_RULES: {
+    PIZZA_MIN_PRICE: 5.0, // Preço mínimo para pizzas
+    PIZZA_MAX_PRICE: 999.99,
+    MAX_PIZZA_NAME_LENGTH: 100,
+    MIN_PIZZA_NAME_LENGTH: 3,
+  },
+
+  // Mensagens de Erro
+  ERROR_MESSAGES: {
   // Autenticação
   USER_NOT_FOUND: 'Usuário não encontrado',
   INVALID_CREDENTIALS: 'Credenciais inválidas',
@@ -56,38 +64,48 @@ export const ERROR_MESSAGES = {
   ORDER_CANNOT_BE_CANCELLED: 'Pedido não pode ser cancelado',
   INVALID_STATUS_TRANSITION: 'Transição de status inválida',
 
-  // Upload
-  FILE_TOO_LARGE: 'Arquivo muito grande',
-  INVALID_FILE_TYPE: 'Tipo de arquivo inválido',
-  UPLOAD_FAILED: 'Falha no upload do arquivo',
-} as const;
+    // Pizza Domain Errors
+    PIZZA_CREATION_FAILED: 'Erro ao criar pizza',
+    PIZZA_UPDATE_FAILED: 'Erro ao atualizar pizza',
+    PIZZA_DELETE_FAILED: 'Erro ao remover pizza',
+    PIZZA_FETCH_FAILED: 'Erro ao buscar pizzas',
+    PIZZA_HAS_ORDERS: 'Pizza possui pedidos associados e não pode ser removida',
 
-export const SUCCESS_MESSAGES = {
-  // CRUD
-  CREATED_SUCCESS: 'Recurso criado com sucesso',
-  UPDATED_SUCCESS: 'Recurso atualizado com sucesso',
-  DELETED_SUCCESS: 'Recurso removido com sucesso',
+    // Upload
+    FILE_TOO_LARGE: 'Arquivo muito grande',
+    INVALID_FILE_TYPE: 'Tipo de arquivo inválido',
+    UPLOAD_FAILED: 'Falha no upload do arquivo',
+  },
 
-  // Específicos
-  PIZZA_CREATED: 'Pizza criada com sucesso',
-  ORDER_CREATED: 'Pedido criado com sucesso',
-  ORDER_UPDATED: 'Pedido atualizado com sucesso',
-  PAYMENT_CONFIRMED: 'Pagamento confirmado com sucesso',
+  // Mensagens de Sucesso
+  SUCCESS_MESSAGES: {
+    // CRUD
+    CREATED_SUCCESS: 'Recurso criado com sucesso',
+    UPDATED_SUCCESS: 'Recurso atualizado com sucesso',
+    DELETED_SUCCESS: 'Recurso removido com sucesso',
 
-  // Autenticação
-  LOGIN_SUCCESS: 'Login realizado com sucesso',
-  REGISTER_SUCCESS: 'Cadastro realizado com sucesso',
-  LOGOUT_SUCCESS: 'Logout realizado com sucesso',
-} as const;
+    // Específicos
+    PIZZA_CREATED: 'Pizza criada com sucesso',
+    ORDER_CREATED: 'Pedido criado com sucesso',
+    ORDER_UPDATED: 'Pedido atualizado com sucesso',
+    PAYMENT_CONFIRMED: 'Pagamento confirmado com sucesso',
 
-export const LOG_CONTEXTS = {
-  APP: 'Application',
-  AUTH: 'AuthService',
-  USERS: 'UsersService',
-  PIZZAS: 'PizzasService',
-  ORDERS: 'OrdersService',
-  PAYMENTS: 'PaymentsService',
-  UPLOAD: 'UploadService',
-  DELIVERERS: 'DeliverersService',
-  ADDRESSES: 'AddressesService',
+    // Autenticação
+    LOGIN_SUCCESS: 'Login realizado com sucesso',
+    REGISTER_SUCCESS: 'Cadastro realizado com sucesso',
+    LOGOUT_SUCCESS: 'Logout realizado com sucesso',
+  },
+
+  // Contextos de Log
+  LOG_CONTEXTS: {
+    APP: 'Application',
+    AUTH: 'AuthService',
+    USERS: 'UsersService',
+    PIZZAS: 'PizzasService',
+    ORDERS: 'OrdersService',
+    PAYMENTS: 'PaymentsService',
+    UPLOAD: 'UploadService',
+    DELIVERERS: 'DeliverersService',
+    ADDRESSES: 'AddressesService',
+  },
 } as const;
