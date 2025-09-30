@@ -19,8 +19,11 @@ import { PizzasService } from './pizzas.service';
 import { CreatePizzaDto } from './dto/create-pizza.dto';
 import { UpdatePizzaDto } from './dto/update-pizza.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
 import { UploadService } from '../upload/upload.service';
 import { FileValidationInterceptor } from '../upload/file-validation.interceptor';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('pizzas')
 export class PizzasController {
@@ -30,7 +33,8 @@ export class PizzasController {
   ) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   async create(@Body() createPizzaDto: CreatePizzaDto) {
     try {
       const pizza = await this.pizzasService.create(createPizzaDto);
@@ -55,6 +59,8 @@ export class PizzasController {
   }
 
   @Post('with-image')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
   async createWithImage(
     @Body() createPizzaDto: CreatePizzaDto,
@@ -94,6 +100,8 @@ export class PizzasController {
   }
 
   @Post(':id/upload-image')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
   async uploadImage(
     @Param('id') id: string,
@@ -149,7 +157,8 @@ export class PizzasController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   @UseInterceptors(FileInterceptor('image')) // Espera um campo opcional 'image'
   async update(
     @Param('id') id: string,
@@ -183,7 +192,8 @@ export class PizzasController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
   async remove(@Param('id') id: string) {
     try {
       await this.pizzasService.remove(+id);

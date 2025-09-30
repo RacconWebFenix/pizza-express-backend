@@ -10,8 +10,8 @@ import { CreateEnderecoDto } from './create-endereco.dto';
 
 export enum Role {
   CLIENTE = 'CLIENTE',
-  ADMIN = 'ADMIN',
   FUNCIONARIO = 'FUNCIONARIO',
+  ADMIN = 'ADMIN',
 }
 
 export class CreateUserDto {

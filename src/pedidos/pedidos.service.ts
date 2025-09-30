@@ -66,6 +66,14 @@ export class PedidosService {
     });
   }
 
+  findByUserId(userId: number) {
+    return this.prisma.pedido.findMany({
+      where: { userId },
+      include: { user: true, pizzas: true, entregador: true, endereco: true },
+      orderBy: { criadoEm: 'desc' },
+    });
+  }
+
   async findOne(id: number) {
     const pedido = await this.prisma.pedido.findUnique({
       where: { id },

@@ -15,6 +15,9 @@ import { EnderecosService } from './enderecos.service';
 import { CreateEnderecoDto } from '../users/dto/create-endereco.dto';
 import { UpdateEnderecoDto } from '../users/dto/update-endereco.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { ResourceOwnerGuard } from '../common/guards/resource-owner.guard';
+import { Resource } from '../common/decorators/resource.decorator';
 
 interface AuthenticatedUser {
   userId?: number;
@@ -26,7 +29,7 @@ interface AuthenticatedRequest extends Request {
 }
 
 @Controller('enderecos')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class EnderecosController {
   // ← CERTIFIQUE-SE DE TER O "export" AQUI
   constructor(private readonly enderecosService: EnderecosService) {}
@@ -62,6 +65,8 @@ export class EnderecosController {
   }
 
   @Patch(':id')
+  @UseGuards(ResourceOwnerGuard)
+  @Resource('endereco')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateEnderecoDto,
@@ -70,6 +75,8 @@ export class EnderecosController {
   }
 
   @Delete(':id')
+  @UseGuards(ResourceOwnerGuard)
+  @Resource('endereco')
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.enderecosService.remove(id);
   }

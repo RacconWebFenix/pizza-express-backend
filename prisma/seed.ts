@@ -19,33 +19,82 @@ async function main() {
   await prisma.endereco.deleteMany();
   await prisma.user.deleteMany();
 
-  // Usuários (role=CLIENTE)
+  // === USUÁRIOS DE TESTE ===
   const senha = process.env.TEST_CLIENTE_PASSWORD;
   const senhaHash = await bcrypt.hash(senha, 10);
-  const user1 = await prisma.user.create({
+
+  // 1. ADMIN
+  const adminUser = await prisma.user.create({
     data: {
-      nome: 'João Silva',
-      email: 'joao@email.com',
+      nome: 'Admin Sistema',
+      email: 'admin@pizza.com',
       password: senhaHash,
       telefone: '11999999999',
+      role: 'ADMIN',
+      enderecos: {
+        create: {
+          cep: '01000-000',
+          tipo: 'comercial',
+          logradouro: 'Rua Admin',
+          numero: '100',
+          bairro: 'Centro',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
+      },
+    },
+  });
+
+  // 2. FUNCIONARIO
+  const funcionarioUser = await prisma.user.create({
+    data: {
+      nome: 'Maria Funcionária',
+      email: 'funcionario@pizza.com',
+      password: senhaHash,
+      telefone: '11888888888',
+      role: 'FUNCIONARIO',
+      enderecos: {
+        create: {
+          cep: '02000-000',
+          tipo: 'residencial',
+          logradouro: 'Rua Funcionário',
+          numero: '200',
+          bairro: 'Vila Funcionário',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
+      },
+    },
+  });
+
+  // 3. CLIENTE
+  const clienteUser = await prisma.user.create({
+    data: {
+      nome: 'João Cliente',
+      email: 'cliente@pizza.com',
+      password: senhaHash,
+      telefone: '11777777777',
+      role: 'CLIENTE',
       enderecos: {
         create: [
           {
-            cep: '12345-678',
+            cep: '03000-000',
             tipo: 'residencial',
-            logradouro: 'Rua das Flores',
-            numero: '123',
-            bairro: 'Centro',
+            logradouro: 'Rua Cliente',
+            numero: '300',
+            bairro: 'Vila Cliente',
             cidade: 'São Paulo',
             estado: 'SP',
             principal: true,
           },
           {
-            cep: '22222-222',
+            cep: '03100-000',
             tipo: 'comercial',
-            logradouro: 'Rua dos Patos',
-            numero: '99',
-            bairro: 'Centro',
+            logradouro: 'Av Cliente Trabalho',
+            numero: '400',
+            bairro: 'Centro Comercial',
             cidade: 'São Paulo',
             estado: 'SP',
             principal: false,
@@ -55,64 +104,10 @@ async function main() {
       },
     },
   });
-  console.log('Usuário CLIENTE 1 criado');
-  const user2 = await prisma.user.create({
-    data: {
-      nome: 'Maria Souza',
-      email: 'maria@email.com',
-      password: senhaHash,
-      telefone: '11988887777',
-      enderecos: {
-        create: [
-          {
-            cep: '98765-432',
-            tipo: 'comercial',
-            logradouro: 'Av. Paulista',
-            numero: '1000',
-            bairro: 'Jardins',
-            cidade: 'São Paulo',
-            estado: 'SP',
-            principal: true,
-          },
-        ],
-      },
-    },
-  });
-  console.log('Usuário CLIENTE 2 criado');
-  const user3 = await prisma.user.create({
-    data: {
-      nome: 'Carlos Lima',
-      email: 'carlos@email.com',
-      password: senhaHash,
-      telefone: '11977776666',
-      enderecos: {
-        create: [
-          {
-            cep: '54321-987',
-            tipo: 'residencial',
-            logradouro: 'Rua Verde',
-            numero: '321',
-            bairro: 'Vila Nova',
-            cidade: 'São Paulo',
-            estado: 'SP',
-            principal: true,
-          },
-        ],
-      },
-    },
-  });
-  console.log('Usuário CLIENTE 3 criado');
+  console.log('Usuários de teste criados: ADMIN, FUNCIONARIO, CLIENTE');
 
   // Usuários para cada role diferente
-  await prisma.user.create({
-    data: {
-      nome: 'Usuário Genérico',
-      email: 'usuario@example.com',
-      password: senhaHash,
-      role: 'USUARIO',
-    },
-  });
-  console.log('Usuário USUARIO criado');
+
   await prisma.user.create({
     data: {
       nome: 'Funcionário Exemplo',
@@ -176,25 +171,22 @@ async function main() {
   });
   console.log('Pizza 3 criada');
 
-  // Pedidos
-  const endereco1 = await prisma.endereco.findFirst({
-    where: { userId: user1.id, principal: true },
+  // Pedidos de exemplo
+  const enderecoAdmin = await prisma.endereco.findFirst({
+    where: { userId: adminUser.id, principal: true },
   });
-  const endereco2 = await prisma.endereco.findFirst({
-    where: { userId: user2.id, principal: true },
-  });
-  const endereco3 = await prisma.endereco.findFirst({
-    where: { userId: user3.id, principal: true },
+  const enderecoCliente = await prisma.endereco.findFirst({
+    where: { userId: clienteUser.id, principal: true },
   });
 
-  if (!endereco1 || !endereco2 || !endereco3) {
+  if (!enderecoAdmin || !enderecoCliente) {
     throw new Error('Endereços principais não encontrados para os usuários.');
   }
 
   await prisma.pedido.create({
     data: {
-      user: { connect: { id: user1.id } },
-      endereco: { connect: { id: endereco1.id } },
+      user: { connect: { id: clienteUser.id } },
+      endereco: { connect: { id: enderecoCliente.id } },
       pizzas: { connect: [{ id: pizza1.id }, { id: pizza2.id }] },
       status: StatusPedido.EM_PREPARO, // Usando o Enum
       entregador: { connect: { id: entregador1.id } },
@@ -206,37 +198,14 @@ async function main() {
 
   await prisma.pedido.create({
     data: {
-      user: { connect: { id: user2.id } },
-      endereco: { connect: { id: endereco2.id } },
+      user: { connect: { id: adminUser.id } },
+      endereco: { connect: { id: enderecoAdmin.id } },
       pizzas: { connect: [{ id: pizza3.id }] },
-      status: StatusPedido.ENTREGUE, // Usando o Enum
+      status: StatusPedido.ENTREGUE,
       entregador: { connect: { id: entregador2.id } },
-      latitude: -23.55111,
-      longitude: -46.634444,
     },
   });
-  console.log('Pedido 2 criado (ENTREGUE)');
-
-  await prisma.pedido.create({
-    data: {
-      user: { connect: { id: user3.id } },
-      endereco: { connect: { id: endereco3.id } },
-      pizzas: { connect: [{ id: pizza1.id }] },
-      status: StatusPedido.A_CAMINHO, // Usando o Enum
-      entregador: { connect: { id: entregador1.id } },
-    },
-  });
-  console.log('Pedido 3 criado (A_CAMINHO)');
-
-  await prisma.pedido.create({
-    data: {
-      user: { connect: { id: user1.id } },
-      endereco: { connect: { id: endereco1.id } },
-      pizzas: { connect: [{ id: pizza2.id }] },
-      status: StatusPedido.PENDENTE, // Usando o Enum
-    },
-  });
-  console.log('Pedido 4 criado (PENDENTE)');
+  console.log('Pedido 2 criado para ADMIN (ENTREGUE)');
 
   // Logs para diagnóstico
   const usuarios = await prisma.user.count();

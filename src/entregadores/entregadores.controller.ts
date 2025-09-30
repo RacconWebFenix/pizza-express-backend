@@ -14,13 +14,17 @@ import { EntregadoresService } from './entregadores.service';
 import { CreateEntregadoreDto } from './dto/create-entregadore.dto';
 import { UpdateEntregadoreDto } from './dto/update-entregadore.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('entregadores')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class EntregadoresController {
   constructor(private readonly entregadoresService: EntregadoresService) {}
 
   @Post()
+  @Roles(Role.ADMIN)
   async create(@Body() createEntregadoreDto: CreateEntregadoreDto) {
     try {
       const entregador =
@@ -42,6 +46,7 @@ export class EntregadoresController {
   }
 
   @Get()
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
   async findAll() {
     try {
       return await this.entregadoresService.findAll();
@@ -54,6 +59,7 @@ export class EntregadoresController {
   }
 
   @Get(':id')
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
   async findOne(@Param('id') id: string) {
     try {
       const entregador = await this.entregadoresService.findOne(+id);
@@ -76,6 +82,7 @@ export class EntregadoresController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN)
   async update(
     @Param('id') id: string,
     @Body() updateEntregadoreDto: UpdateEntregadoreDto,
@@ -110,6 +117,7 @@ export class EntregadoresController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   async remove(@Param('id') id: string) {
     try {
       await this.entregadoresService.remove(+id);

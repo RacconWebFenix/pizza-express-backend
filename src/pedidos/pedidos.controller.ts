@@ -10,15 +10,22 @@ import {
   HttpException,
   HttpStatus,
   ParseIntPipe,
+  Req,
 } from '@nestjs/common';
 import { PedidosService } from './pedidos.service';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { ResourceOwnerGuard } from '../common/guards/resource-owner.guard';
 import { UpdatePedidoStatusDto } from './dto/update-pedido-status.dto';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Resource } from '../common/decorators/resource.decorator';
+import { Role } from '@prisma/client';
+import { RequestWithUser } from '../common/interfaces/authenticated-user.interface';
 
 @Controller('pedidos')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class PedidosController {
   constructor(private readonly pedidosService: PedidosService) {}
 
@@ -43,6 +50,7 @@ export class PedidosController {
   }
 
   @Get()
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
   async findAll() {
     try {
       return await this.pedidosService.findAll();
@@ -54,7 +62,21 @@ export class PedidosController {
     }
   }
 
+  @Get('meus-pedidos')
+  async findMyOrders(@Req() req: RequestWithUser) {
+    try {
+      return await this.pedidosService.findByUserId(req.user.id);
+    } catch {
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   @Get(':id')
+  @UseGuards(ResourceOwnerGuard)
+  @Resource('pedido')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     try {
       const pedido = await this.pedidosService.findOne(id);
@@ -74,6 +96,7 @@ export class PedidosController {
   }
 
   @Patch(':id')
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updatePedidoDto: UpdatePedidoDto,
@@ -103,6 +126,7 @@ export class PedidosController {
 
   // NOVA ROTA PARA ATUALIZAR APENAS O STATUS
   @Patch(':id/status')
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
   async updateStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body() updatePedidoStatusDto: UpdatePedidoStatusDto,
@@ -129,6 +153,7 @@ export class PedidosController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   async remove(@Param('id', ParseIntPipe) id: number) {
     try {
       await this.pedidosService.remove(id);
