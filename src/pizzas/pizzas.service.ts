@@ -129,23 +129,27 @@ export class PizzasService {
     }
 
     try {
-      const updatedPizza = await this.prisma.pizza.update({ 
-        where: { id }, 
+      const updatedPizza = await this.prisma.pizza.update({
+        where: { id },
         data: {
           ...updatePizzaDto,
-          nome: updatePizzaDto.nome ? this.sanitizeName(updatePizzaDto.nome) : undefined,
-        }
+          nome: updatePizzaDto.nome
+            ? this.sanitizeName(updatePizzaDto.nome)
+            : undefined,
+        },
       });
 
-      this.logger.log('Pizza atualizada com sucesso', { 
-        pizzaId: id, 
-        nome: updatedPizza.nome 
+      this.logger.log('Pizza atualizada com sucesso', {
+        pizzaId: id,
+        nome: updatedPizza.nome,
       });
 
       return updatedPizza;
     } catch (error) {
       this.logger.error('Erro ao atualizar pizza', error);
-      throw new BadRequestException(APP_CONSTANTS.ERROR_MESSAGES.PIZZA_UPDATE_FAILED);
+      throw new BadRequestException(
+        APP_CONSTANTS.ERROR_MESSAGES.PIZZA_UPDATE_FAILED,
+      );
     }
   }
 
@@ -165,15 +169,17 @@ export class PizzasService {
     try {
       await this.prisma.pizza.delete({ where: { id } });
 
-      this.logger.log('Pizza removida com sucesso', { 
-        pizzaId: id, 
-        nome: pizza.nome 
+      this.logger.log('Pizza removida com sucesso', {
+        pizzaId: id,
+        nome: pizza.nome,
       });
 
       return { message: `Pizza "${pizza.nome}" removida com sucesso` };
     } catch (error) {
       this.logger.error('Erro ao remover pizza', error);
-      throw new BadRequestException(APP_CONSTANTS.ERROR_MESSAGES.PIZZA_DELETE_FAILED);
+      throw new BadRequestException(
+        APP_CONSTANTS.ERROR_MESSAGES.PIZZA_DELETE_FAILED,
+      );
     }
   }
 
@@ -184,11 +190,11 @@ export class PizzasService {
    */
   private async validateMinimumPrice(preco: number): Promise<void> {
     const minPrice = APP_CONSTANTS.BUSINESS_RULES.PIZZA_MIN_PRICE;
-    
+
     if (preco < minPrice) {
       this.logger.warn('Preço abaixo do mínimo permitido', { preco, minPrice });
       throw new BadRequestException(
-        `Preço deve ser no mínimo R$ ${minPrice.toFixed(2)}`
+        `Preço deve ser no mínimo R$ ${minPrice.toFixed(2)}`,
       );
     }
   }
@@ -196,7 +202,10 @@ export class PizzasService {
   /**
    * Valida se o nome da pizza é único
    */
-  private async validateUniqueName(nome: string, excludeId?: number): Promise<void> {
+  private async validateUniqueName(
+    nome: string,
+    excludeId?: number,
+  ): Promise<void> {
     const existingPizza = await this.prisma.pizza.findFirst({
       where: {
         nome: {
@@ -208,10 +217,11 @@ export class PizzasService {
     });
 
     if (existingPizza) {
-      this.logger.warn('Nome de pizza já existe', { nome, existingId: existingPizza.id });
-      throw new ConflictException(
-        `Já existe uma pizza com o nome "${nome}"`
-      );
+      this.logger.warn('Nome de pizza já existe', {
+        nome,
+        existingId: existingPizza.id,
+      });
+      throw new ConflictException(`Já existe uma pizza com o nome "${nome}"`);
     }
   }
 
@@ -222,14 +232,14 @@ export class PizzasService {
     if (!imageUrl) return;
 
     const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
-    const hasValidExtension = validExtensions.some(ext => 
-      imageUrl.toLowerCase().includes(ext)
+    const hasValidExtension = validExtensions.some((ext) =>
+      imageUrl.toLowerCase().includes(ext),
     );
 
     if (!hasValidExtension) {
       this.logger.warn('URL de imagem com extensão inválida', { imageUrl });
       throw new BadRequestException(
-        'URL da imagem deve ter uma extensão válida (.jpg, .jpeg, .png, .webp)'
+        'URL da imagem deve ter uma extensão válida (.jpg, .jpeg, .png, .webp)',
       );
     }
   }
@@ -249,12 +259,12 @@ export class PizzasService {
     });
 
     if (pedidosCount > 0) {
-      this.logger.warn('Tentativa de deletar pizza com pedidos associados', { 
-        pizzaId, 
-        pedidosCount 
+      this.logger.warn('Tentativa de deletar pizza com pedidos associados', {
+        pizzaId,
+        pedidosCount,
       });
       throw new ConflictException(
-        `Não é possível remover esta pizza pois ela possui ${pedidosCount} pedido(s) associado(s)`
+        `Não é possível remover esta pizza pois ela possui ${pedidosCount} pedido(s) associado(s)`,
       );
     }
   }

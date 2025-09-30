@@ -343,11 +343,12 @@ include: { user: true, pizzas: true, entregador: true, endereco: true }
 - [ ] **Próximo**: Global Exception Filter + Response Builder  
 - [ ] **Pendente**: Validação e ajustes
 
-**Status**: ✅ FASE 1.1 e 1.2 CONCLUÍDAS (30/09/2025)  
-**Entregável**: Base sólida para produção
+**Status**: ✅ FASES 1.1, 1.2, e 2.1 CONCLUÍDAS (30/09/2025)  
+**Entregável**: Domain Services + Logger + Constants implementados
 
 ### **SPRINT 2 (10 dias úteis)** - Arquitetura Core
-- [x] **Dia 1-5**: Services anêmicos → Domain services
+- [x] ✅ **CONCLUÍDO**: Services anêmicos → Domain services (PizzasService)
+- [x] **Dia 1-5**: PizzasService transformado em domain service robusto
 - [x] **Dia 6-10**: Controllers refatorados + Error handling
 
 **Entregável**: Arquitetura limpa e maintível

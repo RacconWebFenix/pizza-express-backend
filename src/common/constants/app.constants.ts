@@ -32,37 +32,37 @@ export const APP_CONSTANTS = {
 
   // Mensagens de Erro
   ERROR_MESSAGES: {
-  // Autenticação
-  USER_NOT_FOUND: 'Usuário não encontrado',
-  INVALID_CREDENTIALS: 'Credenciais inválidas',
-  USER_ALREADY_EXISTS: 'Usuário já existe',
-  TOKEN_INVALID: 'Token inválido',
+    // Autenticação
+    USER_NOT_FOUND: 'Usuário não encontrado',
+    INVALID_CREDENTIALS: 'Credenciais inválidas',
+    USER_ALREADY_EXISTS: 'Usuário já existe',
+    TOKEN_INVALID: 'Token inválido',
 
-  // Autorização
-  ACCESS_DENIED: 'Acesso negado',
-  INSUFFICIENT_PERMISSIONS: 'Permissões insuficientes',
-  RESOURCE_NOT_OWNED: 'Você não tem acesso a este recurso',
+    // Autorização
+    ACCESS_DENIED: 'Acesso negado',
+    INSUFFICIENT_PERMISSIONS: 'Permissões insuficientes',
+    RESOURCE_NOT_OWNED: 'Você não tem acesso a este recurso',
 
-  // Recursos
-  RESOURCE_NOT_FOUND: 'Recurso não encontrado',
-  PIZZA_NOT_FOUND: 'Pizza não encontrada',
-  ORDER_NOT_FOUND: 'Pedido não encontrado',
-  USER_NOT_FOUND_RESOURCE: 'Usuário não encontrado',
-  ADDRESS_NOT_FOUND: 'Endereço não encontrado',
+    // Recursos
+    RESOURCE_NOT_FOUND: 'Recurso não encontrado',
+    PIZZA_NOT_FOUND: 'Pizza não encontrada',
+    ORDER_NOT_FOUND: 'Pedido não encontrado',
+    USER_NOT_FOUND_RESOURCE: 'Usuário não encontrado',
+    ADDRESS_NOT_FOUND: 'Endereço não encontrado',
 
-  // Validação
-  INVALID_EMAIL: 'E-mail inválido',
-  INVALID_PHONE: 'Telefone inválido',
-  INVALID_CEP: 'CEP inválido',
-  INVALID_PRICE: 'Preço inválido',
-  PRICE_TOO_HIGH: 'Preço não pode exceder R$ 999,99',
-  PRICE_TOO_LOW: 'Preço deve ser maior que zero',
+    // Validação
+    INVALID_EMAIL: 'E-mail inválido',
+    INVALID_PHONE: 'Telefone inválido',
+    INVALID_CEP: 'CEP inválido',
+    INVALID_PRICE: 'Preço inválido',
+    PRICE_TOO_HIGH: 'Preço não pode exceder R$ 999,99',
+    PRICE_TOO_LOW: 'Preço deve ser maior que zero',
 
-  // Negócio
-  PIZZA_NAME_EXISTS: 'Pizza com este nome já existe',
-  ORDER_ALREADY_DELIVERED: 'Pedido já foi entregue',
-  ORDER_CANNOT_BE_CANCELLED: 'Pedido não pode ser cancelado',
-  INVALID_STATUS_TRANSITION: 'Transição de status inválida',
+    // Negócio
+    PIZZA_NAME_EXISTS: 'Pizza com este nome já existe',
+    ORDER_ALREADY_DELIVERED: 'Pedido já foi entregue',
+    ORDER_CANNOT_BE_CANCELLED: 'Pedido não pode ser cancelado',
+    INVALID_STATUS_TRANSITION: 'Transição de status inválida',
 
     // Pizza Domain Errors
     PIZZA_CREATION_FAILED: 'Erro ao criar pizza',
