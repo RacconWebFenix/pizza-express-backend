@@ -23,7 +23,12 @@ export class AuthService {
   ): Promise<Record<string, any> | null> {
     const user = await this.prisma.user.findUnique({
       where: { email },
-      include: { enderecos: true },
+      include: { 
+        enderecos: {
+          where: { principal: true },
+          take: 1
+        }
+      },
     });
     if (user && (await this.hasher.compare(password, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

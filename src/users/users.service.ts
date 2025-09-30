@@ -50,7 +50,12 @@ export class UsersService {
   }
 
   async findAll(): Promise<(User & { enderecos: Endereco[] })[]> {
-    return this.prisma.user.findMany({ include: { enderecos: true } });
+    return this.prisma.user.findMany({ 
+      include: { 
+        enderecos: true
+      },
+      orderBy: { createdAt: 'desc' }
+    });
   }
 
   async findOne(

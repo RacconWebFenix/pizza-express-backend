@@ -62,14 +62,81 @@ export class PedidosService {
 
   findAll() {
     return this.prisma.pedido.findMany({
-      include: { user: true, pizzas: true, entregador: true },
+      include: { 
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+          },
+        },
+        pizzas: {
+          select: {
+            id: true,
+            nome: true,
+            preco: true,
+            descricao: true,
+          },
+        },
+        entregador: {
+          select: {
+            id: true,
+            nome: true,
+            telefone: true,
+          },
+        },
+        endereco: {
+          select: {
+            id: true,
+            logradouro: true,
+            numero: true,
+            cidade: true,
+            cep: true,
+          },
+        },
+      },
+      orderBy: { criadoEm: 'desc' },
     });
   }
 
   findByUserId(userId: number) {
     return this.prisma.pedido.findMany({
       where: { userId },
-      include: { user: true, pizzas: true, entregador: true, endereco: true },
+      include: { 
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+          },
+        },
+        pizzas: {
+          select: {
+            id: true,
+            nome: true,
+            preco: true,
+            descricao: true,
+          },
+        },
+        entregador: {
+          select: {
+            id: true,
+            nome: true,
+            telefone: true,
+          },
+        },
+        endereco: {
+          select: {
+            id: true,
+            logradouro: true,
+            numero: true,
+            cidade: true,
+            cep: true,
+          },
+        },
+      },
       orderBy: { criadoEm: 'desc' },
     });
   }
@@ -77,7 +144,40 @@ export class PedidosService {
   async findOne(id: number) {
     const pedido = await this.prisma.pedido.findUnique({
       where: { id },
-      include: { user: true, pizzas: true, entregador: true },
+      include: {
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+          },
+        },
+        pizzas: {
+          select: {
+            id: true,
+            nome: true,
+            preco: true,
+            descricao: true,
+          },
+        },
+        entregador: {
+          select: {
+            id: true,
+            nome: true,
+            telefone: true,
+          },
+        },
+        endereco: {
+          select: {
+            id: true,
+            logradouro: true,
+            numero: true,
+            cidade: true,
+            cep: true,
+          },
+        },
+      },
     });
     if (!pedido) {
       throw new NotFoundException(`Pedido com ID #${id} não encontrado.`);
