@@ -1,5 +1,3 @@
-// ARQUIVO: pizzas.controller.ts (VERSÃO CORRIGIDA)
-
 import {
   Controller,
   Get,
@@ -9,10 +7,11 @@ import {
   Param,
   Delete,
   UseGuards,
-  HttpException,
-  HttpStatus,
   UseInterceptors,
   UploadedFile,
+  ParseIntPipe,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PizzasService } from './pizzas.service';
@@ -24,6 +23,7 @@ import { UploadService } from '../upload/upload.service';
 import { FileValidationInterceptor } from '../upload/file-validation.interceptor';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '@prisma/client';
+import { PizzaResponseBuilder } from '../common/builders/response.builder';
 
 @Controller('pizzas')
 export class PizzasController {
@@ -36,26 +36,8 @@ export class PizzasController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   async create(@Body() createPizzaDto: CreatePizzaDto) {
-    try {
-      const pizza = await this.pizzasService.create(createPizzaDto);
-      return {
-        statusCode: 201,
-        message: 'Pizza criada com sucesso',
-        data: pizza,
-      };
-    } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      const errMsg =
-        typeof error === 'object' && error && 'message' in error
-          ? (error as { message?: string }).message
-          : undefined;
-      throw new HttpException(
-        errMsg || 'Erro interno do servidor',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const pizza = await this.pizzasService.create(createPizzaDto);
+    return PizzaResponseBuilder.pizzaCreated(pizza);
   }
 
   @Post('with-image')
@@ -141,19 +123,14 @@ export class PizzasController {
 
   @Get()
   async findAll() {
-    try {
-      return await this.pizzasService.findAll();
-    } catch {
-      throw new HttpException(
-        'Erro interno do servidor',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const pizzas = await this.pizzasService.findAll();
+    return PizzaResponseBuilder.pizzasList(pizzas);
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.pizzasService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const pizza = await this.pizzasService.findOne(id);
+    return PizzaResponseBuilder.pizzaFound(pizza);
   }
 
   @Patch(':id')
