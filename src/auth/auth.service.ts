@@ -23,11 +23,11 @@ export class AuthService {
   ): Promise<Record<string, any> | null> {
     const user = await this.prisma.user.findUnique({
       where: { email },
-      include: { 
+      include: {
         enderecos: {
           where: { principal: true },
-          take: 1
-        }
+          take: 1,
+        },
       },
     });
     if (user && (await this.hasher.compare(password, user.password))) {

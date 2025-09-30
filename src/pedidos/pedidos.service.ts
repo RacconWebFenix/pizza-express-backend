@@ -62,7 +62,7 @@ export class PedidosService {
 
   findAll() {
     return this.prisma.pedido.findMany({
-      include: { 
+      include: {
         user: {
           select: {
             id: true,
@@ -103,7 +103,7 @@ export class PedidosService {
   findByUserId(userId: number) {
     return this.prisma.pedido.findMany({
       where: { userId },
-      include: { 
+      include: {
         user: {
           select: {
             id: true,
