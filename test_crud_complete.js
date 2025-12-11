@@ -20,7 +20,9 @@ async function login(email = 'cliente@pizza.com', password = '123456') {
     return TOKEN;
   } else {
     const errorText = await response.text();
-    console.log(`❌ Falha no login para ${email}: ${response.status} - ${errorText}`);
+    console.log(
+      `❌ Falha no login para ${email}: ${response.status} - ${errorText}`,
+    );
     return null;
   }
 }
@@ -31,7 +33,7 @@ async function loginAdmin() {
   if (!ADMIN_TOKEN) {
     console.log('⚠️ Admin login falhou, tentando novamente...');
     // Pequena pausa
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     ADMIN_TOKEN = await login('admin@pizza.com', '123456');
   }
   return ADMIN_TOKEN;
@@ -63,7 +65,10 @@ async function testAuth() {
   const registerData = response.ok ? await response.json() : null;
 
   // Login
-  const loginToken = await login(registerPayload.email, registerPayload.password);
+  const loginToken = await login(
+    registerPayload.email,
+    registerPayload.password,
+  );
 
   // Me
   if (loginToken) {
@@ -315,10 +320,13 @@ async function testTableSessions(tableId, productId) {
   }
 
   // Abrir sessão da mesa
-  const openResponse = await fetch(`${BASE_URL}/tables/${tableId}/sessions/open`, {
-    method: 'POST',
-    headers: getHeaders(ADMIN_TOKEN),
-  });
+  const openResponse = await fetch(
+    `${BASE_URL}/tables/${tableId}/sessions/open`,
+    {
+      method: 'POST',
+      headers: getHeaders(ADMIN_TOKEN),
+    },
+  );
   console.log(`Open Table Session: ${openResponse.status}`);
   const sessionData = openResponse.ok ? await openResponse.json() : null;
   const sessionId = sessionData ? sessionData.id : null;
@@ -383,9 +391,7 @@ async function testOrders(productId, enderecoId) {
   // Create Delivery Order - usar endereço do cliente (id: 19)
   const deliveryPayload = {
     type: 'DELIVERY',
-    items: [
-      { productId: existingProductId, quantity: 1 },
-    ],
+    items: [{ productId: existingProductId, quantity: 1 }],
     addressId: 19, // Endereço do cliente
     observations: 'Pedido delivery CRUD',
   };
@@ -419,7 +425,9 @@ async function testOrders(productId, enderecoId) {
     console.log(`Get Order by ID: ${response.status}`);
 
     // Update Order Status - temporariamente desabilitado pois pedido está sendo removido
-    console.log('Update Order Status: Skipped (pedido sendo removido automaticamente)');
+    console.log(
+      'Update Order Status: Skipped (pedido sendo removido automaticamente)',
+    );
   }
 
   return deliveryOrderId;
@@ -582,12 +590,16 @@ async function testGoogleAuth() {
 // Testes de Upload
 async function testUpload() {
   console.log('\n📤 Testando Upload...');
-  console.log('Upload não implementado no sistema refatorado (usar /pizzas/:id/upload-image para pizzas)');
+  console.log(
+    'Upload não implementado no sistema refatorado (usar /pizzas/:id/upload-image para pizzas)',
+  );
 }
 
 // Função principal
 async function main() {
-  console.log('🚀 Iniciando testes CRUD completos do Pizza Express Backend Refatorado');
+  console.log(
+    '🚀 Iniciando testes CRUD completos do Pizza Express Backend Refatorado',
+  );
 
   try {
     // Login admin primeiro
@@ -622,7 +634,6 @@ async function main() {
     console.log('- ✅ Pagamentos (Stripe integration)');
     console.log('- ✅ Google Auth');
     console.log('- ✅ Upload de arquivos');
-
   } catch (error) {
     console.error('❌ Erro durante os testes:', error);
   }
