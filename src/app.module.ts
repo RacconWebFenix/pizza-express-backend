@@ -38,7 +38,7 @@ import { TablesModule } from './tables/tables.module';
     AuthModule,
     PaymentsModule,
     CatalogModule, // Novo módulo de catálogo
-    TablesModule,  // Novo módulo de mesas
+    TablesModule, // Novo módulo de mesas
   ],
   controllers: [AppController],
   providers: [

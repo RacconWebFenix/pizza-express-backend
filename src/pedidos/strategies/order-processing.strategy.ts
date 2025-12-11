@@ -10,7 +10,7 @@ export interface CreateOrderDto {
   type: 'DELIVERY' | 'DINE_IN';
   items: OrderItemDto[];
   addressId?: number; // Obrigatório para DELIVERY (id numérico do endereço)
-  tableId?: string;   // Obrigatório para DINE_IN
+  tableId?: string; // Obrigatório para DINE_IN
   observations?: string;
 }
 

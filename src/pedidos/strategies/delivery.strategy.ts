@@ -1,6 +1,13 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
-import { OrderProcessingStrategy, CreateOrderDto } from './order-processing.strategy';
+import {
+  OrderProcessingStrategy,
+  CreateOrderDto,
+} from './order-processing.strategy';
 import { StatusPedido, OrderType } from '@prisma/client';
 
 @Injectable()
@@ -39,7 +46,9 @@ export class DeliveryStrategy implements OrderProcessingStrategy {
       });
 
       if (!product || !product.active) {
-        throw new NotFoundException(`Product ${item.productId} not found or inactive`);
+        throw new NotFoundException(
+          `Product ${item.productId} not found or inactive`,
+        );
       }
 
       if (item.quantity <= 0) {
@@ -50,8 +59,11 @@ export class DeliveryStrategy implements OrderProcessingStrategy {
     // Validar horário de funcionamento (simplificado)
     const now = new Date();
     const hour = now.getHours();
-    if (hour < 18 || hour > 22) { // 18:00 - 22:00
-      throw new BadRequestException('Delivery is only available from 18:00 to 22:00');
+    if (hour < 18 || hour > 22) {
+      // 18:00 - 22:00
+      throw new BadRequestException(
+        'Delivery is only available from 18:00 to 22:00',
+      );
     }
   }
 
@@ -66,7 +78,9 @@ export class DeliveryStrategy implements OrderProcessingStrategy {
       });
 
       if (!product || !product.active) {
-        throw new NotFoundException(`Product ${item.productId} not found or inactive`);
+        throw new NotFoundException(
+          `Product ${item.productId} not found or inactive`,
+        );
       }
 
       const itemTotal = Number(product.price) * item.quantity;
@@ -80,7 +94,7 @@ export class DeliveryStrategy implements OrderProcessingStrategy {
     }
 
     // Adicionar taxa de entrega (R$ 5.00)
-    const deliveryFee = 5.00;
+    const deliveryFee = 5.0;
     total += deliveryFee;
 
     // Criar pedido

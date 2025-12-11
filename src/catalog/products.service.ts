@@ -9,7 +9,10 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto) {
     return this.prisma.product.create({
-      data: createProductDto,
+      data: {
+        ...createProductDto,
+        price: parseFloat(createProductDto.price),
+      },
       include: {
         category: true,
       },

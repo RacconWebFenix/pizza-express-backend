@@ -35,10 +35,7 @@ export class OrdersController {
   }
 
   @Patch(':id/status')
-  updateStatus(
-    @Param('id') id: string,
-    @Body('status') status: StatusPedido,
-  ) {
+  updateStatus(@Param('id') id: string, @Body('status') status: StatusPedido) {
     return this.ordersService.updateStatus(+id, status);
   }
 

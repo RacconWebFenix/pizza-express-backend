@@ -13,7 +13,7 @@ import { DineInStrategy } from './strategies/dine-in.strategy';
   controllers: [PedidosController, OrdersController],
   providers: [
     PedidosService, // Manter para compatibilidade
-    OrdersService,  // Novo serviço com Strategy Pattern
+    OrdersService, // Novo serviço com Strategy Pattern
     OrderStrategyFactory,
     DeliveryStrategy,
     DineInStrategy,

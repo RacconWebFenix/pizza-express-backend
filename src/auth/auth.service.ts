@@ -70,16 +70,18 @@ export class AuthService {
     // Se recebeu endereco (string), converte para o formato de enderecos
     let enderecosData = enderecos;
     if (endereco && !enderecosData) {
-      enderecosData = [{
-        cep: '01234-567',
-        tipo: 'CASA',
-        logradouro: endereco,
-        numero: '123',
-        bairro: 'Centro',
-        cidade: 'São Paulo',
-        estado: 'SP',
-        principal: true,
-      }];
+      enderecosData = [
+        {
+          cep: '01234-567',
+          tipo: 'CASA',
+          logradouro: endereco,
+          numero: '123',
+          bairro: 'Centro',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
+      ];
     }
 
     const created = await this.prisma.user.create({

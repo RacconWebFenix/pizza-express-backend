@@ -48,7 +48,6 @@ async function migratePizzaToProduct() {
     }
 
     console.log('🎉 Migração concluída com sucesso!');
-
   } catch (error) {
     console.error('❌ Erro durante a migração:', error);
     throw error;

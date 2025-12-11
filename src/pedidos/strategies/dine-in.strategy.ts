@@ -1,6 +1,13 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma.service';
-import { OrderProcessingStrategy, CreateOrderDto } from './order-processing.strategy';
+import {
+  OrderProcessingStrategy,
+  CreateOrderDto,
+} from './order-processing.strategy';
 import { StatusPedido, OrderType, TableStatus } from '@prisma/client';
 
 @Injectable()
@@ -29,7 +36,9 @@ export class DineInStrategy implements OrderProcessingStrategy {
 
     // Validar se a mesa está ocupada (tem sessão ativa)
     if (table.status !== TableStatus.OCCUPIED) {
-      throw new BadRequestException('Table is not occupied. Please open a session first.');
+      throw new BadRequestException(
+        'Table is not occupied. Please open a session first.',
+      );
     }
 
     // Verificar se existe sessão ativa para esta mesa
@@ -56,7 +65,9 @@ export class DineInStrategy implements OrderProcessingStrategy {
       });
 
       if (!product || !product.active) {
-        throw new NotFoundException(`Product ${item.productId} not found or inactive`);
+        throw new NotFoundException(
+          `Product ${item.productId} not found or inactive`,
+        );
       }
 
       if (item.quantity <= 0) {
@@ -88,7 +99,9 @@ export class DineInStrategy implements OrderProcessingStrategy {
       });
 
       if (!product || !product.active) {
-        throw new NotFoundException(`Product ${item.productId} not found or inactive`);
+        throw new NotFoundException(
+          `Product ${item.productId} not found or inactive`,
+        );
       }
 
       const itemTotal = Number(product.price) * item.quantity;

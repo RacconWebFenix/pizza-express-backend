@@ -1,4 +1,8 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
@@ -15,7 +19,9 @@ export class ManageTablesService {
     });
 
     if (existingTable) {
-      throw new ConflictException(`Table with number ${createTableDto.number} already exists`);
+      throw new ConflictException(
+        `Table with number ${createTableDto.number} already exists`,
+      );
     }
 
     return this.prisma.table.create({
@@ -63,7 +69,9 @@ export class ManageTablesService {
 
         // Não permitir mudança direta de status - deve ser feito através de sessões
         if (table.status !== updateTableDto.status) {
-          throw new ConflictException('Table status should be managed through sessions');
+          throw new ConflictException(
+            'Table status should be managed through sessions',
+          );
         }
       }
 
