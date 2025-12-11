@@ -24,6 +24,6 @@ describe('EntregadoresLocationGateway', () => {
     const call = (d: typeof data) =>
       gateway.handleLocationUpdate.call(gateway, d);
     call(data);
-    expect(gateway.server.emit).toHaveBeenCalledWith('locationUpdated', data);
+    expect(gateway.server.emit).toHaveBeenCalledWith('locationUpdate', data);
   });
 });

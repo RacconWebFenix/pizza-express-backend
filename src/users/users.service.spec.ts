@@ -61,7 +61,24 @@ describe('UsersService', () => {
   });
 
   it('should create a user', async () => {
-    prisma.user.create.mockResolvedValue(userMock);
+    const userWithoutAddresses = {
+      id: 1,
+      nome: 'João',
+      email: 'joao@email.com',
+      password: 'hashedpassword',
+      telefone: null,
+      role: Role.CLIENTE,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const userWithAddresses = {
+      ...userWithoutAddresses,
+      enderecos: [],
+    };
+
+    prisma.user.create.mockResolvedValue(userWithoutAddresses);
+    prisma.user.findUnique.mockResolvedValue(userWithAddresses);
 
     const result = await service.create({
       nome: 'João',
@@ -71,6 +88,7 @@ describe('UsersService', () => {
     });
 
     expect(result).toBeDefined();
+    expect(result.enderecos).toBeDefined();
     expect(prisma.user.create).toHaveBeenCalled();
   });
 });

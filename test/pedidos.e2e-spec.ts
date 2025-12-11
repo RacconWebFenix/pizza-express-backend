@@ -4,7 +4,7 @@ import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { PrismaClient } from '@prisma/client';
 
-describe('PedidosController (e2e)', () => {
+describe('OrdersController (e2e)', () => {
   jest.setTimeout(40000);
   let app: INestApplication;
   let prisma: PrismaClient;
@@ -23,10 +23,6 @@ describe('PedidosController (e2e)', () => {
     await prisma.$disconnect();
   });
 
-  beforeEach(async () => {
-    // Removido deleteMany para preservar dados do seed
-  });
-
   function getServer() {
     return app.getHttpServer() as unknown as import('http').Server;
   }
@@ -34,20 +30,25 @@ describe('PedidosController (e2e)', () => {
   async function waitForClienteApi(
     app: INestApplication,
     email: string,
-    maxRetries = 50,
+    password: string,
+    maxRetries = 10,
     delayMs = 300,
   ): Promise<void> {
     for (let i = 0; i < maxRetries; i++) {
-      const res = await request(getServer()).get('/clientes').query({ email });
-      if (
-        Array.isArray(res.body) &&
-        res.body.some((c: { email: string }) => c.email === email)
-      )
-        return;
+      try {
+        const res = await request(getServer())
+          .post('/auth/login')
+          .send({ email, password });
+        if (res.status === 201 && res.body.access_token) {
+          return; // Usuário pode fazer login, então foi criado com sucesso
+        }
+      } catch (error) {
+        // Ignorar erro e tentar novamente
+      }
       await new Promise((resolve) => setTimeout(resolve, delayMs));
     }
     throw new Error(
-      `Cliente com email ${email} não encontrado via API após registro.`,
+      `Cliente com email ${email} não conseguiu fazer login após registro.`,
     );
   }
 
@@ -60,13 +61,12 @@ describe('PedidosController (e2e)', () => {
       email,
       password,
       telefone: '11999999999',
-      endereco: 'Rua das Flores, 123',
     });
     if (resRegister.status >= 400)
       throw new Error(
         'Falha ao registrar cliente: ' + JSON.stringify(resRegister.body),
       );
-    await waitForClienteApi(app, email);
+    await waitForClienteApi(app, email, password);
     const res = await request(getServer())
       .post('/auth/login')
       .send({ email, password });
@@ -81,115 +81,143 @@ describe('PedidosController (e2e)', () => {
     return `test${Date.now()}${Math.floor(Math.random() * 10000)}@mail.com`;
   }
 
-  it('/pedidos (GET) deve retornar pedidos', async () => {
+  it('/orders (GET) deve retornar pedidos', async () => {
     const email = randomEmail();
     const token = await createAndLoginCliente(email);
-    // Cria entregador
-    const entregador = await prisma.entregador.create({
+
+    // Cria categoria (ou usa existente)
+    let category = await prisma.category.findUnique({
+      where: { name: 'Pizzas' },
+    });
+    if (!category) {
+      category = await prisma.category.create({
+        data: {
+          name: 'Pizzas',
+          slug: 'pizzas',
+        },
+      });
+    }
+
+    // Cria produtos
+    const product1 = await prisma.product.create({
       data: {
-        nome: 'Carlos Motoboy',
-        telefone: '11988888888',
+        name: 'Margherita Test',
+        description: 'Molho de tomate, mussarela, manjericão',
+        price: 39.9,
+        categoryId: category.id,
+        active: true,
       },
     });
-    // Cria pizzas
-    const pizza1 = await prisma.pizza.create({
+
+    const product2 = await prisma.product.create({
       data: {
-        nome: 'Margherita',
-        descricao: 'Molho de tomate, mussarela, manjericão',
-        preco: 39.9,
+        name: 'Calabresa Test',
+        description: 'Calabresa, cebola, mussarela',
+        price: 44.9,
+        categoryId: category.id,
+        active: true,
       },
     });
-    const pizza2 = await prisma.pizza.create({
-      data: {
-        nome: 'Calabresa',
-        descricao: 'Calabresa, cebola, mussarela',
-        preco: 44.9,
-      },
+
+    // Busca endereço existente do usuário cliente
+    const address = await prisma.endereco.findFirst({
+      where: { userId: 12 }, // ID do usuário CLIENTE criado no seed
     });
-    // Aguarda cliente via API
-    await waitForClienteApi(app, email);
-    const clientes = await request(getServer())
-      .get('/clientes')
-      .query({ email });
-    const clientesBody = clientes.body as { id: number }[];
-    const clienteId = clientesBody[0].id;
-    // Cria pedido via API
-    const pedidoRes = await request(getServer())
-      .post('/pedidos')
+
+    if (!address) {
+      throw new Error('Endereço do usuário cliente não encontrado');
+    }
+
+    // Cria pedido de delivery via API
+    const orderRes = await request(getServer())
+      .post('/orders')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        clienteId,
-        pizzasIds: [pizza1.id, pizza2.id],
-        status: 'em preparo',
-        entregadorId: entregador.id,
-        latitude: -23.55052,
-        longitude: -46.633308,
+        type: 'DELIVERY',
+        items: [
+          { productId: product1.id, quantity: 1 },
+          { productId: product2.id, quantity: 2 },
+        ],
+        addressId: address.id,
+        observations: 'Sem cebola na calabresa',
       });
-    expect(pedidoRes.status).toBe(201);
-    const res = await request(getServer())
-      .get('/pedidos')
+
+    expect(orderRes.status).toBe(201);
+    expect(orderRes.body).toHaveProperty('id');
+    expect(orderRes.body.type).toBe('DELIVERY');
+    expect(orderRes.body.status).toBe('PENDENTE');
+    expect(orderRes.body.total).toBeGreaterThan(0);
+
+    // Verifica se o pedido foi criado
+    const getOrdersRes = await request(getServer())
+      .get('/orders')
       .set('Authorization', `Bearer ${token}`);
-    type Pedido = { id: number; status: string };
-    const pedidosBody = res.body as Pedido[];
-    expect(res.status).toBe(200);
-    expect(Array.isArray(pedidosBody)).toBe(true);
-    expect(pedidosBody.length).toBeGreaterThan(0);
-    expect(pedidosBody[0]).toHaveProperty('id');
-    expect(pedidosBody[0]).toHaveProperty('status');
+
+    expect(getOrdersRes.status).toBe(200);
+    expect(Array.isArray(getOrdersRes.body)).toBe(true);
+    expect(getOrdersRes.body.length).toBeGreaterThan(0);
   });
 
-  it('/pedidos/:id (GET) deve retornar um pedido', async () => {
+  it('/orders/:id (GET) deve retornar um pedido', async () => {
     const email = randomEmail();
     const token = await createAndLoginCliente(email);
-    // Cria entregador
-    const entregador = await prisma.entregador.create({
+
+    // Cria categoria (ou usa existente)
+    let category = await prisma.category.findUnique({
+      where: { name: 'Pizzas' },
+    });
+    if (!category) {
+      category = await prisma.category.create({
+        data: {
+          name: 'Pizzas',
+          slug: 'pizzas',
+        },
+      });
+    }
+
+    // Cria produto
+    const product = await prisma.product.create({
       data: {
-        nome: 'Carlos Motoboy',
-        telefone: '11988888888',
+        name: 'Margherita Test 2',
+        description: 'Molho de tomate, mussarela, manjericão',
+        price: 39.9,
+        categoryId: category.id,
+        active: true,
       },
     });
-    // Cria pizzas
-    const pizza1 = await prisma.pizza.create({
-      data: {
-        nome: 'Margherita',
-        descricao: 'Molho de tomate, mussarela, manjericão',
-        preco: 39.9,
-      },
+
+    // Busca endereço existente do usuário cliente
+    const address = await prisma.endereco.findFirst({
+      where: { userId: 12 }, // ID do usuário CLIENTE criado no seed
     });
-    const pizza2 = await prisma.pizza.create({
-      data: {
-        nome: 'Calabresa',
-        descricao: 'Calabresa, cebola, mussarela',
-        preco: 44.9,
-      },
-    });
-    // Aguarda cliente via API
-    await waitForClienteApi(app, email);
-    const clientes = await request(getServer())
-      .get('/clientes')
-      .query({ email });
-    const clientesBody = clientes.body as { id: number }[];
-    const clienteId = clientesBody[0].id;
-    // Cria pedido via API
-    const pedidoRes = await request(getServer())
-      .post('/pedidos')
+
+    if (!address) {
+      throw new Error('Endereço do usuário cliente não encontrado');
+    }
+
+    // Cria pedido de delivery via API
+    const orderRes = await request(getServer())
+      .post('/orders')
       .set('Authorization', `Bearer ${token}`)
       .send({
-        clienteId,
-        pizzasIds: [pizza1.id, pizza2.id],
-        status: 'em preparo',
-        entregadorId: entregador.id,
-        latitude: -23.55052,
-        longitude: -46.633308,
+        type: 'DELIVERY',
+        items: [{ productId: product.id, quantity: 1 }],
+        addressId: address.id,
       });
-    expect(pedidoRes.status).toBe(201);
-    const pedidoId = (pedidoRes.body as { data: { id: number } }).data.id;
-    const res = await request(getServer())
-      .get(`/pedidos/${pedidoId}`)
+
+    expect(orderRes.status).toBe(201);
+    const orderId = orderRes.body.id;
+
+    // Busca o pedido específico
+    const getOrderRes = await request(getServer())
+      .get(`/orders/${orderId}`)
       .set('Authorization', `Bearer ${token}`);
-    const pedidoBody = res.body as { id: number; status: string };
-    expect(res.status).toBe(200);
-    expect(pedidoBody).toHaveProperty('id', pedidoId);
-    expect(pedidoBody).toHaveProperty('status');
+
+    expect(getOrderRes.status).toBe(200);
+    expect(getOrderRes.body).toHaveProperty('id', orderId);
+    expect(getOrderRes.body).toHaveProperty('type', 'DELIVERY');
+    expect(getOrderRes.body).toHaveProperty('status');
+    expect(getOrderRes.body).toHaveProperty('items');
+    expect(Array.isArray(getOrderRes.body.items)).toBe(true);
   });
 });

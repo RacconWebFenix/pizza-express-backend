@@ -47,7 +47,7 @@ describe('PizzasService', () => {
   it('should create a pizza', async () => {
     jest.spyOn(prisma.pizza, 'create').mockResolvedValue(pizzaMock as any);
     const result = await service.create({
-      nome: 'Margherita',
+      nome: 'Margherita Test',
       descricao: 'Pizza clássica',
       preco: 39.9,
     });

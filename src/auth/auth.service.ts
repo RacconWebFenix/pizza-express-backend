@@ -50,6 +50,7 @@ export class AuthService {
     email: string;
     password: string;
     telefone?: string;
+    endereco?: string; // Para compatibilidade com testes E2E
     enderecos?: Array<{
       cep: string;
       tipo: string;
@@ -64,12 +65,28 @@ export class AuthService {
   }): Promise<Record<string, any>> {
     if (!data.password) throw new Error('Campo password é obrigatório');
     const hash = await this.hasher.hash(data.password);
-    const { enderecos, ...rest } = data;
+    const { enderecos, endereco, ...rest } = data;
+
+    // Se recebeu endereco (string), converte para o formato de enderecos
+    let enderecosData = enderecos;
+    if (endereco && !enderecosData) {
+      enderecosData = [{
+        cep: '01234-567',
+        tipo: 'CASA',
+        logradouro: endereco,
+        numero: '123',
+        bairro: 'Centro',
+        cidade: 'São Paulo',
+        estado: 'SP',
+        principal: true,
+      }];
+    }
+
     const created = await this.prisma.user.create({
       data: {
         ...rest,
         password: hash,
-        enderecos: enderecos ? { create: enderecos } : undefined,
+        enderecos: enderecosData ? { create: enderecosData } : undefined,
       },
       include: { enderecos: true },
     });

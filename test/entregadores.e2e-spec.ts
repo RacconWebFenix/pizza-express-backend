@@ -35,19 +35,27 @@ describe('EntregadoresController (e2e)', () => {
   async function waitForClienteApi(
     app: INestApplication,
     email: string,
-    maxRetries = 50,
+    password: string,
+    maxRetries = 10,
     delayMs = 300,
   ): Promise<void> {
     for (let i = 0; i < maxRetries; i++) {
-      const res = await request(getServer()).get('/clientes').query({ email });
-      if (
-        Array.isArray(res.body) &&
-        res.body.some((c: { email: string }) => c.email === email)
-      )
-        return;
+      try {
+        const res = await request(getServer())
+          .post('/auth/login')
+          .send({ email, password });
+        if (res.status === 201 && res.body.access_token) {
+          return; // Usuário pode fazer login, então foi criado com sucesso
+        }
+      } catch (error) {
+        // Ignorar erro e tentar novamente
+      }
       await new Promise((resolve) => setTimeout(resolve, delayMs));
     }
     throw new Error(
+      `Cliente com email ${email} não conseguiu fazer login após registro.`,
+    );
+  }
       `Cliente com email ${email} não encontrado via API após registro.`,
     );
   }
@@ -67,7 +75,7 @@ describe('EntregadoresController (e2e)', () => {
       throw new Error(
         'Falha ao registrar cliente: ' + JSON.stringify(resRegister.body),
       );
-    await waitForClienteApi(app, email);
+    await waitForClienteApi(app, email, password);
     const res = await request(getServer())
       .post('/auth/login')
       .send({ email, password });

@@ -16,7 +16,7 @@ async function main() {
   await prisma.pedido.deleteMany();
   await prisma.pizza.deleteMany();
   await prisma.entregador.deleteMany();
-  // await prisma.endereco.deleteMany();
+  await prisma.endereco.deleteMany();
   await prisma.user.deleteMany();
 
   // === USUÁRIOS DE TESTE ===

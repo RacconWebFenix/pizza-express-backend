@@ -13,6 +13,8 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { EnderecosModule } from './enderecos/enderecos.module';
 import { PaymentsModule } from './payments/payments.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { CatalogModule } from './catalog/catalog.module';
+import { TablesModule } from './tables/tables.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
     EnderecosModule,
     AuthModule,
     PaymentsModule,
+    CatalogModule, // Novo módulo de catálogo
+    TablesModule,  // Novo módulo de mesas
   ],
   controllers: [AppController],
   providers: [

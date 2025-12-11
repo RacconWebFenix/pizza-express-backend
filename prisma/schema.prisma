@@ -16,6 +16,7 @@ model Pizza {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   pedidos   Pedido[] @relation("PedidoPizzas")
+  orders    Order[]  @relation("PedidoPizzas")
 }
 
 model User {
@@ -30,6 +31,7 @@ model User {
   updatedAt DateTime   @updatedAt
   enderecos Endereco[]
   pedidos   Pedido[]
+  orders    Order[]
 }
 
 model Pedido {
@@ -78,6 +80,96 @@ model Endereco {
   userId      Int
   user        User     @relation(fields: [userId], references: [id])
   pedidos     Pedido[] @relation("PedidoEndereco")
+  orders      Order[]
+}
+
+// Categorização de Produtos (ex: Pizzas, Bebidas, Sobremesas)
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+// Produto Genérico (Substituirá a tabela Pizza futuramente)
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  imageUrl    String?
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  active      Boolean  @default(true)
+
+  // Relacionamento com itens de pedido (OrderItems) deve ser migrado
+  items       OrderItem[]
+}
+
+// Gestão de Mesas Físicas
+model Table {
+  id        String         @id @default(uuid())
+  number    Int            @unique // Identificador visual (Mesa 1, Mesa 2)
+  status    TableStatus    @default(AVAILABLE) // Enum: AVAILABLE, OCCUPIED, RESERVED
+  sessions  TableSession[]
+}
+
+// Sessão de Atendimento (A "Comanda")
+model TableSession {
+  id        String    @id @default(uuid())
+  tableId   String
+  table     Table     @relation(fields: [tableId], references: [id])
+  openedAt  DateTime  @default(now())
+  closedAt  DateTime?
+  total     Decimal   @default(0) @db.Decimal(10, 2)
+  orders    Order[]   // Pedidos feitos nesta sessão
+}
+
+// Item de Pedido (para produtos genéricos)
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   Int
+  productId String
+  quantity  Int     @default(1)
+  price     Decimal @db.Decimal(10, 2) // Preço no momento da compra
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+// Pedido atualizado para ser polimórfico (mantendo id Int por compatibilidade)
+model Order {
+  id              Int         @id @default(autoincrement())
+  type            OrderType   @default(DELIVERY)
+
+  // Campos obrigatórios
+  status          StatusPedido
+  total           Decimal     @db.Decimal(10, 2)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Campos opcionais de contexto
+  addressId       Int?        // Obrigatório se DELIVERY
+  sessionId       String?     // Obrigatório se DINE_IN (link com TableSession)
+  session         TableSession? @relation(fields: [sessionId], references: [id])
+  address         Endereco?   @relation(fields: [addressId], references: [id])
+
+  // Usuário se torna opcional (cliente de mesa pode ser anônimo)
+  userId          Int?
+  user            User?       @relation(fields: [userId], references: [id])
+
+  // Relacionamentos
+  items           OrderItem[]
+
+  // Campos legados (para compatibilidade durante migração)
+  entregadorId    Int?
+  latitude        Float?
+  longitude       Float?
+  paymentIntentId String?
+  observacoes     String?
+
+  // Relacionamentos legados (serão removidos após migração)
+  pizzas          Pizza[]     @relation("PedidoPizzas")
 }
 
 enum Role {
@@ -92,4 +184,15 @@ enum StatusPedido {
   A_CAMINHO
   ENTREGUE
   CANCELADO
+}
+
+enum TableStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+}
+
+enum OrderType {
+  DELIVERY
+  DINE_IN
 }
