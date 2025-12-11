@@ -3,7 +3,7 @@
  */
 export const APP_CONSTANTS = {
   // Servidor
-  DEFAULT_PORT: 10000,
+  DEFAULT_PORT: 3000,
 
   // Segurança
   BCRYPT_SALT_ROUNDS: 10,
