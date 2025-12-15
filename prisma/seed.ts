@@ -4,13 +4,7 @@ import * as bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('DATABASE_URL:', process.env.DATABASE_URL);
-  console.log('TEST_CLIENTE_PASSWORD:', process.env.TEST_CLIENTE_PASSWORD);
-  if (!process.env.TEST_CLIENTE_PASSWORD) {
-    throw new Error(
-      'A variável TEST_CLIENTE_PASSWORD não está definida no .env!',
-    );
-  }
+  console.log('Iniciando seed do banco de dados...');
 
   // Limpa o banco antes de popular
   await prisma.pedido.deleteMany();
@@ -19,15 +13,16 @@ async function main() {
   await prisma.endereco.deleteMany();
   await prisma.user.deleteMany();
 
-  // === USUÁRIOS DE TESTE ===
-  const senha = process.env.TEST_CLIENTE_PASSWORD;
+  // === CRIANDO USUÁRIOS SOLICITADOS ===
+  const senha = '123'; // Senha fixa como solicitado
   const senhaHash = await bcrypt.hash(senha, 10);
 
+  console.log('Criando usuário ADMIN...');
   // 1. ADMIN
   const adminUser = await prisma.user.create({
     data: {
-      nome: 'Admin Sistema',
-      email: 'admin@pizza.com',
+      nome: 'Administrador',
+      email: 'admin@admin.com',
       password: senhaHash,
       telefone: '11999999999',
       role: 'ADMIN',
@@ -45,21 +40,23 @@ async function main() {
       },
     },
   });
+  console.log('✅ Usuário ADMIN criado: admin@admin.com / senha: 123');
 
-  // 2. FUNCIONARIO
-  const funcionarioUser = await prisma.user.create({
+  console.log('Criando funcionários...');
+  // 2. FUNCIONARIO 1
+  const funcionario1 = await prisma.user.create({
     data: {
-      nome: 'Maria Funcionária',
-      email: 'funcionario@pizza.com',
+      nome: 'Funcionário 1',
+      email: 'funcionario1',
       password: senhaHash,
-      telefone: '11888888888',
+      telefone: '11888888881',
       role: 'FUNCIONARIO',
       enderecos: {
         create: {
-          cep: '02000-000',
+          cep: '02000-001',
           tipo: 'residencial',
-          logradouro: 'Rua Funcionário',
-          numero: '200',
+          logradouro: 'Rua Funcionário 1',
+          numero: '201',
           bairro: 'Vila Funcionário',
           cidade: 'São Paulo',
           estado: 'SP',
@@ -69,63 +66,60 @@ async function main() {
     },
   });
 
-  // 3. CLIENTE
-  const clienteUser = await prisma.user.create({
+  // 3. FUNCIONARIO 2
+  const funcionario2 = await prisma.user.create({
     data: {
-      nome: 'João Cliente',
-      email: 'cliente@pizza.com',
+      nome: 'Funcionário 2',
+      email: 'funcionario2',
       password: senhaHash,
-      telefone: '11777777777',
-      role: 'CLIENTE',
+      telefone: '11888888882',
+      role: 'FUNCIONARIO',
       enderecos: {
-        create: [
-          {
-            cep: '03000-000',
-            tipo: 'residencial',
-            logradouro: 'Rua Cliente',
-            numero: '300',
-            bairro: 'Vila Cliente',
-            cidade: 'São Paulo',
-            estado: 'SP',
-            principal: true,
-          },
-          {
-            cep: '03100-000',
-            tipo: 'comercial',
-            logradouro: 'Av Cliente Trabalho',
-            numero: '400',
-            bairro: 'Centro Comercial',
-            cidade: 'São Paulo',
-            estado: 'SP',
-            principal: false,
-            complemento: 'Sala 101',
-          },
-        ],
+        create: {
+          cep: '02000-002',
+          tipo: 'residencial',
+          logradouro: 'Rua Funcionário 2',
+          numero: '202',
+          bairro: 'Vila Funcionário',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
       },
     },
   });
-  console.log('Usuários de teste criados: ADMIN, FUNCIONARIO, CLIENTE');
 
-  // Usuários para cada role diferente
-
-  await prisma.user.create({
+  // 4. FUNCIONARIO 3
+  const funcionario3 = await prisma.user.create({
     data: {
-      nome: 'Funcionário Exemplo',
-      email: 'funcionario@example.com',
+      nome: 'Funcionário 3',
+      email: 'funcionario3',
       password: senhaHash,
+      telefone: '11888888883',
       role: 'FUNCIONARIO',
+      enderecos: {
+        create: {
+          cep: '02000-003',
+          tipo: 'residencial',
+          logradouro: 'Rua Funcionário 3',
+          numero: '203',
+          bairro: 'Vila Funcionário',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
+      },
     },
   });
-  console.log('Usuário FUNCIONARIO criado');
-  await prisma.user.create({
-    data: {
-      nome: 'Administrador Exemplo',
-      email: 'admin@example.com',
-      password: senhaHash,
-      role: 'ADMIN',
-    },
-  });
-  console.log('Usuário ADMIN criado');
+
+  console.log('✅ Funcionários criados:');
+  console.log('   - funcionario1 / senha: 123');
+  console.log('   - funcionario2 / senha: 123');
+  console.log('   - funcionario3 / senha: 123');
+
+  // === CRIANDO ALGUNS DADOS BÁSICOS PARA TESTE ===
+
+  console.log('Criando entregadores de exemplo...');
   // Entregadores
   const entregador1 = await prisma.entregador.create({
     data: {
@@ -133,15 +127,16 @@ async function main() {
       telefone: '11988888888',
     },
   });
-  console.log('Entregador 1 criado');
+
   const entregador2 = await prisma.entregador.create({
     data: {
       nome: 'Ana Entregadora',
       telefone: '11999997777',
     },
   });
-  console.log('Entregador 2 criado');
+  console.log('✅ Entregadores criados');
 
+  console.log('Criando pizzas de exemplo...');
   // Pizzas
   const pizza1 = await prisma.pizza.create({
     data: {
@@ -151,7 +146,7 @@ async function main() {
       image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
     },
   });
-  console.log('Pizza 1 criada');
+
   const pizza2 = await prisma.pizza.create({
     data: {
       nome: 'Calabresa',
@@ -160,59 +155,28 @@ async function main() {
       image: 'https://images.unsplash.com/photo-1548365328-8b849e6c7b8b',
     },
   });
-  console.log('Pizza 2 criada');
-  const pizza3 = await prisma.pizza.create({
-    data: {
-      nome: 'Quatro Queijos',
-      descricao: 'Mussarela, parmesão, provolone, gorgonzola',
-      preco: 49.9,
-      image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591',
-    },
-  });
-  console.log('Pizza 3 criada');
-
-  // Pedidos de exemplo
-  const enderecoAdmin = await prisma.endereco.findFirst({
-    where: { userId: adminUser.id, principal: true },
-  });
-  const enderecoCliente = await prisma.endereco.findFirst({
-    where: { userId: clienteUser.id, principal: true },
-  });
-
-  if (!enderecoAdmin || !enderecoCliente) {
-    throw new Error('Endereços principais não encontrados para os usuários.');
-  }
-
-  await prisma.pedido.create({
-    data: {
-      user: { connect: { id: clienteUser.id } },
-      endereco: { connect: { id: enderecoCliente.id } },
-      pizzas: { connect: [{ id: pizza1.id }, { id: pizza2.id }] },
-      status: StatusPedido.EM_PREPARO, // Usando o Enum
-      entregador: { connect: { id: entregador1.id } },
-      latitude: -23.55052,
-      longitude: -46.633308,
-    },
-  });
-  console.log('Pedido 1 criado (EM_PREPARO)');
-
-  await prisma.pedido.create({
-    data: {
-      user: { connect: { id: adminUser.id } },
-      endereco: { connect: { id: enderecoAdmin.id } },
-      pizzas: { connect: [{ id: pizza3.id }] },
-      status: StatusPedido.ENTREGUE,
-      entregador: { connect: { id: entregador2.id } },
-    },
-  });
-  console.log('Pedido 2 criado para ADMIN (ENTREGUE)');
+  console.log('✅ Pizzas criadas');
 
   // Logs para diagnóstico
   const usuarios = await prisma.user.count();
   const entregadores = await prisma.entregador.count();
   const pizzas = await prisma.pizza.count();
   const pedidos = await prisma.pedido.count();
-  console.log('Seed concluído:', { usuarios, entregadores, pizzas, pedidos });
+
+  console.log('\n🎉 SEED CONCLUÍDO COM SUCESSO!');
+  console.log('=====================================');
+  console.log('📊 Dados criados:');
+  console.log(`   👥 Usuários: ${usuarios}`);
+  console.log(`   🏍️  Entregadores: ${entregadores}`);
+  console.log(`   🍕 Pizzas: ${pizzas}`);
+  console.log(`   📦 Pedidos: ${pedidos}`);
+  console.log('');
+  console.log('🔐 Credenciais de acesso:');
+  console.log('   ADMIN: admin@admin.com / 123');
+  console.log('   FUNC1: funcionario1 / 123');
+  console.log('   FUNC2: funcionario2 / 123');
+  console.log('   FUNC3: funcionario3 / 123');
+  console.log('=====================================');
 }
 
 main()
