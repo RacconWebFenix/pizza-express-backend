@@ -1,44 +1,48 @@
 import {
-  IsNotEmpty,
   IsEnum,
-  IsArray,
-  IsString,
+  IsNotEmpty,
   IsOptional,
-  ValidateNested,
-  IsUUID,
+  IsString,
   IsNumber,
-  Min,
+  IsArray,
+  ValidateNested,
+  ArrayMinSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
+export enum OrderType {
+  DELIVERY = 'DELIVERY',
+  DINE_IN = 'DINE_IN',
+}
+
 export class OrderItemDto {
-  @IsUUID()
   @IsNotEmpty()
+  @IsString()
   productId: string;
 
-  @IsNumber({ maxDecimalPlaces: 0 })
-  @Min(1)
-  @Type(() => Number)
+  @IsNotEmpty()
+  @IsNumber()
   quantity: number;
 }
 
 export class CreateOrderDto {
-  @IsEnum(['DELIVERY', 'DINE_IN'])
+  @IsEnum(OrderType)
   @IsNotEmpty()
-  type: 'DELIVERY' | 'DINE_IN';
+  type: OrderType;
 
   @IsArray()
   @ValidateNested({ each: true })
+  @ArrayMinSize(1)
   @Type(() => OrderItemDto)
   items: OrderItemDto[];
 
   @IsOptional()
   @IsNumber()
-  addressId?: number; // Obrigatório se type === 'DELIVERY'
+  addressId?: number;
 
   @IsOptional()
-  @IsUUID()
-  tableId?: string; // Obrigatório se type === 'DINE_IN'
+  @IsString()
+  tableId?: string;
 
   @IsOptional()
   @IsString()

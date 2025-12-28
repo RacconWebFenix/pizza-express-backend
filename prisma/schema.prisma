@@ -32,6 +32,7 @@ model User {
   enderecos Endereco[]
   pedidos   Pedido[]
   orders    Order[]
+  splitPayments SplitPayment[]
 
   // NOVO RELACIONAMENTO
   modifications OrderModification[]
@@ -183,6 +184,7 @@ model Order {
   // NOVOS RELACIONAMENTOS
   modifications OrderModification[]
   payments      Payment[]
+  splitPayments SplitPayment[]
 
   // NOVOS CAMPOS
   canModify     Boolean  @default(true) // Flag para bloquear modificações
@@ -319,4 +321,20 @@ model Payment {
   @@index([orderId])
   @@index([status])
   @@map("payments")
+}
+
+// ==================== SPLIT PAYMENT ====================
+
+model SplitPayment {
+  id               String        @id @default(uuid())
+  orderId          Int
+  userId           Int?
+  amount           Decimal       @db.Decimal(10, 2)
+  paymentIntentId  String
+  status           PaymentStatus @default(PENDING)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  order Order @relation(fields: [orderId], references: [id])
+  user  User? @relation(fields: [userId], references: [id])
 }

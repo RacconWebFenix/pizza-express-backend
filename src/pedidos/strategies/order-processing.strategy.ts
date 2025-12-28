@@ -1,8 +1,9 @@
 import { Order } from '@prisma/client';
+import { PrismaService } from '../../prisma.service';
 
 export interface OrderProcessingStrategy {
-  validate(dto: CreateOrderDto): Promise<void>;
-  process(dto: CreateOrderDto, userId?: number): Promise<Order>;
+  validate(dto: CreateOrderDto, prisma: PrismaService): Promise<void>;
+  process(order: any, prisma: PrismaService): Promise<void>;
 }
 
 // DTO para criação de pedidos (atualizado)

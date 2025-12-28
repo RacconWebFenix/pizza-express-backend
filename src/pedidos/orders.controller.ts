@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdatePedidoStatusDto } from './dto/update-pedido-status.dto';
 import { StatusPedido } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
@@ -35,8 +36,8 @@ export class OrdersController {
   }
 
   @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body('status') status: StatusPedido) {
-    return this.ordersService.updateStatus(+id, status);
+  updateStatus(@Param('id') id: string, @Body() dto: UpdatePedidoStatusDto) {
+    return this.ordersService.updateStatus(+id, dto);
   }
 
   @Delete(':id')

@@ -7,9 +7,10 @@ import { PrismaModule } from '../prisma.module';
 import { OrderStrategyFactory } from './strategies/order-strategy.factory';
 import { DeliveryStrategy } from './strategies/delivery.strategy';
 import { DineInStrategy } from './strategies/dine-in.strategy';
+import { KitchenModule } from '../kitchen/kitchen.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, KitchenModule],
   controllers: [PedidosController, OrdersController],
   providers: [
     PedidosService, // Manter para compatibilidade

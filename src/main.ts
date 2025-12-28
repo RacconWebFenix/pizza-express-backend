@@ -11,6 +11,9 @@ import { APP_CONSTANTS } from './common/constants/app.constants';
 async function bootstrap() {
   const isDevelopment = process.env.NODE_ENV !== 'production';
 
+  console.log('🔍 JWT_SECRET no startup:', process.env.JWT_SECRET);
+  console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
+
   try {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
 

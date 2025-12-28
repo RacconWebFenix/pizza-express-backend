@@ -1,130 +1,79 @@
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { OrderProcessingStrategy } from './order-processing.strategy';
+import { CreateOrderDto } from '../dto/create-order.dto';
 import { PrismaService } from '../../prisma.service';
-import {
-  OrderProcessingStrategy,
-  CreateOrderDto,
-} from './order-processing.strategy';
-import { StatusPedido, OrderType } from '@prisma/client';
 
 @Injectable()
 export class DeliveryStrategy implements OrderProcessingStrategy {
-  constructor(private prisma: PrismaService) {}
-
-  async validate(dto: CreateOrderDto): Promise<void> {
-    // Validar tipo
-    if (dto.type !== 'DELIVERY') {
-      throw new BadRequestException('Invalid order type for delivery strategy');
-    }
-
-    // Validar addressId obrigatório
+  /**
+   * Valida requisitos para pedido DELIVERY
+   */
+  async validate(dto: CreateOrderDto, prisma: PrismaService): Promise<void> {
+    // 1. Validar que tem endereço
     if (!dto.addressId) {
-      throw new BadRequestException('Address is required for delivery orders');
+      throw new BadRequestException('Pedido tipo DELIVERY requer addressId');
     }
 
-    // Validar se o endereço existe
-    const address = await this.prisma.endereco.findUnique({
+    // 2. Verificar se endereço existe
+    const address = await prisma.endereco.findUnique({
       where: { id: dto.addressId },
     });
 
     if (!address) {
-      throw new NotFoundException('Address not found');
-    }
-
-    // Validar itens
-    if (!dto.items || dto.items.length === 0) {
-      throw new BadRequestException('Order must have at least one item');
-    }
-
-    // Validar produtos
-    for (const item of dto.items) {
-      const product = await this.prisma.product.findUnique({
-        where: { id: item.productId },
-      });
-
-      if (!product || !product.active) {
-        throw new NotFoundException(
-          `Product ${item.productId} not found or inactive`,
-        );
-      }
-
-      if (item.quantity <= 0) {
-        throw new BadRequestException('Item quantity must be greater than 0');
-      }
-    }
-
-    // Validar horário de funcionamento (simplificado)
-    const now = new Date();
-    const hour = now.getHours();
-    if (hour < 18 || hour > 22) {
-      // 18:00 - 22:00
       throw new BadRequestException(
-        'Delivery is only available from 18:00 to 22:00',
+        `Endereço #${dto.addressId} não encontrado`,
       );
     }
+
+    console.log(
+      `[DeliveryStrategy] Validação OK - Endereço: ${address.logradouro}`,
+    );
   }
 
-  async process(dto: CreateOrderDto, userId?: number): Promise<any> {
-    // Calcular total
-    let total = 0;
-    const orderItems = [];
+  /**
+   * Processa pedido DELIVERY (atribui entregador)
+   */
+  async process(order: any, prisma: PrismaService): Promise<void> {
+    console.log(`[DeliveryStrategy] Processando pedido #${order.id}`);
 
-    for (const item of dto.items) {
-      const product = await this.prisma.product.findUnique({
-        where: { id: item.productId },
+    // 1. Buscar entregador disponível
+    const entregador = await this.findAvailableEntregador(prisma);
+
+    // 2. Atribuir entregador ao pedido (se encontrou)
+    if (entregador) {
+      await prisma.order.update({
+        where: { id: order.id },
+        data: { entregadorId: entregador.id },
       });
 
-      if (!product || !product.active) {
-        throw new NotFoundException(
-          `Product ${item.productId} not found or inactive`,
-        );
-      }
-
-      const itemTotal = Number(product.price) * item.quantity;
-      total += itemTotal;
-
-      orderItems.push({
-        productId: item.productId,
-        quantity: item.quantity,
-        price: product.price,
-      });
+      console.log(
+        `[DeliveryStrategy] Pedido #${order.id} atribuído ao entregador #${entregador.id} (${entregador.nome})`,
+      );
+    } else {
+      console.warn(
+        `[DeliveryStrategy] Nenhum entregador disponível para pedido #${order.id}`,
+      );
     }
 
-    // Adicionar taxa de entrega (R$ 5.00)
-    const deliveryFee = 5.0;
-    total += deliveryFee;
+    // 3. TODO: Notificar entregador via WebSocket (implementar na Fase 3)
+  }
 
-    // Criar pedido
-    const order = await this.prisma.order.create({
-      data: {
-        type: OrderType.DELIVERY,
-        status: StatusPedido.PENDENTE,
-        total: total,
-        addressId: dto.addressId,
-        userId: userId,
-        observacoes: dto.observations,
-        items: {
-          create: orderItems,
-        },
-      },
-      include: {
-        items: {
-          include: {
-            product: true,
-          },
-        },
-        address: true,
-        user: true,
-      },
+  /**
+   * Busca entregador disponível (lógica simples)
+   */
+  private async findAvailableEntregador(prisma: PrismaService) {
+    const entregadores = await prisma.entregador.findMany({
+      take: 1, // Por enquanto, pega o primeiro
     });
 
-    return {
-      ...order,
-      total: Number(order.total.toFixed(2)),
-      deliveryFee,
-    };
+    if (entregadores.length === 0) {
+      return null;
+    }
+
+    // TODO: Implementar lógica mais sofisticada:
+    // - Entregador com menos pedidos ativos
+    // - Entregador mais próximo do endereço
+    // - Prioridade por performance
+    return entregadores[0];
   }
 }

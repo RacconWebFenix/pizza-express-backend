@@ -11,7 +11,7 @@ import { MeController } from './me.controller';
 @Module({
   imports: [
     PrismaModule,
-    PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'pizza-secret',
       signOptions: { expiresIn: '1d' },

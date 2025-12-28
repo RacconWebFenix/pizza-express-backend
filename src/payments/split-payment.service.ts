@@ -1,171 +1,178 @@
 import {
   Injectable,
-  BadRequestException,
   NotFoundException,
-  InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import { CreateSplitPaymentDto } from './dto/split-payment.dto';
-import { Decimal } from '@prisma/client/runtime/library';
-import { PaymentStatus } from '@prisma/client';
+import { ConfigService } from '@nestjs/config';
+import Stripe from 'stripe';
+import { SplitPaymentDto } from './dto/split-payment.dto';
 
 @Injectable()
 export class SplitPaymentService {
-  constructor(private readonly prisma: PrismaService) {}
+  private stripe: Stripe;
 
-  /**
-   * Processa pagamento dividido para uma sessão de mesa
-   * SOLID: Single Responsibility - apenas processa pagamentos
-   */
-  async processSplitPayment(dto: CreateSplitPaymentDto) {
-    // 1. Validar sessão
-    const session = await this.prisma.tableSession.findUnique({
-      where: { id: dto.sessionId },
-      select: {
-        id: true,
-        total: true,
-        closedAt: true,
-        payments: {
-          where: { status: 'COMPLETED' },
-          select: { amount: true, tip: true },
-        },
-      },
-    });
+  constructor(
+    private prisma: PrismaService,
+    private configService: ConfigService,
+  ) {
+    const secretKey = this.configService.get<string>('STRIPE_SECRET_KEY');
 
-    if (!session) {
-      throw new NotFoundException(`Session ${dto.sessionId} not found`);
-    }
-
-    if (session.closedAt) {
-      throw new BadRequestException('Session is already closed');
-    }
-
-    // 2. Calcular total a ser pago
-    const sessionTotal = new Decimal(session.total);
-
-    // Total já pago
-    const alreadyPaid = session.payments.reduce(
-      (sum, p) => sum.add(new Decimal(p.amount)).add(new Decimal(p.tip || 0)),
-      new Decimal(0),
-    );
-
-    // Total dos novos pagamentos
-    const newPaymentTotal = dto.payments.reduce(
-      (sum, p) => sum + p.amount + (p.tip || 0),
-      0,
-    );
-
-    const remaining = sessionTotal.sub(alreadyPaid);
-
-    // 3. Validar montante
-    if (new Decimal(newPaymentTotal).lessThan(remaining)) {
-      throw new BadRequestException(
-        `Payment total (${newPaymentTotal}) is less than remaining (${remaining.toString()})`,
+    if (!secretKey) {
+      console.warn(
+        '[SplitPayment] STRIPE_SECRET_KEY não configurada. Split payment não funcionará.',
       );
-    }
-
-    if (new Decimal(newPaymentTotal).greaterThan(remaining)) {
-      throw new BadRequestException(
-        `Payment total (${newPaymentTotal}) exceeds remaining (${remaining.toString()})`,
-      );
-    }
-
-    // 4. Processar pagamentos em transação
-    try {
-      const result = await this.prisma.$transaction(async (tx) => {
-        const createdPayments = [];
-
-        for (const payment of dto.payments) {
-          const newPayment = await tx.payment.create({
-            data: {
-              sessionId: dto.sessionId,
-              amount: new Decimal(payment.amount),
-              method: payment.method,
-              status: 'COMPLETED' as PaymentStatus,
-              paidBy: payment.paidBy,
-              tip: payment.tip ? new Decimal(payment.tip) : new Decimal(0),
-              externalId: payment.externalId,
-              completedAt: new Date(),
-            },
-          });
-
-          createdPayments.push(newPayment);
-        }
-
-        // 5. Verificar se sessão foi paga completamente
-        const totalPaid = alreadyPaid.add(new Decimal(newPaymentTotal));
-
-        if (totalPaid.greaterThanOrEqualTo(sessionTotal)) {
-          await tx.tableSession.update({
-            where: { id: dto.sessionId },
-            data: { closedAt: new Date() },
-          });
-
-          // Liberar mesa
-          const sessionWithTable = await tx.tableSession.findUnique({
-            where: { id: dto.sessionId },
-            select: { tableId: true },
-          });
-
-          if (sessionWithTable?.tableId) {
-            await tx.table.update({
-              where: { id: sessionWithTable.tableId },
-              data: { status: 'AVAILABLE' },
-            });
-          }
-        }
-
-        return createdPayments;
+      // Não lançar erro para permitir que o app inicie
+    } else {
+      this.stripe = new Stripe(secretKey, {
+        apiVersion: '2025-08-27.basil',
       });
+    }
+  }
 
-      return {
-        success: true,
-        payments: result,
-        sessionClosed: result.length > 0,
-      };
-    } catch (error) {
-      throw new InternalServerErrorException(
-        'Failed to process split payment',
-        error instanceof Error ? error.message : 'Unknown error',
+  /**
+   * Processa divisão de pagamento de um pedido
+   */
+  async processSplitPayment(dto: SplitPaymentDto) {
+    const { orderId, splits } = dto;
+
+    // 1. Validar Stripe configurado
+    if (!this.stripe) {
+      throw new BadRequestException(
+        'Split payment não disponível: Stripe não configurado',
       );
     }
-  }
 
-  /**
-   * Busca todos os pagamentos de uma sessão
-   */
-  async findBySession(sessionId: string) {
-    return this.prisma.payment.findMany({
-      where: { sessionId },
-      orderBy: { createdAt: 'desc' },
-    });
-  }
-
-  /**
-   * Calcula quanto falta pagar em uma sessão
-   */
-  async getRemainingAmount(sessionId: string): Promise<string> {
-    const session = await this.prisma.tableSession.findUnique({
-      where: { id: sessionId },
-      select: {
-        total: true,
-        payments: {
-          where: { status: 'COMPLETED' },
-          select: { amount: true, tip: true },
-        },
-      },
+    // 2. Buscar pedido
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
     });
 
-    if (!session) {
-      throw new NotFoundException(`Session ${sessionId} not found`);
+    if (!order) {
+      throw new NotFoundException(`Pedido #${orderId} não encontrado`);
     }
 
-    const total = new Decimal(session.total);
-    const paid = session.payments.reduce(
-      (sum, p) => sum.add(new Decimal(p.amount)).add(new Decimal(p.tip || 0)),
-      new Decimal(0),
+    // 3. Validar soma dos splits
+    const totalSplits = splits.reduce((sum, s) => sum + Number(s.amount), 0);
+    const orderTotalInCents = Math.round(Number(order.total) * 100);
+
+    if (Math.abs(totalSplits - orderTotalInCents) > 1) {
+      // Tolerância de 1 centavo
+      throw new BadRequestException(
+        `Soma dos splits (R$ ${(totalSplits / 100).toFixed(2)}) não corresponde ao total do pedido (R$ ${order.total})`,
+      );
+    }
+
+    console.log(
+      `[SplitPayment] Criando ${splits.length} splits para pedido #${orderId}`,
     );
 
-    return total.sub(paid).toString();
+    // 4. Criar PaymentIntents no Stripe para cada split
+    const paymentIntents = await Promise.all(
+      splits.map(async (split, index) => {
+        const pi = await this.stripe.paymentIntents.create({
+          amount: Math.round(Number(split.amount) * 100), // Centavos
+          currency: 'brl',
+          metadata: {
+            orderId: orderId.toString(),
+            userId: split.userId?.toString() || 'anonymous',
+            splitIndex: index.toString(),
+          },
+        });
+
+        console.log(
+          `[SplitPayment] PaymentIntent criado: ${pi.id} (R$ ${split.amount})`,
+        );
+
+        return {
+          userId: split.userId,
+          amount: Number(split.amount),
+          paymentIntentId: pi.id,
+          clientSecret: pi.client_secret,
+        };
+      }),
+    );
+
+    // 5. Salvar registros no banco
+    await this.prisma.splitPayment.createMany({
+      data: paymentIntents.map((pi) => ({
+        orderId,
+        userId: pi.userId,
+        amount: pi.amount,
+        paymentIntentId: pi.paymentIntentId,
+        status: 'PENDING',
+      })),
+    });
+
+    console.log(
+      `[SplitPayment] ${paymentIntents.length} splits salvos no banco`,
+    );
+
+    return {
+      orderId,
+      totalAmount: order.total,
+      splitsCount: splits.length,
+      paymentIntentId: paymentIntents[0]?.paymentIntentId || null, // Retornar primeiro PaymentIntent como referência
+      splits: paymentIntents.map((pi) => ({
+        userId: pi.userId,
+        amount: pi.amount,
+        clientSecret: pi.clientSecret, // Frontend usa para confirmar
+      })),
+      message: 'Split payment criado com sucesso',
+    };
+  }
+
+  /**
+   * Busca todos os splits de um pedido
+   */
+  async getSplitPaymentsByOrder(orderId: number) {
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Pedido #${orderId} não encontrado`);
+    }
+
+    return this.prisma.splitPayment.findMany({
+      where: { orderId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
+  }
+
+  /**
+   * Atualiza status de um split
+   */
+  async updateSplitPaymentStatus(
+    paymentIntentId: string,
+    status: 'PENDING' | 'COMPLETED' | 'FAILED' | 'REFUNDED',
+  ) {
+    const updated = await this.prisma.splitPayment.updateMany({
+      where: { paymentIntentId },
+      data: { status },
+    });
+
+    if (updated.count === 0) {
+      throw new NotFoundException(
+        `Split com paymentIntentId ${paymentIntentId} não encontrado`,
+      );
+    }
+
+    console.log(
+      `[SplitPayment] Status atualizado: ${paymentIntentId} → ${status}`,
+    );
+
+    return { updated: updated.count };
   }
 }

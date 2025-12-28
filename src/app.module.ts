@@ -16,11 +16,13 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { CatalogModule } from './catalog/catalog.module';
 import { TablesModule } from './tables/tables.module';
 import { OrderItemsModule } from './order-items/order-items.module';
+import { KitchenModule } from './kitchen/kitchen.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
     ThrottlerModule.forRoot({
       throttlers: [
@@ -41,6 +43,7 @@ import { OrderItemsModule } from './order-items/order-items.module';
     CatalogModule, // Novo módulo de catálogo
     TablesModule, // Novo módulo de mesas
     OrderItemsModule, // Novo módulo de itens de pedido
+    KitchenModule, // Novo módulo de cozinha (WebSocket)
   ],
   controllers: [AppController],
   providers: [

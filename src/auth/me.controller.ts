@@ -20,7 +20,7 @@ export class MeController {
   @UseGuards(JwtAuthGuard)
   async getMe(@Req() req: AuthenticatedRequest) {
     // Busca dados do usuário autenticado (sem password)
-    const userId = req.user?.userId ?? req.user?.id;
+    const userId = req.user?.id;
 
     if (!userId) {
       return { error: 'Token inválido - userId não encontrado' };
