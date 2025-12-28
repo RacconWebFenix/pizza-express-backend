@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Post,
-  Get,
-  Body,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Get, Body, Param, UseGuards } from '@nestjs/common';
 import { SplitPaymentService } from './split-payment.service';
 import { CreateSplitPaymentDto } from './dto/split-payment.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -38,7 +31,8 @@ export class SplitPaymentController {
   @Roles('FUNCIONARIO', 'ADMIN')
   @ApiOperation({ summary: 'Get remaining amount to pay' })
   async getRemainingAmount(@Param('sessionId') sessionId: string) {
-    const remaining = await this.splitPaymentService.getRemainingAmount(sessionId);
+    const remaining =
+      await this.splitPaymentService.getRemainingAmount(sessionId);
     return { sessionId, remaining };
   }
 }

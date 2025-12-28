@@ -142,6 +142,17 @@ export class DineInStrategy implements OrderProcessingStrategy {
       },
     });
 
+    // Atualizar total da sessão da mesa
+    const newSessionTotal = Number(activeSession.total) + total;
+    await this.prisma.tableSession.update({
+      where: { id: activeSession.id },
+      data: { total: newSessionTotal },
+    });
+
+    console.log(
+      `Sessão #${activeSession.id} atualizada: R$ ${newSessionTotal.toFixed(2)}`,
+    );
+
     return {
       ...order,
       total: Number(order.total.toFixed(2)),

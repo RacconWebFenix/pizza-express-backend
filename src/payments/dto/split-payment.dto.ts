@@ -1,10 +1,20 @@
-import { IsArray, ValidateNested, ArrayMinSize, IsEnum, IsString, IsNumber, Min, IsOptional, IsUUID } from 'class-validator';
+import {
+  IsArray,
+  ValidateNested,
+  ArrayMinSize,
+  IsEnum,
+  IsString,
+  IsNumber,
+  Min,
+  IsOptional,
+  IsUUID,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { PaymentMethod } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
 
 class PaymentSplitDto {
-  @ApiProperty({ example: 50.00 })
+  @ApiProperty({ example: 50.0 })
   @IsNumber()
   @Min(0.01)
   amount: number;
@@ -18,7 +28,7 @@ class PaymentSplitDto {
   @IsString()
   paidBy?: string;
 
-  @ApiProperty({ example: 5.00, required: false })
+  @ApiProperty({ example: 5.0, required: false })
   @IsOptional()
   @IsNumber()
   @Min(0)
