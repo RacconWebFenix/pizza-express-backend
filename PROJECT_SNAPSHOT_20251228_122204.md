@@ -16,6 +16,7 @@
 ├── .eslintrc.js
 ├── generate_project_snapshot.sh
 ├── .gitignore
+├── GUIA_REMOCAO_SEGURA_BACKEND.md
 ├── Insomnia_Pizza_Express_Complete.yaml
 ├── nest-cli.json
 ├── package.json
@@ -35,12 +36,12 @@
 │   │   │   └── migration.sql
 │   │   ├── 20251228134650_add_split_payment
 │   │   │   └── migration.sql
+│   │   ├── 20251228151454_remove_legacy_models
+│   │   │   └── migration.sql
 │   │   └── migration_lock.toml
 │   ├── schema.prisma
-│   ├── seed-migration.ts
-│   ├── seed-pedidos.ts
 │   └── seed.ts
-├── PROJECT_SNAPSHOT_20251228_114520.md
+├── PROJECT_SNAPSHOT_20251228_122204.md
 ├── README.md
 ├── RELATORIO_TESTES_E2E.md
 ├── src
@@ -90,7 +91,6 @@
 │   │   ├── filters
 │   │   │   └── all-exceptions.filter.ts
 │   │   ├── guards
-│   │   │   └── resource-owner.guard.ts
 │   │   ├── interfaces
 │   │   │   ├── authenticated-user.interface.ts
 │   │   │   └── hasher.interface.ts
@@ -129,6 +129,12 @@
 │   │   ├── order-items.controller.ts
 │   │   ├── order-items.module.ts
 │   │   └── order-items.service.ts
+│   ├── orders
+│   │   ├── dto
+│   │   ├── entities
+│   │   ├── orders.controller.ts
+│   │   ├── orders.module.ts
+│   │   └── orders.service.ts
 │   ├── payments
 │   │   ├── dto
 │   │   │   ├── create-payment.dto.ts
@@ -138,35 +144,6 @@
 │   │   ├── payments.service.ts
 │   │   ├── split-payment.controller.ts
 │   │   └── split-payment.service.ts
-│   ├── pedidos
-│   │   ├── dto
-│   │   │   ├── create-order.dto.ts
-│   │   │   ├── create-pedido.dto.ts
-│   │   │   ├── update-pedido.dto.ts
-│   │   │   └── update-pedido-status.dto.ts
-│   │   ├── entities
-│   │   │   └── pedido.entity.ts
-│   │   ├── orders.controller.ts
-│   │   ├── orders.service.ts
-│   │   ├── pedidos.controller.ts
-│   │   ├── pedidos.module.ts
-│   │   ├── pedidos.service.spec.ts
-│   │   ├── pedidos.service.ts
-│   │   └── strategies
-│   │       ├── delivery.strategy.ts
-│   │       ├── dine-in.strategy.ts
-│   │       ├── order-processing.strategy.ts
-│   │       └── order-strategy.factory.ts
-│   ├── pizzas
-│   │   ├── dto
-│   │   │   ├── create-pizza.dto.ts
-│   │   │   └── update-pizza.dto.ts
-│   │   ├── entities
-│   │   │   └── pizza.entity.ts
-│   │   ├── pizzas.controller.ts
-│   │   ├── pizzas.module.ts
-│   │   ├── pizzas.service.spec.ts
-│   │   └── pizzas.service.ts
 │   ├── prisma.module.ts
 │   ├── prisma.service.ts
 │   ├── tables
@@ -202,19 +179,15 @@
 │   ├── app.e2e-spec.ts
 │   ├── entregadores.e2e-spec.ts
 │   ├── jest-e2e.json
-│   ├── pedidos.e2e-spec.ts
-│   ├── pizzas.e2e-spec.ts
 │   └── utils.ts
 ├── tests
 │   └── e2e
 │       ├── 01-auth.test.sh
 │       ├── 02-users.test.sh
 │       ├── 03-enderecos.test.sh
-│       ├── 04-pizzas.test.sh
 │       ├── 05-catalog.test.sh
 │       ├── 06-tables.test.sh
 │       ├── 07-orders.test.sh
-│       ├── 08-pedidos-legacy.test.sh
 │       ├── 09-entregadores.test.sh
 │       ├── 10-payments.test.sh
 │       ├── run-all.sh
@@ -224,7 +197,7 @@
 └── .vscode
     └── settings.json
 
-55 directories, 159 files
+52 directories, 135 files
 ```
 
 ---
@@ -593,6 +566,595 @@ echo -e "${GREEN}💡 Use este arquivo para análise com IA ou code review${NC}"
 echo ""
 
 exit 0
+
+```
+
+---
+
+
+## 📝 `GUIA_REMOCAO_SEGURA_BACKEND.md`
+
+```markdown
+# 🗑️ GUIA DE REMOÇÃO SEGURA - Backend Legado
+
+**Data**: 28/12/2025 12:04
+**Objetivo**: Remover sistema legado do backend com segurança
+**Frontend**: https://github.com/RacconWebFenix/pizza-express-frontend
+
+---
+
+## ⚠️ IMPORTANTE: BACKUP PRIMEIRO!
+
+```bash
+# 1. Commit atual
+git add .
+git commit -m "checkpoint: before removing legacy system"
+
+# 2. Criar branch de backup
+git checkout -b backup/before-legacy-removal-20251228
+git push origin backup/before-legacy-removal-20251228
+
+# 3. Voltar para main
+git checkout main
+
+# 4. Criar branch de trabalho
+git checkout -b feat/remove-legacy-system
+```
+
+---
+
+## 📋 PASSO 1: Migrar Dados (Se Houver)
+
+### Verificar se há dados no banco
+
+```bash
+# Conectar ao banco e verificar
+npx prisma studio
+
+# Ou via SQL
+psql -d pizza_express -c "SELECT COUNT(*) FROM \"Pizza\";"
+psql -d pizza_express -c "SELECT COUNT(*) FROM \"Pedido\";"
+```
+
+### Script de Migração
+
+Criar arquivo: `prisma/migrate-legacy-data.ts`
+
+```typescript
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function main() {
+  console.log('🔄 Migrando dados legados...');
+
+  // 1. Criar categoria "Pizzas"
+  const pizzaCategory = await prisma.category.upsert({
+    where: { slug: 'pizzas' },
+    update: {},
+    create: {
+      name: 'Pizzas',
+      slug: 'pizzas',
+      description: 'Nossas deliciosas pizzas',
+    },
+  });
+  console.log('✅ Categoria criada');
+
+  // 2. Migrar Pizzas → Products
+  const pizzas = await prisma.pizza.findMany();
+  console.log(`📦 Migrando ${pizzas.length} pizzas...`);
+
+  for (const pizza of pizzas) {
+    await prisma.product.upsert({
+      where: { name: pizza.nome },
+      update: {},
+      create: {
+        name: pizza.nome,
+        description: pizza.descricao,
+        price: pizza.preco.toString(),
+        imageUrl: pizza.image,
+        categoryId: pizzaCategory.id,
+        active: true,
+      },
+    });
+  }
+  console.log(`✅ ${pizzas.length} pizzas migradas`);
+
+  // 3. Migrar Pedidos → Orders
+  const pedidos = await prisma.pedido.findMany({
+    include: { pizzas: true },
+  });
+  console.log(`📦 Migrando ${pedidos.length} pedidos...`);
+
+  for (const pedido of pedidos) {
+    // Verificar se já existe
+    const exists = await prisma.order.findFirst({
+      where: {
+        userId: pedido.clienteId,
+        createdAt: pedido.createdAt,
+      },
+    });
+
+    if (exists) continue;
+
+    // Criar order
+    const order = await prisma.order.create({
+      data: {
+        type: 'DELIVERY',
+        status: pedido.status,
+        userId: pedido.clienteId,
+        addressId: pedido.enderecoId,
+        total: '0',
+        deliveryFee: '5.00',
+        observations: pedido.observacoes,
+        createdAt: pedido.createdAt,
+        updatedAt: pedido.updatedAt,
+      },
+    });
+
+    // Criar order items
+    let total = 0;
+    for (const pizza of pedido.pizzas) {
+      const product = await prisma.product.findFirst({
+        where: { name: pizza.nome },
+      });
+
+      if (product) {
+        const price = parseFloat(product.price);
+        total += price;
+
+        await prisma.orderItem.create({
+          data: {
+            orderId: order.id,
+            productId: product.id,
+            quantity: 1,
+            price: product.price,
+            subtotal: product.price,
+            status: 'ACTIVE',
+          },
+        });
+      }
+    }
+
+    // Atualizar total
+    await prisma.order.update({
+      where: { id: order.id },
+      data: { total: (total + 5).toFixed(2) },
+    });
+  }
+  console.log(`✅ ${pedidos.length} pedidos migrados`);
+
+  console.log('🎉 Migração concluída!');
+}
+
+main()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());
+```
+
+### Executar Migração
+
+```bash
+# Executar script de migração
+npx ts-node prisma/migrate-legacy-data.ts
+
+# Verificar dados migrados
+npx prisma studio
+```
+
+---
+
+## 📋 PASSO 2: Remover Código Backend
+
+### 2.1 Remover Módulos
+
+```bash
+# Remover pastas legadas
+rm -rf src/pizzas/
+rm -rf src/pedidos/
+
+# Remover testes legados
+rm -f test/pizzas.e2e-spec.ts
+rm -f test/pedidos.e2e-spec.ts
+rm -f tests/e2e/04-pizzas.test.sh
+rm -f tests/e2e/08-pedidos-legacy.test.sh
+```
+
+### 2.2 Atualizar app.module.ts
+
+Editar `src/app.module.ts`:
+
+```typescript
+// REMOVER estas linhas:
+import { PizzasModule } from './pizzas/pizzas.module';
+import { PedidosModule } from './pedidos/pedidos.module';
+
+@Module({
+  imports: [
+    // ... outros módulos
+    // PizzasModule,    // ❌ REMOVER
+    // PedidosModule,   // ❌ REMOVER
+    CatalogModule,      // ✅ MANTER
+    OrdersModule,       // ✅ MANTER (orders, não pedidos)
+    // ... outros módulos
+  ],
+})
+export class AppModule {}
+```
+
+---
+
+## 📋 PASSO 3: Atualizar Prisma Schema
+
+### 3.1 Editar schema.prisma
+
+Editar `prisma/schema.prisma` e **REMOVER** completamente:
+
+```prisma
+// ❌ REMOVER ESTE MODEL COMPLETO
+model Pizza {
+  id          Int       @id @default(autoincrement())
+  nome        String
+  descricao   String
+  preco       Float
+  image       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  pedidos     Pedido[]  @relation("PedidoPizzas")
+}
+
+// ❌ REMOVER ESTE MODEL COMPLETO
+model Pedido {
+  id                Int         @id @default(autoincrement())
+  clienteId         Int
+  cliente           User        @relation(fields: [clienteId], references: [id])
+  enderecoId        Int
+  endereco          Endereco    @relation(fields: [enderecoId], references: [id])
+  pizzasIds         Int[]
+  pizzas            Pizza[]     @relation("PedidoPizzas")
+  entregadorId      Int?
+  entregador        Entregador? @relation(fields: [entregadorId], references: [id])
+  paymentIntentId   String?
+  observacoes       String?
+  status            Status      @default(PENDENTE)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+```
+
+### 3.2 Remover Relacionamentos Legados
+
+No mesmo arquivo, encontrar e remover relações:
+
+```prisma
+model User {
+  // ... campos
+  // pedidos     Pedido[]  // ❌ REMOVER ESTA LINHA
+  orders      Order[]   // ✅ MANTER
+  // ... outros campos
+}
+
+model Endereco {
+  // ... campos
+  // pedidos     Pedido[]  // ❌ REMOVER ESTA LINHA
+  orders      Order[]   // ✅ MANTER
+  // ... outros campos
+}
+
+model Entregador {
+  // ... campos
+  // pedidos     Pedido[]  // ❌ REMOVER ESTA LINHA
+  // ... outros campos
+}
+```
+
+### 3.3 Criar Migration de Remoção
+
+```bash
+# Gerar migration que remove as tabelas
+npx prisma migrate dev --name remove_legacy_models
+
+# Aplicar migration
+npx prisma migrate deploy
+
+# Atualizar Prisma Client
+npx prisma generate
+```
+
+---
+
+## 📋 PASSO 4: Atualizar Testes
+
+### 4.1 Editar tests/e2e/run-all.sh
+
+```bash
+# Remover estas linhas:
+# run_module "$TEST_DIR/04-pizzas.test.sh"
+# run_module "$TEST_DIR/08-pedidos-legacy.test.sh"
+
+# Manter apenas:
+run_module "$TEST_DIR/01-auth.test.sh"
+run_module "$TEST_DIR/02-users.test.sh"
+run_module "$TEST_DIR/03-enderecos.test.sh"
+run_module "$TEST_DIR/05-catalog.test.sh"      # ✅ Produtos
+run_module "$TEST_DIR/06-tables.test.sh"
+run_module "$TEST_DIR/07-orders.test.sh"       # ✅ Pedidos modernos
+run_module "$TEST_DIR/09-entregadores.test.sh"
+run_module "$TEST_DIR/10-payments.test.sh"
+```
+
+### 4.2 Atualizar Relatório
+
+Editar `RELATORIO_TESTES_E2E.md` e remover seções de pizzas e pedidos legado.
+
+---
+
+## 📋 PASSO 5: Atualizar Documentação
+
+### 5.1 Atualizar README.md
+
+Remover todas as seções sobre `/pizzas` e `/pedidos`:
+
+```markdown
+## ❌ REMOVER:
+### Pizzas
+- GET /pizzas
+- POST /pizzas
+...
+
+### Pedidos
+- GET /pedidos
+- POST /pedidos
+...
+
+## ✅ MANTER/DESTACAR:
+### Catálogo
+- GET /categories
+- GET /products
+...
+
+### Pedidos
+- POST /orders (não /pedidos!)
+- GET /orders
+...
+```
+
+### 5.2 Atualizar Insomnia Collection
+
+Editar `Insomnia_Pizza_Express_Complete.yaml` e remover todas as requests de:
+- `/pizzas`
+- `/pedidos`
+
+---
+
+## 📋 PASSO 6: Validar e Testar
+
+### 6.1 Compilar Backend
+
+```bash
+# Compilar TypeScript
+npm run build
+
+# Deve compilar SEM ERROS
+```
+
+### 6.2 Executar Testes E2E
+
+```bash
+cd tests/e2e
+./run-all.sh
+
+# Deve passar: 8/8 módulos (sem pizzas e pedidos)
+```
+
+### 6.3 Iniciar Servidor
+
+```bash
+npm run start:dev
+
+# Verificar logs - sem erros
+```
+
+### 6.4 Testar Endpoints Modernos
+
+```bash
+# Testar catálogo
+curl http://localhost:3000/categories
+curl http://localhost:3000/products
+
+# Testar pedidos modernos
+curl -X POST http://localhost:3000/orders \
+  -H "Authorization: Bearer TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "DELIVERY",
+    "addressId": 1,
+    "items": [{"productId": "uuid", "quantity": 1}]
+  }'
+```
+
+### 6.5 Verificar que Legado Foi Removido
+
+```bash
+# Tentar acessar endpoints legados (deve falhar)
+curl http://localhost:3000/pizzas
+# Esperado: 404 Not Found
+
+curl http://localhost:3000/pedidos
+# Esperado: 404 Not Found
+```
+
+---
+
+## 📋 PASSO 7: Commit e Push
+
+### 7.1 Commit das Mudanças
+
+```bash
+git add .
+
+git commit -m "feat: remove legacy system (pizzas + pedidos)
+
+BREAKING CHANGES:
+- Remove /pizzas endpoints (use /products)
+- Remove /pedidos endpoints (use /orders)
+- Remove Pizza and Pedido models from database
+- Migrate legacy data to modern system
+
+Migration:
+- Pizzas migrated to Products (category: pizzas)
+- Pedidos migrated to Orders (type: DELIVERY)
+
+New endpoints to use:
+- GET /categories - List categories
+- GET /products - List all products
+- GET /products?categoryId=X - Filter by category
+- POST /orders - Create order (DELIVERY or DINEIN)
+- GET /orders - List orders
+
+Documentation updated:
+- README.md
+- Insomnia collection
+- E2E tests
+
+See GUIA_MIGRACAO_FRONTEND.md for frontend migration guide."
+
+git push origin feat/remove-legacy-system
+```
+
+### 7.2 Criar Pull Request
+
+```bash
+# No GitHub, criar PR com:
+# Título: Remove legacy system (pizzas + pedidos)
+# Descrição: Ver commit message acima
+# Label: breaking-change
+```
+
+---
+
+## 📋 CHECKLIST COMPLETO
+
+### Antes de Começar
+- [ ] ✅ Backup do código (git commit + branch)
+- [ ] ✅ Verificar se há dados no banco
+- [ ] ✅ Executar script de migração (se houver dados)
+- [ ] ✅ Validar que dados foram migrados
+
+### Remoção de Código
+- [ ] ✅ Remover pasta `src/pizzas/`
+- [ ] ✅ Remover pasta `src/pedidos/`
+- [ ] ✅ Atualizar `src/app.module.ts`
+- [ ] ✅ Remover imports de PizzasModule
+- [ ] ✅ Remover imports de PedidosModule
+
+### Prisma Schema
+- [ ] ✅ Remover model `Pizza`
+- [ ] ✅ Remover model `Pedido`
+- [ ] ✅ Remover relação `pedidos` do User
+- [ ] ✅ Remover relação `pedidos` do Endereco
+- [ ] ✅ Remover relação `pedidos` do Entregador
+- [ ] ✅ Executar `npx prisma migrate dev --name remove_legacy_models`
+- [ ] ✅ Executar `npx prisma generate`
+
+### Testes
+- [ ] ✅ Remover `test/pizzas.e2e-spec.ts`
+- [ ] ✅ Remover `test/pedidos.e2e-spec.ts`
+- [ ] ✅ Remover `tests/e2e/04-pizzas.test.sh`
+- [ ] ✅ Remover `tests/e2e/08-pedidos-legacy.test.sh`
+- [ ] ✅ Atualizar `tests/e2e/run-all.sh`
+
+### Documentação
+- [ ] ✅ Atualizar README.md
+- [ ] ✅ Atualizar Insomnia collection
+- [ ] ✅ Atualizar RELATORIO_TESTES_E2E.md
+
+### Validação
+- [ ] ✅ `npm run build` sem erros
+- [ ] ✅ `./tests/e2e/run-all.sh` passando
+- [ ] ✅ Servidor inicia sem erros
+- [ ] ✅ Endpoints modernos funcionando
+- [ ] ✅ Endpoints legados retornam 404
+
+### Deploy
+- [ ] ✅ Commit com mensagem clara
+- [ ] ✅ Push para branch
+- [ ] ✅ Criar Pull Request
+- [ ] ✅ Review de código
+- [ ] ✅ Merge para main
+
+---
+
+## ⚠️ PROBLEMAS COMUNS
+
+### Erro: "Table 'Pizza' doesn't exist"
+
+**Causa**: Migration não foi aplicada
+
+**Solução**:
+```bash
+npx prisma migrate deploy
+npx prisma generate
+npm run build
+```
+
+### Erro: "Cannot find module './pizzas/pizzas.module'"
+
+**Causa**: Import não foi removido
+
+**Solução**:
+```bash
+# Procurar imports restantes
+grep -r "pizzas.module" src/
+grep -r "pedidos.module" src/
+
+# Remover manualmente
+```
+
+### Erro: Testes falhando
+
+**Causa**: Testes ainda referenciam legado
+
+**Solução**:
+```bash
+# Procurar referências
+grep -r "/pizzas" test/
+grep -r "/pedidos" test/
+
+# Remover ou atualizar testes
+```
+
+---
+
+## 🎉 APÓS A REMOÇÃO
+
+### O que foi removido:
+- ❌ `/pizzas` endpoints
+- ❌ `/pedidos` endpoints
+- ❌ Model Pizza
+- ❌ Model Pedido
+- ❌ Testes legados
+- ❌ Documentação legada
+
+### O que usar agora:
+- ✅ `/categories` - Listar categorias
+- ✅ `/products` - Listar produtos
+- ✅ `/orders` - Criar/listar pedidos
+- ✅ `/tables` - Sistema de mesas
+- ✅ `/payments/split` - Dividir conta
+
+### Benefícios:
+- ✅ Código 30% menor
+- ✅ Menos complexidade
+- ✅ Mais fácil de manter
+- ✅ Sem duplicação
+
+---
+
+**⏱️ Tempo Total Estimado: 2-3 horas**
+
+**Data de Execução**: 28/12/2025
+**Status**: ✅ Pronto para executar
 
 ```
 
@@ -2404,6 +2966,46 @@ ALTER TABLE "public"."SplitPayment" ADD CONSTRAINT "SplitPayment_userId_fkey" FO
 ---
 
 
+## 📝 `prisma/migrations/20251228151454_remove_legacy_models/migration.sql`
+
+```sql
+/*
+  Warnings:
+
+  - You are about to drop the `Pedido` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `Pizza` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `_PedidoPizzas` table. If the table is not empty, all the data it contains will be lost.
+
+*/
+-- DropForeignKey
+ALTER TABLE "public"."Pedido" DROP CONSTRAINT "Pedido_enderecoId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "public"."Pedido" DROP CONSTRAINT "Pedido_entregadorId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "public"."Pedido" DROP CONSTRAINT "Pedido_userId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "public"."_PedidoPizzas" DROP CONSTRAINT "_PedidoPizzas_A_fkey";
+
+-- DropForeignKey
+ALTER TABLE "public"."_PedidoPizzas" DROP CONSTRAINT "_PedidoPizzas_B_fkey";
+
+-- DropTable
+DROP TABLE "public"."Pedido";
+
+-- DropTable
+DROP TABLE "public"."Pizza";
+
+-- DropTable
+DROP TABLE "public"."_PedidoPizzas";
+
+```
+
+---
+
+
 ## 📝 `prisma/migrations/migration_lock.toml`
 
 ```toml
@@ -2428,18 +3030,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Pizza {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  descricao String?
-  preco     Float
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  pedidos   Pedido[] @relation("PedidoPizzas")
-  orders    Order[]  @relation("PedidoPizzas")
-}
-
 model User {
   id        Int        @id @default(autoincrement())
   nome      String
@@ -2451,31 +3041,11 @@ model User {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   enderecos Endereco[]
-  pedidos   Pedido[]
   orders    Order[]
   splitPayments SplitPayment[]
 
   // NOVO RELACIONAMENTO
   modifications OrderModification[]
-}
-
-model Pedido {
-  id              Int          @id @default(autoincrement())
-  entregadorId    Int?
-  latitude        Float?
-  longitude       Float?
-  criadoEm        DateTime     @default(now())
-  atualizadoEm    DateTime     @updatedAt
-  enderecoId      Int
-  userId          Int
-  status          StatusPedido
-  paymentIntentId String?
-  total           Float?
-  observacoes     String?
-  endereco        Endereco     @relation("PedidoEndereco", fields: [enderecoId], references: [id])
-  entregador      Entregador?  @relation(fields: [entregadorId], references: [id])
-  user            User         @relation(fields: [userId], references: [id])
-  pizzas          Pizza[]      @relation("PedidoPizzas")
 }
 
 model Entregador {
@@ -2484,7 +3054,6 @@ model Entregador {
   telefone  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  pedidos   Pedido[]
 }
 
 model Endereco {
@@ -2504,7 +3073,6 @@ model Endereco {
   updatedAt   DateTime @updatedAt
   userId      Int
   user        User     @relation(fields: [userId], references: [id])
-  pedidos     Pedido[] @relation("PedidoEndereco")
   orders      Order[]
 }
 
@@ -2617,9 +3185,6 @@ model Order {
   longitude       Float?
   paymentIntentId String?
   observacoes     String?
-
-  // Relacionamentos legados (serão removidos após migração)
-  pizzas          Pizza[]     @relation("PedidoPizzas")
 }
 
 enum Role {
@@ -2765,204 +3330,10 @@ model SplitPayment {
 ---
 
 
-## 📝 `prisma/seed-migration.ts`
-
-```typescript
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
-async function migratePizzaToProduct() {
-  console.log('🚀 Iniciando migração de Pizza para Product...');
-
-  try {
-    // 1. Criar categoria "Pizzas" se não existir
-    let pizzaCategory = await prisma.category.findFirst({
-      where: { slug: 'pizzas' },
-    });
-
-    if (!pizzaCategory) {
-      pizzaCategory = await prisma.category.create({
-        data: {
-          name: 'Pizzas',
-          slug: 'pizzas',
-        },
-      });
-      console.log('✅ Categoria "Pizzas" criada');
-    }
-
-    // 2. Migrar todas as pizzas para produtos
-    const pizzas = await prisma.pizza.findMany();
-    console.log(`📊 Encontradas ${pizzas.length} pizzas para migrar`);
-
-    for (const pizza of pizzas) {
-      const existingProduct = await prisma.product.findFirst({
-        where: { name: pizza.nome },
-      });
-
-      if (!existingProduct) {
-        await prisma.product.create({
-          data: {
-            name: pizza.nome,
-            description: pizza.descricao,
-            price: pizza.preco,
-            imageUrl: pizza.image,
-            categoryId: pizzaCategory.id,
-            active: true,
-          },
-        });
-        console.log(`✅ Pizza "${pizza.nome}" migrada para Product`);
-      } else {
-        console.log(`⚠️ Produto "${pizza.nome}" já existe, pulando...`);
-      }
-    }
-
-    console.log('🎉 Migração concluída com sucesso!');
-  } catch (error) {
-    console.error('❌ Erro durante a migração:', error);
-    throw error;
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
-// Executar apenas se chamado diretamente
-if (require.main === module) {
-  migratePizzaToProduct().catch(console.error);
-}
-
-export { migratePizzaToProduct };
-
-```
-
----
-
-
-## 📝 `prisma/seed-pedidos.ts`
-
-```typescript
-import { PrismaClient, StatusPedido } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
-const statuses: StatusPedido[] = [
-  'PENDENTE',
-  'EM_PREPARO',
-  'A_CAMINHO',
-  'ENTREGUE',
-  'CANCELADO',
-];
-
-const nomes = [
-  'João Silva',
-  'Maria Santos',
-  'Carlos Oliveira',
-  'Ana Costa',
-  'Pedro Ferreira',
-  'Juliana Souza',
-  'Roberto Alves',
-  'Fernanda Lima',
-  'Marcos Cesar Domingues',
-];
-
-async function main() {
-  console.log('🍕 Iniciando seed de pedidos...\n');
-
-  // Buscar usuários clientes existentes (role = CLIENT ou não ADMIN/FUNCIONARIO)
-  const usuarios = await prisma.user.findMany({
-    where: {
-      role: {
-        notIn: ['ADMIN', 'FUNCIONARIO'],
-      },
-    },
-    include: {
-      enderecos: true,
-    },
-  });
-
-  if (usuarios.length === 0) {
-    console.log('❌ Nenhum usuário cliente encontrado no banco');
-    process.exit(1);
-  }
-
-  console.log(`✅ Encontrados ${usuarios.length} usuários\n`);
-
-  // Buscar pizzas
-  const pizzas = await prisma.pizza.findMany();
-
-  if (pizzas.length === 0) {
-    console.log('❌ Nenhuma pizza encontrada no banco');
-    process.exit(1);
-  }
-
-  console.log(`✅ Encontradas ${pizzas.length} pizzas\n`);
-
-  // Criar 10 pedidos
-  for (let i = 0; i < 10; i++) {
-    const usuarioAleatorio =
-      usuarios[Math.floor(Math.random() * usuarios.length)];
-    const enderecoAleatorio =
-      usuarioAleatorio.enderecos[0] || usuarioAleatorio.enderecos[0];
-
-    if (!enderecoAleatorio) {
-      console.log(`⚠️  Usuário ${usuarioAleatorio.nome} não tem endereço`);
-      continue;
-    }
-
-    // Selecionar 2-4 pizzas aleatoriamente
-    const numPizzas = Math.floor(Math.random() * 3) + 2;
-    const pizzasSelecionadas: typeof pizzas = [];
-    for (let j = 0; j < numPizzas; j++) {
-      const pizza = pizzas[Math.floor(Math.random() * pizzas.length)];
-      if (!pizzasSelecionadas.find((p) => p.id === pizza.id)) {
-        pizzasSelecionadas.push(pizza);
-      }
-    }
-
-    const statusAleatorio =
-      statuses[Math.floor(Math.random() * statuses.length)];
-
-    const pedido = await prisma.pedido.create({
-      data: {
-        userId: usuarioAleatorio.id,
-        enderecoId: enderecoAleatorio.id,
-        status: statusAleatorio,
-        observacoes: 'Pedido criado via seed de teste',
-        total: Math.floor(Math.random() * 100 + 30), // Valor entre 30 e 130
-        pizzas: {
-          connect: pizzasSelecionadas.map((p) => ({ id: p.id })),
-        },
-      },
-    });
-
-    console.log(`✅ Pedido #${pedido.id} criado`);
-    console.log(`   Cliente: ${usuarioAleatorio.nome}`);
-    console.log(`   Status: ${statusAleatorio}`);
-    console.log(`   Pizzas: ${pizzasSelecionadas.length}\n`);
-  }
-
-  console.log('✅ Seed de pedidos concluído!\n');
-  process.exit(0);
-}
-
-main()
-  .catch((error) => {
-    console.error('❌ Erro durante seed:', error);
-    process.exit(1);
-  })
-  .finally(() => {
-    prisma.$disconnect();
-  });
-
-```
-
----
-
-
 ## 📝 `prisma/seed.ts`
 
 ```typescript
-import { PrismaClient, StatusPedido } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -2971,8 +3342,6 @@ async function main() {
   console.log('Iniciando seed do banco de dados...');
 
   // Limpa o banco antes de popular
-  await prisma.pedido.deleteMany();
-  await prisma.pizza.deleteMany();
   await prisma.entregador.deleteMany();
   await prisma.endereco.deleteMany();
   await prisma.user.deleteMany();
@@ -3100,40 +3469,15 @@ async function main() {
   });
   console.log('✅ Entregadores criados');
 
-  console.log('Criando pizzas de exemplo...');
-  // Pizzas
-  const pizza1 = await prisma.pizza.create({
-    data: {
-      nome: 'Margherita',
-      descricao: 'Molho de tomate, mussarela, manjericão',
-      preco: 39.9,
-      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
-    },
-  });
-
-  const pizza2 = await prisma.pizza.create({
-    data: {
-      nome: 'Calabresa',
-      descricao: 'Calabresa, cebola, mussarela',
-      preco: 44.9,
-      image: 'https://images.unsplash.com/photo-1548365328-8b849e6c7b8b',
-    },
-  });
-  console.log('✅ Pizzas criadas');
-
   // Logs para diagnóstico
   const usuarios = await prisma.user.count();
   const entregadores = await prisma.entregador.count();
-  const pizzas = await prisma.pizza.count();
-  const pedidos = await prisma.pedido.count();
 
   console.log('\n🎉 SEED CONCLUÍDO COM SUCESSO!');
   console.log('=====================================');
   console.log('📊 Dados criados:');
   console.log(`   👥 Usuários: ${usuarios}`);
   console.log(`   🏍️  Entregadores: ${entregadores}`);
-  console.log(`   🍕 Pizzas: ${pizzas}`);
-  console.log(`   📦 Pedidos: ${pedidos}`);
   console.log('');
   console.log('🔐 Credenciais de acesso:');
   console.log('   ADMIN: admin@admin.com / 123');

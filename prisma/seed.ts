@@ -1,4 +1,4 @@
-import { PrismaClient, StatusPedido } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -7,8 +7,6 @@ async function main() {
   console.log('Iniciando seed do banco de dados...');
 
   // Limpa o banco antes de popular
-  await prisma.pedido.deleteMany();
-  await prisma.pizza.deleteMany();
   await prisma.entregador.deleteMany();
   await prisma.endereco.deleteMany();
   await prisma.user.deleteMany();
@@ -136,40 +134,15 @@ async function main() {
   });
   console.log('✅ Entregadores criados');
 
-  console.log('Criando pizzas de exemplo...');
-  // Pizzas
-  const pizza1 = await prisma.pizza.create({
-    data: {
-      nome: 'Margherita',
-      descricao: 'Molho de tomate, mussarela, manjericão',
-      preco: 39.9,
-      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
-    },
-  });
-
-  const pizza2 = await prisma.pizza.create({
-    data: {
-      nome: 'Calabresa',
-      descricao: 'Calabresa, cebola, mussarela',
-      preco: 44.9,
-      image: 'https://images.unsplash.com/photo-1548365328-8b849e6c7b8b',
-    },
-  });
-  console.log('✅ Pizzas criadas');
-
   // Logs para diagnóstico
   const usuarios = await prisma.user.count();
   const entregadores = await prisma.entregador.count();
-  const pizzas = await prisma.pizza.count();
-  const pedidos = await prisma.pedido.count();
 
   console.log('\n🎉 SEED CONCLUÍDO COM SUCESSO!');
   console.log('=====================================');
   console.log('📊 Dados criados:');
   console.log(`   👥 Usuários: ${usuarios}`);
   console.log(`   🏍️  Entregadores: ${entregadores}`);
-  console.log(`   🍕 Pizzas: ${pizzas}`);
-  console.log(`   📦 Pedidos: ${pedidos}`);
   console.log('');
   console.log('🔐 Credenciais de acesso:');
   console.log('   ADMIN: admin@admin.com / 123');

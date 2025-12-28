@@ -3,8 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { PizzasModule } from './pizzas/pizzas.module';
-import { PedidosModule } from './pedidos/pedidos.module';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './users/users.module';
 import { EntregadoresModule } from './entregadores/entregadores.module';
@@ -17,6 +15,7 @@ import { CatalogModule } from './catalog/catalog.module';
 import { TablesModule } from './tables/tables.module';
 import { OrderItemsModule } from './order-items/order-items.module';
 import { KitchenModule } from './kitchen/kitchen.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -33,8 +32,6 @@ import { KitchenModule } from './kitchen/kitchen.module';
       ],
     }),
     CommonModule,
-    PizzasModule,
-    PedidosModule,
     UsersModule,
     EntregadoresModule,
     EnderecosModule,
@@ -44,6 +41,7 @@ import { KitchenModule } from './kitchen/kitchen.module';
     TablesModule, // Novo módulo de mesas
     OrderItemsModule, // Novo módulo de itens de pedido
     KitchenModule, // Novo módulo de cozinha (WebSocket)
+    OrdersModule, // Novo módulo de pedidos
   ],
   controllers: [AppController],
   providers: [

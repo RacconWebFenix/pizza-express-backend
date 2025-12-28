@@ -28,7 +28,7 @@ export class MeController {
 
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      include: { enderecos: true, pedidos: true }, // Inclui endereços e pedidos
+      include: { enderecos: true, orders: true }, // Inclui endereços e pedidos
     });
 
     if (!user) {

@@ -84,19 +84,19 @@ export class PaymentsService {
     });
 
     try {
-      const pedido = await this.prismaService.pedido.findFirst({
+      const order = await this.prismaService.order.findFirst({
         where: { paymentIntentId: paymentIntent.id },
       });
 
-      if (pedido) {
-        await this.prismaService.pedido.update({
-          where: { id: pedido.id },
+      if (order) {
+        await this.prismaService.order.update({
+          where: { id: order.id },
           data: {
             status: StatusPedido.EM_PREPARO,
           },
         });
         this.logger.logOrder('Order updated to EM_PREPARO', {
-          id: pedido.id,
+          id: order.id,
           status: 'EM_PREPARO',
         });
       } else {
@@ -123,19 +123,19 @@ export class PaymentsService {
     });
 
     try {
-      const pedido = await this.prismaService.pedido.findFirst({
+      const order = await this.prismaService.order.findFirst({
         where: { paymentIntentId: paymentIntent.id },
       });
 
-      if (pedido) {
-        await this.prismaService.pedido.update({
-          where: { id: pedido.id },
+      if (order) {
+        await this.prismaService.order.update({
+          where: { id: order.id },
           data: {
             status: StatusPedido.CANCELADO,
           },
         });
         this.logger.logOrder('Order cancelled due to payment failure', {
-          id: pedido.id,
+          id: order.id,
           status: 'CANCELADO',
         });
       }
@@ -158,19 +158,19 @@ export class PaymentsService {
     });
 
     try {
-      const pedido = await this.prismaService.pedido.findFirst({
+      const order = await this.prismaService.order.findFirst({
         where: { paymentIntentId: paymentIntent.id },
       });
 
-      if (pedido) {
-        await this.prismaService.pedido.update({
-          where: { id: pedido.id },
+      if (order) {
+        await this.prismaService.order.update({
+          where: { id: order.id },
           data: {
             status: StatusPedido.CANCELADO,
           },
         });
         this.logger.logOrder('Order cancelled', {
-          id: pedido.id,
+          id: order.id,
           status: 'CANCELADO',
         });
       }

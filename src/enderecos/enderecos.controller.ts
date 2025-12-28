@@ -17,7 +17,6 @@ import { UpdateEnderecoDto } from '../users/dto/update-endereco.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Resource } from '../common/decorators/resource.decorator';
-import { ResourceOwner } from '../common/decorators/auth.decorators';
 import { ResponseBuilder } from '../common/builders/response.builder';
 
 interface AuthenticatedUser {
@@ -69,7 +68,6 @@ export class EnderecosController {
   }
 
   @Patch(':id')
-  @ResourceOwner()
   @Resource('endereco')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -80,7 +78,6 @@ export class EnderecosController {
   }
 
   @Delete(':id')
-  @ResourceOwner()
   @Resource('endereco')
   async remove(@Param('id', ParseIntPipe) id: number) {
     await this.enderecosService.remove(id);

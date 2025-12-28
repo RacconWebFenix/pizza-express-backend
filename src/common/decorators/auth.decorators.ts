@@ -14,7 +14,6 @@ import { applyDecorators, UseGuards } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { RolesGuard } from '../../auth/roles.guard';
-import { ResourceOwnerGuard } from '../guards/resource-owner.guard';
 import { Roles } from './roles.decorator';
 
 /**
@@ -56,18 +55,6 @@ export const StaffOrAdmin = () =>
  * @Authenticated()
  */
 export const Authenticated = () => applyDecorators(UseGuards(JwtAuthGuard));
-
-/**
- * Decorator composto para endpoints que verificam ownership do recurso
- *
- * Substitui:
- * @UseGuards(ResourceOwnerGuard)
- *
- * Por:
- * @ResourceOwner()
- */
-export const ResourceOwner = () =>
-  applyDecorators(UseGuards(ResourceOwnerGuard));
 
 /**
  * Decorator flexível para casos especiais com múltiplas roles

@@ -7,18 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Pizza {
-  id        Int      @id @default(autoincrement())
-  nome      String
-  descricao String?
-  preco     Float
-  image     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  pedidos   Pedido[] @relation("PedidoPizzas")
-  orders    Order[]  @relation("PedidoPizzas")
-}
-
 model User {
   id        Int        @id @default(autoincrement())
   nome      String
@@ -30,31 +18,11 @@ model User {
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   enderecos Endereco[]
-  pedidos   Pedido[]
   orders    Order[]
   splitPayments SplitPayment[]
 
   // NOVO RELACIONAMENTO
   modifications OrderModification[]
-}
-
-model Pedido {
-  id              Int          @id @default(autoincrement())
-  entregadorId    Int?
-  latitude        Float?
-  longitude       Float?
-  criadoEm        DateTime     @default(now())
-  atualizadoEm    DateTime     @updatedAt
-  enderecoId      Int
-  userId          Int
-  status          StatusPedido
-  paymentIntentId String?
-  total           Float?
-  observacoes     String?
-  endereco        Endereco     @relation("PedidoEndereco", fields: [enderecoId], references: [id])
-  entregador      Entregador?  @relation(fields: [entregadorId], references: [id])
-  user            User         @relation(fields: [userId], references: [id])
-  pizzas          Pizza[]      @relation("PedidoPizzas")
 }
 
 model Entregador {
@@ -63,7 +31,6 @@ model Entregador {
   telefone  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  pedidos   Pedido[]
 }
 
 model Endereco {
@@ -83,7 +50,6 @@ model Endereco {
   updatedAt   DateTime @updatedAt
   userId      Int
   user        User     @relation(fields: [userId], references: [id])
-  pedidos     Pedido[] @relation("PedidoEndereco")
   orders      Order[]
 }
 
@@ -196,9 +162,6 @@ model Order {
   longitude       Float?
   paymentIntentId String?
   observacoes     String?
-
-  // Relacionamentos legados (serão removidos após migração)
-  pizzas          Pizza[]     @relation("PedidoPizzas")
 }
 
 enum Role {
