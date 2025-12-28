@@ -56,9 +56,6 @@ describe('EntregadoresController (e2e)', () => {
       `Cliente com email ${email} não conseguiu fazer login após registro.`,
     );
   }
-      `Cliente com email ${email} não encontrado via API após registro.`,
-    );
-  }
 
   async function createAndLoginCliente(
     email: string,
@@ -86,13 +83,19 @@ describe('EntregadoresController (e2e)', () => {
     return token;
   }
 
-  function randomEmail() {
-    return `test${Date.now()}${Math.floor(Math.random() * 10000)}@mail.com`;
+  async function loginAsAdmin(): Promise<string> {
+    const res = await request(getServer())
+      .post('/auth/login')
+      .send({ email: 'admin@admin.com', password: '123' });
+    const token = (res.body as { access_token?: string }).access_token;
+    if (!token) {
+      throw new Error('Token de acesso não retornado ou inválido');
+    }
+    return token;
   }
 
   it('/entregadores (GET) deve retornar entregadores', async () => {
-    const email = randomEmail();
-    const token = await createAndLoginCliente(email);
+    const token = await loginAsAdmin();
     // Cria entregador
     await prisma.entregador.create({
       data: {
@@ -113,8 +116,7 @@ describe('EntregadoresController (e2e)', () => {
   });
 
   it('/entregadores (POST) seguido de (GET) deve retornar o entregador criado', async () => {
-    const email = randomEmail();
-    const token = await createAndLoginCliente(email);
+    const token = await loginAsAdmin();
     const entregadorData = {
       nome: 'Teste Diagnóstico',
       telefone: '11999990000',

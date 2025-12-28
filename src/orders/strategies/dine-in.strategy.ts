@@ -14,7 +14,9 @@ export class DineInStrategy implements OrderStrategy {
     }
 
     if (!dto.sessionId) {
-      throw new BadRequestException('Session ID is required for dine-in orders');
+      throw new BadRequestException(
+        'Session ID is required for dine-in orders',
+      );
     }
 
     // Validate session exists and is active
@@ -33,7 +35,9 @@ export class DineInStrategy implements OrderStrategy {
       });
 
       if (!product || !product.active) {
-        throw new BadRequestException(`Product ${item.productId} not found or inactive`);
+        throw new BadRequestException(
+          `Product ${item.productId} not found or inactive`,
+        );
       }
     }
   }
@@ -47,6 +51,10 @@ export class DineInStrategy implements OrderStrategy {
       const product = await this.prisma.product.findUnique({
         where: { id: item.productId },
       });
+
+      if (!product) {
+        throw new BadRequestException(`Product ${item.productId} not found`);
+      }
 
       const itemTotal = Number(product.price) * item.quantity;
       total += itemTotal;

@@ -52,6 +52,7 @@ run_module "$TEST_DIR/03-enderecos.test.sh"
 run_module "$TEST_DIR/05-catalog.test.sh"
 run_module "$TEST_DIR/06-tables.test.sh"
 run_module "$TEST_DIR/07-orders.test.sh"
+run_module "$TEST_DIR/08-dine-in-manual.test.sh"
 run_module "$TEST_DIR/09-entregadores.test.sh"
 run_module "$TEST_DIR/10-payments.test.sh"
 

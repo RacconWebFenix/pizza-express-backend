@@ -33,7 +33,9 @@ export class DeliveryStrategy implements OrderStrategy {
       });
 
       if (!product || !product.active) {
-        throw new BadRequestException(`Product ${item.productId} not found or inactive`);
+        throw new BadRequestException(
+          `Product ${item.productId} not found or inactive`,
+        );
       }
     }
   }

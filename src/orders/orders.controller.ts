@@ -42,10 +42,7 @@ export class OrdersController {
   @Patch(':id/status')
   @Roles(Role.FUNCIONARIO, Role.ADMIN)
   @UseGuards(RolesGuard)
-  updateStatus(
-    @Param('id') id: string,
-    @Body('status') status: StatusPedido,
-  ) {
+  updateStatus(@Param('id') id: string, @Body('status') status: StatusPedido) {
     return this.ordersService.updateStatus(+id, status);
   }
 
