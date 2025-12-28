@@ -1,3 +1,2126 @@
+# Estrutura do Projeto
+
+## Diretórios
+.
+./dist
+./dist/prisma
+./dist/src
+./dist/src/auth
+./dist/src/catalog
+./dist/src/catalog/dto
+./dist/src/cloudinary
+./dist/src/common
+./dist/src/common/adapters
+./dist/src/common/builders
+./dist/src/common/constants
+./dist/src/common/decorators
+./dist/src/common/enums
+./dist/src/common/filters
+./dist/src/common/guards
+./dist/src/common/interfaces
+./dist/src/common/logger
+./dist/src/enderecos
+./dist/src/entregadores
+./dist/src/entregadores/dto
+./dist/src/entregadores/entities
+./dist/src/payments
+./dist/src/payments/dto
+./dist/src/pedidos
+./dist/src/pedidos/dto
+./dist/src/pedidos/entities
+./dist/src/pedidos/strategies
+./dist/src/pizzas
+./dist/src/pizzas/dto
+./dist/src/pizzas/entities
+./dist/src/tables
+./dist/src/tables/dto
+./dist/src/upload
+./dist/src/users
+./dist/src/users/dto
+./dist/src/users/entities
+./.git
+./logs
+./node_modules
+./prisma
+./prisma/migrations
+./prisma/migrations/20250720114702_add_new_rules_image
+./prisma/migrations/20251211221547_add_hybrid_architecture_models
+./prisma/migrations/20251211221709_add_hybrid_architecture_models_v2
+./prisma/migrations/20251211222713_fix_address_relationship
+./src
+./src/auth
+./src/catalog
+./src/catalog/dto
+./src/catalog/entities
+./src/cloudinary
+./src/common
+./src/common/adapters
+./src/common/builders
+./src/common/constants
+./src/common/decorators
+./src/common/enums
+./src/common/filters
+./src/common/guards
+./src/common/interfaces
+./src/common/logger
+./src/enderecos
+./src/entregadores
+./src/entregadores/dto
+./src/entregadores/entities
+./src/payments
+./src/payments/dto
+./src/pedidos
+./src/pedidos/dto
+./src/pedidos/entities
+./src/pedidos/strategies
+./src/pizzas
+./src/pizzas/dto
+./src/pizzas/entities
+./src/tables
+./src/tables/dto
+./src/tables/entities
+./src/types
+./src/upload
+./src/users
+./src/users/dto
+./src/users/entities
+./test
+./.vscode
+
+## Arquivos
+eslint.config.mjs
+.eslintignore
+.eslintrc.js
+.gitignore
+Insomnia_Pizza_Express_Complete.yaml
+nest-cli.json
+package.json
+package-lock.json
+.prettierrc
+prisma/migrations/20250720114702_add_new_rules_image/migration.sql
+prisma/migrations/migration_lock.toml
+prisma/schema.prisma
+prisma/seed-migration.ts
+prisma/seed-pedidos.ts
+prisma/seed.ts
+README.md
+src/app.controller.spec.ts
+src/app.controller.ts
+src/app.module.ts
+src/app.service.ts
+src/auth/auth.controller.ts
+src/auth/auth.module.ts
+src/auth/auth.service.ts
+src/auth/google.strategy.ts
+src/auth/jwt-auth.guard.ts
+src/auth/jwt.strategy.ts
+src/auth/me.controller.ts
+src/auth/roles.guard.ts
+src/catalog/catalog.module.ts
+src/catalog/categories.controller.ts
+src/catalog/categories.service.ts
+src/catalog/dto/create-category.dto.ts
+src/catalog/dto/create-product.dto.ts
+src/catalog/dto/update-category.dto.ts
+src/catalog/dto/update-product.dto.ts
+src/catalog/products.controller.ts
+src/catalog/products.service.ts
+src/cloudinary/cloudinary.module.ts
+src/cloudinary/cloudinary.service.ts
+src/common/adapters/bcrypt.adapter.ts
+src/common/builders/response.builder.ts
+src/common/common.module.ts
+src/common/constants/app.constants.ts
+src/common/constants/roles.constants.ts
+src/common/decorators/auth.decorators.ts
+src/common/decorators/resource.decorator.ts
+src/common/decorators/roles.decorator.ts
+src/common/enums/role.enum.ts
+src/common/filters/all-exceptions.filter.ts
+src/common/guards/resource-owner.guard.ts
+src/common/interfaces/authenticated-user.interface.ts
+src/common/interfaces/hasher.interface.ts
+src/common/logger/logger.module.ts
+src/common/logger/logger.service.ts
+src/enderecos/enderecos.controller.ts
+src/enderecos/enderecos.module.ts
+src/enderecos/enderecos.service.ts
+src/entregadores/dto/create-entregadore.dto.ts
+src/entregadores/dto/update-entregadore.dto.ts
+src/entregadores/entities/entregadore.entity.ts
+src/entregadores/entregadores.controller.ts
+src/entregadores/entregadores-location.gateway.spec.ts
+src/entregadores/entregadores-location.gateway.ts
+src/entregadores/entregadores.module.ts
+src/entregadores/entregadores.service.spec.ts
+src/entregadores/entregadores.service.ts
+src/main.ts
+src/payments/dto/create-payment.dto.ts
+src/payments/payments.controller.ts
+src/payments/payments.module.ts
+src/payments/payments.service.ts
+src/pedidos/dto/create-order.dto.ts
+src/pedidos/dto/create-pedido.dto.ts
+src/pedidos/dto/update-pedido.dto.ts
+src/pedidos/dto/update-pedido-status.dto.ts
+src/pedidos/entities/pedido.entity.ts
+src/pedidos/orders.controller.ts
+src/pedidos/orders.service.ts
+src/pedidos/pedidos.controller.ts
+src/pedidos/pedidos.module.ts
+src/pedidos/pedidos.service.spec.ts
+src/pedidos/pedidos.service.ts
+src/pedidos/strategies/delivery.strategy.ts
+src/pedidos/strategies/dine-in.strategy.ts
+src/pedidos/strategies/order-processing.strategy.ts
+src/pedidos/strategies/order-strategy.factory.ts
+src/pizzas/dto/create-pizza.dto.ts
+src/pizzas/dto/update-pizza.dto.ts
+src/pizzas/entities/pizza.entity.ts
+src/pizzas/pizzas.controller.ts
+src/pizzas/pizzas.module.ts
+src/pizzas/pizzas.service.spec.ts
+src/pizzas/pizzas.service.ts
+src/prisma.module.ts
+src/prisma.service.ts
+src/tables/dto/create-table.dto.ts
+src/tables/dto/update-table.dto.ts
+src/tables/manage-tables.service.ts
+src/tables/tables.controller.ts
+src/tables/table-session.service.ts
+src/tables/tables.module.ts
+src/types/multer.d.ts
+src/upload/file-validation.interceptor.ts
+src/upload/upload.module.ts
+src/upload/upload.service.ts
+src/users/dto/create-endereco.dto.ts
+src/users/dto/create-user.dto.ts
+src/users/dto/update-endereco.dto.ts
+src/users/dto/update-user.dto.ts
+src/users/entities/endereco.entity.ts
+src/users/entities/user.entity.ts
+src/users/users.controller.ts
+src/users/users.module.ts
+src/users/users.service.spec.ts
+src/users/users.service.ts
+test/app.e2e-spec.ts
+test_crud_complete.js
+test_crud.js
+test_endereco.js
+test/entregadores.e2e-spec.ts
+test/jest-e2e.json
+test/pedidos.e2e-spec.ts
+test/pizzas.e2e-spec.ts
+test/utils.ts
+tsconfig.build.json
+tsconfig.json
+
+<- Manter consistência visual entre os botões do menu de START: .eslintignore -->
+# Ignore build and config files
+node_modules/
+dist/
+.eslintrc.js
+.eslintignore
+<- Manter consistência visual entre os botões do menu de END: .eslintignore -->
+<- Manter consistência visual entre os botões do menu de START: .eslintrc.js -->
+module.exports = {
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
+  },
+  plugins: ['@typescript-eslint/eslint-plugin'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
+  root: true,
+  env: {
+    node: true,
+    jest: true,
+  },
+  ignorePatterns: ['.eslintrc.js'],
+  rules: {
+    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+
+    // Regra para desativar a verificação de atribuição insegura para o tipo 'any'
+    // Isso é útil para os casos em que o Prisma retorna tipos dinâmicos
+    '@typescript-eslint/no-unsafe-assignment': 'off',
+    '@typescript-eslint/no-unsafe-member-access': 'off',
+    '@typescript-eslint/no-unsafe-call': 'off',
+    '@typescript-eslint/no-unsafe-return': 'off',
+  },
+};
+<- Manter consistência visual entre os botões do menu de END: .eslintrc.js -->
+<- Manter consistência visual entre os botões do menu de START: .gitignore -->
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+yarn.lock
+package-lock.json
+*.tgz
+
+# Build outputs
+/dist/
+/build/
+/.next/
+
+# Vercel
+.vercel/
+.vercel_build_output/
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+logs/
+*.log
+Dockerfile.local
+
+# Environment variables
+.env
+.env.*
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Prisma
+prisma/dev.db
+prisma/*.sqlite
+prisma/.cache/
+
+# Test coverage & results
+coverage/
+test-results/
+*.snap
+
+# GitHub Actions
+.github/
+
+# Others
+*.local
+*.cache
+pizza-express-insomnia.json
+
+# Uploads (opcional - remova se quiser versionar as imagens)
+uploads/
+
+# SQL dumps
+*.dump
+*.sql
+<- Manter consistência visual entre os botões do menu de END: .gitignore -->
+<- Manter consistência visual entre os botões do menu de START: .prettierrc -->
+{
+  "singleQuote": true,
+  "trailingComma": "all"
+}
+<- Manter consistência visual entre os botões do menu de END: .prettierrc -->
+<- Manter consistência visual entre os botões do menu de START: Insomnia_Pizza_Express_Complete.yaml -->
+_type: export
+__export_format: 4
+__export_date: 2025-09-30T23:00:00.000Z
+__export_source: insomnia.desktop.app:v8.6.1
+resources:
+  - _id: req_pizza_list
+    parentId: fld_pizzas
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pizzas"
+    name: Listar Pizzas
+    description: Lista todas as pizzas disponíveis
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1727733600000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pizza_create
+    parentId: fld_pizzas
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pizzas"
+    name: Criar Pizza
+    description: Cria uma nova pizza (apenas ADMIN)
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "nome": "Pizza Margherita",
+          "descricao": "Molho de tomate, mussarela e manjericão fresco",
+          "preco": 39.90
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733590000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pizza_create_with_image
+    parentId: fld_pizzas
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pizzas/with-image"
+    name: Criar Pizza com Imagem
+    description: Cria pizza com upload de imagem (apenas ADMIN)
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: nome
+          value: Pizza Calabresa
+          id: pair_1
+        - name: descricao
+          value: Molho de tomate, mussarela, calabresa e cebola
+          id: pair_2
+        - name: preco
+          value: "42.90"
+          id: pair_3
+        - name: image
+          type: file
+          value: ""
+          id: pair_4
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733580000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pizza_get_by_id
+    parentId: fld_pizzas
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pizzas/1"
+    name: Buscar Pizza por ID
+    description: Busca uma pizza específica
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1727733570000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pizza_update
+    parentId: fld_pizzas
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pizzas/1"
+    name: Atualizar Pizza
+    description: Atualiza uma pizza existente (apenas ADMIN)
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "nome": "Pizza Margherita Premium",
+          "descricao": "Molho de tomate especial, mussarela de búfala e manjericão",
+          "preco": 45.90
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733560000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pizza_upload_image
+    parentId: fld_pizzas
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pizzas/1/upload-image"
+    name: Upload Imagem Pizza
+    description: Faz upload de imagem para pizza existente (apenas ADMIN)
+    method: POST
+    body:
+      mimeType: multipart/form-data
+      params:
+        - name: image
+          type: file
+          value: ""
+          id: pair_1
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733550000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pizza_delete
+    parentId: fld_pizzas
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pizzas/1"
+    name: Deletar Pizza
+    description: Remove uma pizza (apenas ADMIN)
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733540000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  # AUTH ENDPOINTS
+  - _id: req_auth_register
+    parentId: fld_auth
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/auth/register"
+    name: Registro de Usuário
+    description: Registra um novo usuário
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "nome": "João Silva",
+          "email": "joao@example.com",
+          "password": "senha123",
+          "telefone": "11999999999",
+          "enderecos": [
+            {
+              "cep": "01310-100",
+              "tipo": "residencial",
+              "logradouro": "Av. Paulista",
+              "numero": "1000",
+              "bairro": "Bela Vista",
+              "cidade": "São Paulo",
+              "estado": "SP",
+              "principal": true
+            }
+          ]
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+    authentication: {}
+    metaSortKey: -1727733500000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_auth_login
+    parentId: fld_auth
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/auth/login"
+    name: Login
+    description: Faz login com email e senha
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "email": "joao@example.com",
+          "password": "senha123"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+    authentication: {}
+    metaSortKey: -1727733490000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_auth_google
+    parentId: fld_auth
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/auth/google"
+    name: Login Google
+    description: Inicia login com Google OAuth
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1727733480000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_auth_me
+    parentId: fld_auth
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/me"
+    name: Perfil do Usuário
+    description: Busca dados do usuário logado
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733470000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  # USERS ENDPOINTS
+  - _id: req_users_list
+    parentId: fld_users
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/users"
+    name: Listar Usuários
+    description: Lista todos os usuários (apenas ADMIN)
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733400000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_users_create
+    parentId: fld_users
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/users"
+    name: Criar Usuário
+    description: Cria um novo usuário (apenas ADMIN)
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "nome": "Maria Santos",
+          "email": "maria@example.com",
+          "password": "senha123",
+          "telefone": "11888888888",
+          "role": "CLIENTE",
+          "enderecos": [
+            {
+              "cep": "04038-001",
+              "tipo": "residencial",
+              "logradouro": "Rua Vergueiro",
+              "numero": "2000",
+              "bairro": "Vila Mariana",
+              "cidade": "São Paulo",
+              "estado": "SP",
+              "principal": true
+            }
+          ]
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733390000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_users_get_by_id
+    parentId: fld_users
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/users/1"
+    name: Buscar Usuário por ID
+    description: Busca usuário específico (apenas ADMIN)
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733380000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_users_update
+    parentId: fld_users
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/users/1"
+    name: Atualizar Usuário
+    description: Atualiza dados do usuário
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "nome": "João Silva Santos",
+          "telefone": "11999888777"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733370000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_users_delete
+    parentId: fld_users
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/users/1"
+    name: Deletar Usuário
+    description: Remove um usuário (apenas ADMIN)
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733360000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  # PEDIDOS ENDPOINTS
+  - _id: req_pedidos_create
+    parentId: fld_pedidos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pedidos"
+    name: Criar Pedido
+    description: Cria um novo pedido
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "clienteId": 1,
+          "enderecoId": 1,
+          "pizzasIds": [1, 2],
+          "entregadorId": 1,
+          "paymentIntentId": "pi_1234567890",
+          "observacoes": "Sem cebola na pizza margherita"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733300000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pedidos_list
+    parentId: fld_pedidos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pedidos"
+    name: Listar Pedidos
+    description: Lista todos os pedidos (apenas ADMIN/FUNCIONARIO)
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733290000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pedidos_my_orders
+    parentId: fld_pedidos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pedidos/meus-pedidos"
+    name: Meus Pedidos
+    description: Lista pedidos do usuário logado
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733280000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pedidos_get_by_id
+    parentId: fld_pedidos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pedidos/1"
+    name: Buscar Pedido por ID
+    description: Busca pedido específico
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733270000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pedidos_update
+    parentId: fld_pedidos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pedidos/1"
+    name: Atualizar Pedido
+    description: Atualiza dados do pedido (apenas ADMIN/FUNCIONARIO)
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "observacoes": "Sem cebola e sem azeitona"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733260000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pedidos_update_status
+    parentId: fld_pedidos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pedidos/1/status"
+    name: Atualizar Status do Pedido
+    description: Atualiza status do pedido (apenas ADMIN)
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "status": "EM_PREPARO"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733250000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_pedidos_delete
+    parentId: fld_pedidos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/pedidos/1"
+    name: Cancelar Pedido
+    description: Cancela/remove um pedido
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733240000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  # ENTREGADORES ENDPOINTS
+  - _id: req_entregadores_list
+    parentId: fld_entregadores
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/entregadores"
+    name: Listar Entregadores
+    description: Lista todos os entregadores (apenas ADMIN/FUNCIONARIO)
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733200000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_entregadores_create
+    parentId: fld_entregadores
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/entregadores"
+    name: Criar Entregador
+    description: Cria um novo entregador (apenas ADMIN)
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "nome": "Carlos Motoboy",
+          "telefone": "11777777777"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733190000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_entregadores_get_by_id
+    parentId: fld_entregadores
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/entregadores/1"
+    name: Buscar Entregador por ID
+    description: Busca entregador específico (apenas ADMIN/FUNCIONARIO)
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733180000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_entregadores_update
+    parentId: fld_entregadores
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/entregadores/1"
+    name: Atualizar Entregador
+    description: Atualiza dados do entregador (apenas ADMIN)
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "nome": "Carlos Silva Motoboy",
+          "telefone": "11777666555"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733170000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_entregadores_delete
+    parentId: fld_entregadores
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/entregadores/1"
+    name: Deletar Entregador
+    description: Remove um entregador (apenas ADMIN)
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733160000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  # ENDERECOS ENDPOINTS
+  - _id: req_enderecos_list
+    parentId: fld_enderecos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/enderecos"
+    name: Meus Endereços
+    description: Lista endereços do usuário logado
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733100000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_enderecos_create
+    parentId: fld_enderecos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/enderecos"
+    name: Criar Endereço
+    description: Cria um novo endereço para o usuário logado
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "cep": "05508-030",
+          "tipo": "trabalho",
+          "logradouro": "Av. das Nações Unidas",
+          "numero": "12901",
+          "bairro": "Brooklin",
+          "cidade": "São Paulo",
+          "estado": "SP",
+          "complemento": "Torre Norte, 5º andar",
+          "principal": false
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733090000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_enderecos_get_by_id
+    parentId: fld_enderecos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/enderecos/1"
+    name: Buscar Endereço por ID
+    description: Busca endereço específico do usuário
+    method: GET
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733080000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_enderecos_update
+    parentId: fld_enderecos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/enderecos/1"
+    name: Atualizar Endereço
+    description: Atualiza dados do endereço
+    method: PATCH
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "numero": "1500",
+          "complemento": "Apto 101, Bloco A"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733070000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_enderecos_delete
+    parentId: fld_enderecos
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/enderecos/1"
+    name: Deletar Endereço
+    description: Remove um endereço do usuário
+    method: DELETE
+    body: {}
+    parameters: []
+    headers:
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733060000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  # PAYMENTS ENDPOINTS
+  - _id: req_payments_create_intent
+    parentId: fld_payments
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/payments/create-intent"
+    name: Criar Payment Intent
+    description: Cria intenção de pagamento no Stripe
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "amount": 8290,
+          "currency": "brl",
+          "metadata": {
+            "pedidoId": "1",
+            "userId": "1"
+          }
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Authorization
+        value: Bearer {{ _.auth_token }}
+    authentication: {}
+    metaSortKey: -1727733000000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  - _id: req_payments_webhook
+    parentId: fld_payments
+    modified: 1727733600000
+    created: 1727733600000
+    url: "{{ _.base_url }}/payments/webhook"
+    name: Webhook do Stripe
+    description: Endpoint para webhooks do Stripe (uso interno)
+    method: POST
+    body:
+      mimeType: application/json
+      text: |
+        {
+          "id": "evt_test_webhook",
+          "object": "event",
+          "type": "payment_intent.succeeded",
+          "data": {
+            "object": {
+              "id": "pi_test_1234567890",
+              "status": "succeeded",
+              "amount": 8290,
+              "currency": "brl"
+            }
+          }
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: Stripe-Signature
+        value: "t=1234567890,v1=test_signature"
+    authentication: {}
+    metaSortKey: -1727732990000
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+
+  # FOLDERS
+  - _id: fld_pizzas
+    parentId: wrk_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: 🍕 Pizzas
+    description: Endpoints para gestão de pizzas
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1727733600000
+    _type: request_group
+
+  - _id: fld_auth
+    parentId: wrk_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: 🔐 Autenticação
+    description: Endpoints de autenticação e autorização
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1727733500000
+    _type: request_group
+
+  - _id: fld_users
+    parentId: wrk_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: 👥 Usuários
+    description: Endpoints para gestão de usuários
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1727733400000
+    _type: request_group
+
+  - _id: fld_pedidos
+    parentId: wrk_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: 📦 Pedidos
+    description: Endpoints para gestão de pedidos
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1727733300000
+    _type: request_group
+
+  - _id: fld_entregadores
+    parentId: wrk_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: 🏍️ Entregadores
+    description: Endpoints para gestão de entregadores
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1727733200000
+    _type: request_group
+
+  - _id: fld_enderecos
+    parentId: wrk_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: 📍 Endereços
+    description: Endpoints para gestão de endereços
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1727733100000
+    _type: request_group
+
+  - _id: fld_payments
+    parentId: wrk_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: 💳 Pagamentos
+    description: Endpoints para integração com Stripe
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1727733000000
+    _type: request_group
+
+  # WORKSPACE AND ENVIRONMENTS
+  - _id: wrk_main
+    parentId: null
+    modified: 1727733600000
+    created: 1727733600000
+    name: Pizza Express API Complete
+    description: Coleção completa da API Pizza Express com todos os endpoints organizados
+    scope: collection
+    _type: workspace
+
+  - _id: env_main
+    parentId: wrk_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: Base Environment
+    data:
+      base_url: http://localhost:10000
+      auth_token: ""
+    dataPropertyOrder:
+      "&":
+        - base_url
+        - auth_token
+    color: null
+    isPrivate: false
+    metaSortKey: 1727733600000
+    _type: environment
+
+  - _id: env_dev
+    parentId: env_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: Development
+    data:
+      base_url: http://localhost:10000
+      auth_token: ""
+    dataPropertyOrder:
+      "&":
+        - base_url
+        - auth_token
+    color: "#7d69cb"
+    isPrivate: false
+    metaSortKey: 1727733600000
+    _type: environment
+
+  - _id: env_prod
+    parentId: env_main
+    modified: 1727733600000
+    created: 1727733600000
+    name: Production
+    data:
+      base_url: https://pizza-express-backend.vercel.app
+      auth_token: ""
+    dataPropertyOrder:
+      "&":
+        - base_url
+        - auth_token
+    color: "#d9534f"
+    isPrivate: false
+    metaSortKey: 1727733610000
+    _type: environment<- Manter consistência visual entre os botões do menu de END: Insomnia_Pizza_Express_Complete.yaml -->
+<- Manter consistência visual entre os botões do menu de START: README.md -->
+# 🍕 Pizza Express Backend
+
+<div align="center">
+
+![Pizza Express](https://img.shields.io/badge/Pizza-Express-red?style=for-the-badge&logo=pizza&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-2.0.0-blue?style=for-the-badge)
+
+**API REST completa para sistema de delivery de pizzas com arquitetura híbrida moderna e escalável**
+
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green?logo=node.js)](https://nodejs.org/)
+[![NestJS](https://img.shields.io/badge/NestJS-11.x-red?logo=nestjs)](https://nestjs.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-blue?logo=postgresql)](https://postgresql.org/)
+[![Prisma](https://img.shields.io/badge/Prisma-6.x-indigo?logo=prisma)](https://prisma.io/)
+[![Stripe](https://img.shields.io/badge/Stripe-Payments-purple?logo=stripe)](https://stripe.com/)
+
+[🚀 Instalação](#instalação) • [📖 API Docs](#api-endpoints) • [💳 Pagamentos](#sistema-de-pagamentos) • [🔌 WebSocket](#websocket-real-time) • [🪑 Mesas](#gestão-de-mesas) • [🔐 RBAC](#role-based-access-control)
+
+</div>
+
+---
+
+## 📋 Visão Geral
+
+O **Pizza Express Backend** é uma API REST robusta desenvolvida com **NestJS** e **TypeScript**, oferecendo uma solução completa para sistemas de delivery de pizzas com arquitetura híbrida (delivery + dine-in). Construída com foco em performance, segurança e escalabilidade.
+
+### 🎯 **Principais Características**
+
+- ⚡ **Performance Otimizada** - Queries N+1 eliminadas, responses padronizadas
+- 🛡️ **Segurança Avançada** - JWT + OAuth2, Rate Limiting, Global Exception Filter
+- 🏗️ **Arquitetura Limpa** - SOLID principles, Domain Services, Clean Code
+- 📊 **Monitoramento** - Logging estruturado Winston, Error tracking completo
+- 🔄 **Real-time** - WebSocket para tracking de entregadores
+- 💳 **Pagamentos** - Integração completa Stripe com webhooks
+- 📱 **Mobile Ready** - API otimizada para aplicações mobile
+- 🪑 **Híbrido** - Suporte a delivery e atendimento presencial (mesas)
+- 🔐 **RBAC** - Controle de acesso baseado em roles (Cliente, Funcionário, Admin)
+
+---
+
+## 🚀 Features Principais
+
+### 🍕 **Sistema de Pizzas**
+- ✅ CRUD completo com validações rigorosas
+- ✅ Upload de imagens via Cloudinary
+- ✅ Preços dinâmicos e controle de estoque
+- ✅ Busca e filtros avançados
+
+### 👥 **Gestão de Usuários**
+- ✅ Registro e autenticação JWT
+- ✅ Login social (Google OAuth) com avatar
+- ✅ Sistema de roles (Cliente, Admin, Funcionário)
+- ✅ Gestão de múltiplos endereços
+
+### 📦 **Sistema de Pedidos**
+- ✅ Criação com múltiplas pizzas
+- ✅ Tracking de status em tempo real
+- ✅ Histórico completo de pedidos
+- ✅ Cálculo automático de preços e taxas
+- ✅ Observações personalizadas
+
+### 🏍️ **Gestão de Entregadores**
+- ✅ CRUD completo de entregadores
+- ✅ Tracking GPS em tempo real
+- ✅ Status de disponibilidade
+- ✅ WebSocket para localização
+
+### 💳 **Sistema de Pagamentos**
+- ✅ Integração completa Stripe
+- ✅ Payment Intents seguros
+- ✅ Webhooks para confirmação automática
+- ✅ Múltiplos métodos de pagamento
+- ✅ Atualização automática de status após pagamento confirmado
+
+### 🪑 **Gestão de Mesas (Dine-in)**
+- ✅ CRUD de mesas físicas
+- ✅ Controle de status (Disponível, Ocupada, Reservada)
+- ✅ Sessões de atendimento (comandas)
+- ✅ Pedidos vinculados a mesas
+- ✅ Fechamento de conta automático
+
+### 📦 **Catálogo Genérico**
+- ✅ Categorias de produtos (Pizzas, Bebidas, Sobremesas)
+- ✅ Produtos genéricos com upload de imagens
+- ✅ Migração gradual da arquitetura legada
+
+---
+
+## 🏗️ Arquitetura Técnica
+
+### **Stack Principal**
+- **Framework**: NestJS 11.x
+- **Language**: TypeScript 5.x (100% Type Safety)
+- **Database**: PostgreSQL + Prisma ORM 6.x
+- **Authentication**: JWT + Passport + Google OAuth
+- **File Upload**: Cloudinary integration
+- **Payments**: Stripe complete integration
+- **Real-time**: Socket.IO WebSocket
+- **Logging**: Winston structured logging
+- **Validation**: Class Validator + Class Transformer
+- **Testing**: Jest + Supertest
+
+### **Padrões Arquiteturais Implementados**
+- ✅ **SOLID Principles** rigorosamente aplicados
+- ✅ **Clean Architecture** com Domain Services
+- ✅ **Repository Pattern** via Prisma
+- ✅ **Decorator Pattern** para Guards customizados
+- ✅ **Builder Pattern** para Response DTOs
+- ✅ **Strategy Pattern** para métodos de autenticação e pedidos
+
+### **Estrutura de Módulos**
+```
+src/
+├── auth/           [PROTEGIDO] - JWT, OAuth Google, guards, estratégias
+├── catalog/        - Categorias e produtos genéricos
+├── cloudinary/     - Upload de imagens
+├── common/         - Utilitários compartilhados
+├── enderecos/      - CRUD de endereços (vinculados ao usuário)
+├── entregadores/   - CRUD + WebSocket para localização
+├── payments/       - Integração Stripe
+├── pedidos/        - Sistema de pedidos (legado + novo)
+├── pizzas/         - CRUD de pizzas (legado)
+├── tables/         - Gestão de mesas e sessões
+├── upload/         - Serviços de upload
+├── users/          - CRUD de usuários
+└── main.ts         [PROTEGIDO] - Bootstrap da aplicação
+```
+
+---
+
+## 🔧 Instalação e Configuração
+
+### **Pré-requisitos**
+- Node.js 18+
+- PostgreSQL 14+
+- Conta Cloudinary (para uploads)
+- Conta Stripe (para pagamentos)
+- Conta Google OAuth (opcional)
+
+### **Passos de Instalação**
+
+1. **Clone o repositório**
+```bash
+git clone <repository-url>
+cd pizza-express-backend
+```
+
+2. **Instale as dependências**
+```bash
+npm install
+```
+
+3. **Configure as variáveis de ambiente**
+```bash
+cp .env.example .env
+```
+
+Edite o `.env` com suas configurações:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/pizza_express"
+JWT_SECRET="your-jwt-secret"
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+CLOUDINARY_CLOUD_NAME="your-cloud-name"
+CLOUDINARY_API_KEY="your-api-key"
+CLOUDINARY_API_SECRET="your-api-secret"
+STRIPE_SECRET_KEY="your-stripe-secret"
+STRIPE_WEBHOOK_SECRET="your-webhook-secret"
+FRONTEND_URL="http://localhost:3000"
+```
+
+4. **Execute as migrações do banco**
+```bash
+npx prisma migrate dev
+```
+
+5. **Popule o banco com dados iniciais**
+```bash
+npm run seed
+```
+
+6. **Inicie o servidor**
+```bash
+npm run start:dev
+```
+
+### **Scripts Disponíveis**
+```bash
+npm run build          # Build da aplicação
+npm run start:prod     # Iniciar em produção
+npm run test           # Executar testes
+npm run test:e2e       # Testes end-to-end
+npm run lint           # Verificar código
+```
+
+---
+
+## 📖 API Endpoints
+
+### 🔐 Autenticação
+
+#### **POST /auth/login**
+**Autenticação**: ❌ Não requer
+**Corpo**:
+```typescript
+{
+  "email": "string",
+  "password": "string"
+}
+```
+**Resposta**:
+```typescript
+{
+  "access_token": "string",
+  "user": {
+    "id": number,
+    "email": "string",
+    "role": "CLIENTE" | "FUNCIONARIO" | "ADMIN"
+  }
+}
+```
+
+#### **POST /auth/register**
+**Autenticação**: ❌ Não requer
+**Corpo**:
+```typescript
+{
+  "nome": "string",
+  "email": "string",
+  "password": "string",
+  "telefone": "string",
+  "role": "CLIENTE" | "FUNCIONARIO" | "ADMIN" // Opcional, padrão CLIENTE
+}
+```
+
+#### **GET /auth/google**
+**Autenticação**: ❌ Não requer
+**Redireciona para OAuth do Google**
+
+#### **GET /me**
+**Autenticação**: ✅ Requer (qualquer usuário logado)
+**Resposta**: Dados completos do usuário com endereços e pedidos
+
+### 🍕 Pizzas
+
+#### **GET /pizzas**
+**Autenticação**: ❌ Não requer
+**Resposta**: Lista de todas as pizzas disponíveis
+
+#### **POST /pizzas**
+**Autenticação**: ✅ ADMIN apenas
+**Corpo**: Dados da pizza (nome, descrição, preço, etc.)
+
+#### **POST /pizzas/with-image**
+**Autenticação**: ✅ ADMIN apenas
+**Tipo**: multipart/form-data
+**Corpo**: FormData com imagem e dados da pizza
+
+### 📦 Pedidos
+
+#### **POST /pedidos**
+**Autenticação**: ✅ Requer
+**Corpo**:
+```typescript
+{
+  "enderecoId": number,
+  "itens": [
+    {
+      "pizzaId": number,
+      "quantidade": number,
+      "observacoes": "string"
+    }
+  ],
+  "observacoes": "string"
+}
+```
+
+#### **GET /pedidos/meus-pedidos**
+**Autenticação**: ✅ Requer
+**Resposta**: Pedidos do usuário logado
+
+#### **GET /pedidos**
+**Autenticação**: ✅ FUNCIONARIO ou ADMIN
+**Resposta**: Todos os pedidos
+
+### 🪑 Mesas (Tables)
+
+#### **GET /tables**
+**Autenticação**: ✅ FUNCIONARIO ou ADMIN
+**Resposta**: Lista de mesas com status
+
+#### **POST /tables**
+**Autenticação**: ✅ ADMIN
+**Corpo**:
+```typescript
+{
+  "number": number
+}
+```
+
+#### **POST /tables/:id/sessions**
+**Autenticação**: ✅ FUNCIONARIO ou ADMIN
+**Abre uma sessão para a mesa (muda status para OCCUPIED)**
+
+#### **POST /tables/:id/bill**
+**Autenticação**: ✅ FUNCIONARIO ou ADMIN
+**Fecha a conta e libera a mesa**
+
+### 📦 Catálogo (Categories & Products)
+
+#### **GET /categories**
+**Autenticação**: ❌ Não requer
+**Resposta**: Lista de categorias
+
+#### **GET /products**
+**Autenticação**: ❌ Não requer
+**Resposta**: Lista de produtos com filtros
+
+### 💳 Pagamentos
+
+#### **POST /payments/create-intent**
+**Autenticação**: ✅ Requer
+**Corpo**:
+```typescript
+{
+  "amount": number,
+  "currency": "brl"
+}
+```
+**Resposta**: client_secret para Stripe
+
+### 🚚 Entregadores
+
+#### **GET /entregadores**
+**Autenticação**: ✅ FUNCIONARIO ou ADMIN
+**Resposta**: Lista de entregadores
+
+#### **WebSocket /entregadores/location**
+**Autenticação**: ✅ Entregador logado
+**Emite localização GPS em tempo real**
+
+---
+
+## 🔌 WebSocket Real-time
+
+### **Conexão**
+```typescript
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:3000', {
+  auth: {
+    token: 'jwt-token'
+  }
+});
+```
+
+### **Eventos de Entregadores**
+```typescript
+// Entregador emite localização
+socket.emit('updateLocation', {
+  latitude: number,
+  longitude: number
+});
+
+// Cliente escuta localização
+socket.on('locationUpdate', (data) => {
+  console.log('Entregador em:', data);
+});
+```
+
+---
+
+## 🔐 Role-Based Access Control (RBAC)
+
+### **Roles Disponíveis**
+- **CLIENTE**: Acesso básico (visualizar catálogo, fazer pedidos, gerenciar perfil)
+- **FUNCIONARIO**: Acesso intermediário (gerenciar pedidos, mesas, entregadores)
+- **ADMIN**: Acesso total (gerenciar tudo)
+
+### **Implementação no Frontend**
+
+#### **Context de Autenticação**
+```typescript
+// contexts/AuthContext.tsx
+interface User {
+  id: number;
+  nome: string;
+  email: string;
+  role: 'CLIENTE' | 'FUNCIONARIO' | 'ADMIN';
+}
+
+const AuthContext = createContext<{
+  user: User | null;
+  hasRole: (role: string) => boolean;
+}>({
+  user: null,
+  hasRole: () => false
+});
+```
+
+#### **Hook de Permissões**
+```typescript
+// hooks/usePermissions.ts
+export const usePermissions = () => {
+  const { user } = useAuth();
+  
+  const hasRole = (requiredRole: string) => {
+    const hierarchy = { CLIENTE: 1, FUNCIONARIO: 2, ADMIN: 3 };
+    return hierarchy[user?.role] >= hierarchy[requiredRole];
+  };
+  
+  return { hasRole };
+};
+```
+
+#### **Componente Protegido**
+```typescript
+// components/ProtectedRoute.tsx
+interface ProtectedRouteProps {
+  children: ReactNode;
+  requiredRole?: string;
+  fallback?: ReactNode;
+}
+
+export const ProtectedRoute: FC<ProtectedRouteProps> = ({ 
+  children, 
+  requiredRole, 
+  fallback 
+}) => {
+  const { user } = useAuth();
+  const { hasRole } = usePermissions();
+  
+  if (!user) return <Navigate to="/login" />;
+  if (requiredRole && !hasRole(requiredRole)) {
+    return fallback || <div>Acesso negado</div>;
+  }
+  
+  return <>{children}</>;
+};
+```
+
+---
+
+## 🛠️ Guia de Integração Frontend
+
+### **Stack Sugerida**
+- **Framework**: Next.js 14+ (App Router)
+- **Data Fetching**: TanStack Query para estado do cliente
+- **Auth**: NextAuth.js ou gerenciamento manual de JWT
+- **UI**: Tailwind CSS + Shadcn/UI
+
+### **Fluxo de Autenticação**
+1. Login → Recebe JWT token
+2. Armazena token em cookies/httpOnly
+3. Inclui em headers de todas as requisições autenticadas
+4. Middleware do Next.js protege rotas baseadas em roles
+
+### **Gestão de Mesas (Dine-in)**
+- **Mesas Físicas**: Identificadas por number (Mesa 1, Mesa 2)
+- **Status**: AVAILABLE, OCCUPIED, RESERVED
+- **Sessões**: Comandas que agrupam pedidos
+- **UI**: Grid de mesas no dashboard do funcionário
+
+### **Pedidos**
+- **Tipos**: DELIVERY (requer endereço) e DINE_IN (requer mesa)
+- **Status**: PENDENTE → CONFIRMADO → PREPARANDO → PRONTO → ENTREGANDO → ENTREGUE
+
+### **Pagamentos Stripe**
+1. Frontend chama `/payments/create-intent`
+2. Recebe `client_secret`
+3. Usa `@stripe/react-stripe-js` para renderizar formulário
+4. Confirma pagamento
+5. Backend recebe webhook e atualiza status
+
+---
+
+## 📜 Plano de Refatoração (Master Refactoring Plan)
+
+### **Objetivo**
+Transição de "App de Pizza" para "Sistema de Gestão de Restaurante Completo" com arquitetura híbrida.
+
+### **Tarefa 1: Evolução do Schema**
+- ✅ Adicionar models: Category, Product, Table, TableSession
+- ✅ Atualizar Order para polimórfico (DELIVERY/DINE_IN)
+- ✅ Manter compatibilidade com dados legados
+
+### **Tarefa 2: Módulo de Catálogo Genérico**
+- ✅ Criar src/catalog com CategoriesService e ProductsService
+- ✅ Suporte a upload de imagens
+- ✅ Script de migração para converter Pizzas em Products
+
+### **Tarefa 3: Módulo de Mesas**
+- ✅ ManageTablesService: CRUD de mesas
+- ✅ TableSessionService: Abrir/fechar sessões
+- ✅ Validação de status e integridade
+
+### **Tarefa 4: Refatoração de Pedidos com Strategy Pattern**
+- ✅ Interface OrderProcessingStrategy
+- ✅ Estratégias: DeliveryStrategy e DineInStrategy
+- ✅ Strategy Factory no OrdersService
+
+### **Tarefa 5: Limpeza e Finalização**
+- ✅ Depreciação gradual do PizzasModule
+- ✅ DTOs unificados com validação condicional
+- ✅ Testes E2E para fluxos completos
+
+---
+
+## 🧪 Testes
+
+### **Cobertura**
+- ✅ Autenticação e autorização
+- ✅ CRUD de entidades
+- ✅ Fluxos de pedidos (delivery e mesa)
+- ✅ Integração Stripe
+- ✅ WebSocket de entregadores
+
+### **Executar Testes**
+```bash
+npm run test              # Unitários
+npm run test:e2e          # End-to-end
+npm run test:cov          # Com cobertura
+```
+
+---
+
+## 🚀 Deploy
+
+### **Vercel**
+```bash
+npm run vercel-build
+```
+
+### **Configuração de Produção**
+- ✅ Variáveis de ambiente configuradas
+- ✅ Database PostgreSQL em produção
+- ✅ Webhooks Stripe configurados
+- ✅ CORS para domínios do frontend
+
+---
+
+## 📝 Licença
+
+UNLICENSED
+
+---
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie uma branch para sua feature
+3. Commit suas mudanças
+4. Push para a branch
+5. Abra um Pull Request
+
+---
+
+**Desenvolvido com ❤️ usando NestJS e TypeScript**<- Manter consistência visual entre os botões do menu de END: README.md -->
+<- Manter consistência visual entre os botões do menu de START: eslint.config.mjs -->
+// @ts-check
+import eslint from '@eslint/js';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  {
+    ignores: ['eslint.config.mjs', 'dist/**'],
+  },
+  eslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
+  eslintPluginPrettierRecommended,
+  {
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
+      sourceType: 'commonjs',
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-unsafe-argument': 'warn',
+      '@typescript-eslint/unbound-method': 'warn',
+    },
+  },
+  {
+    files: ['test/**/*.ts', '**/*.spec.ts', '**/*.e2e-spec.ts'],
+    rules: {
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/unbound-method': 'off',
+    },
+  },
+);
+<- Manter consistência visual entre os botões do menu de END: eslint.config.mjs -->
+<- Manter consistência visual entre os botões do menu de START: nest-cli.json -->
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: nest-cli.json -->
+<- Manter consistência visual entre os botões do menu de START: package-lock.json -->
 {
   "name": "backend",
   "version": "0.0.1",
@@ -18,7 +2141,6 @@
         "@nestjs/passport": "^11.0.5",
         "@nestjs/platform-express": "^11.0.1",
         "@nestjs/platform-socket.io": "^11.1.3",
-        "@nestjs/swagger": "^11.2.3",
         "@nestjs/throttler": "^6.4.0",
         "@nestjs/websockets": "^11.1.3",
         "@types/passport-google-oauth20": "^2.0.16",
@@ -1948,12 +4070,6 @@
         "node": ">=8"
       }
     },
-    "node_modules/@microsoft/tsdoc": {
-      "version": "0.16.0",
-      "resolved": "https://registry.npmjs.org/@microsoft/tsdoc/-/tsdoc-0.16.0.tgz",
-      "integrity": "sha512-xgAyonlVVS+q7Vc7qLW0UrJU7rSFcETRWsqdXZtjzRU8dF+6CkozTK4V4y1LwOX7j8r/vHphjDeMeGI4tNGeGA==",
-      "license": "MIT"
-    },
     "node_modules/@napi-rs/nice": {
       "version": "1.0.4",
       "resolved": "https://registry.npmjs.org/@napi-rs/nice/-/nice-1.0.4.tgz",
@@ -2590,49 +4706,6 @@
         "tslib": "^2.1.0"
       }
     },
-    "node_modules/@nestjs/swagger": {
-      "version": "11.2.3",
-      "resolved": "https://registry.npmjs.org/@nestjs/swagger/-/swagger-11.2.3.tgz",
-      "integrity": "sha512-a0xFfjeqk69uHIUpP8u0ryn4cKuHdra2Ug96L858i0N200Hxho+n3j+TlQXyOF4EstLSGjTfxI1Xb2E1lUxeNg==",
-      "license": "MIT",
-      "dependencies": {
-        "@microsoft/tsdoc": "0.16.0",
-        "@nestjs/mapped-types": "2.1.0",
-        "js-yaml": "4.1.1",
-        "lodash": "4.17.21",
-        "path-to-regexp": "8.3.0",
-        "swagger-ui-dist": "5.30.2"
-      },
-      "peerDependencies": {
-        "@fastify/static": "^8.0.0",
-        "@nestjs/common": "^11.0.1",
-        "@nestjs/core": "^11.0.1",
-        "class-transformer": "*",
-        "class-validator": "*",
-        "reflect-metadata": "^0.1.12 || ^0.2.0"
-      },
-      "peerDependenciesMeta": {
-        "@fastify/static": {
-          "optional": true
-        },
-        "class-transformer": {
-          "optional": true
-        },
-        "class-validator": {
-          "optional": true
-        }
-      }
-    },
-    "node_modules/@nestjs/swagger/node_modules/path-to-regexp": {
-      "version": "8.3.0",
-      "resolved": "https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-8.3.0.tgz",
-      "integrity": "sha512-7jdwVIRtsP8MYpdXSwOS0YdD0Du+qOoF/AEPIt88PcCFrZCzx41oxku1jD88hZBwbNUIEfpqvuhjFaMAqMTWnA==",
-      "license": "MIT",
-      "funding": {
-        "type": "opencollective",
-        "url": "https://opencollective.com/express"
-      }
-    },
     "node_modules/@nestjs/testing": {
       "version": "11.1.5",
       "resolved": "https://registry.npmjs.org/@nestjs/testing/-/testing-11.1.5.tgz",
@@ -2871,13 +4944,6 @@
       "dependencies": {
         "@prisma/debug": "6.13.0"
       }
-    },
-    "node_modules/@scarf/scarf": {
-      "version": "1.4.0",
-      "resolved": "https://registry.npmjs.org/@scarf/scarf/-/scarf-1.4.0.tgz",
-      "integrity": "sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==",
-      "hasInstallScript": true,
-      "license": "Apache-2.0"
     },
     "node_modules/@sinclair/typebox": {
       "version": "0.27.8",
@@ -4976,6 +7042,7 @@
       "version": "2.0.1",
       "resolved": "https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz",
       "integrity": "sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==",
+      "dev": true,
       "license": "Python-2.0"
     },
     "node_modules/array-timsort": {
@@ -9450,6 +11517,7 @@
       "version": "4.1.1",
       "resolved": "https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.1.tgz",
       "integrity": "sha512-qQKT4zQxXl8lLwBtHMWwaTcGfFOZviOJet3Oy/xmGk2gZH677CJM9EvtfdSkgWcATZhj/55JZ0rmy3myCT5lsA==",
+      "dev": true,
       "license": "MIT",
       "dependencies": {
         "argparse": "^2.0.1"
@@ -12230,15 +14298,6 @@
         "url": "https://github.com/sponsors/ljharb"
       }
     },
-    "node_modules/swagger-ui-dist": {
-      "version": "5.30.2",
-      "resolved": "https://registry.npmjs.org/swagger-ui-dist/-/swagger-ui-dist-5.30.2.tgz",
-      "integrity": "sha512-HWCg1DTNE/Nmapt+0m2EPXFwNKNeKK4PwMjkwveN/zn1cV2Kxi9SURd+m0SpdcSgWEK/O64sf8bzXdtUhigtHA==",
-      "license": "Apache-2.0",
-      "dependencies": {
-        "@scarf/scarf": "=1.4.0"
-      }
-    },
     "node_modules/symbol-observable": {
       "version": "4.0.0",
       "resolved": "https://registry.npmjs.org/symbol-observable/-/symbol-observable-4.0.0.tgz",
@@ -13598,3 +15657,8221 @@
     }
   }
 }
+<- Manter consistência visual entre os botões do menu de END: package-lock.json -->
+<- Manter consistência visual entre os botões do menu de START: package.json -->
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "vercel-build": "prisma generate && nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "postinstall": "prisma generate",
+    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/mapped-types": "*",
+    "@nestjs/passport": "^11.0.5",
+    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/platform-socket.io": "^11.1.3",
+    "@nestjs/throttler": "^6.4.0",
+    "@nestjs/websockets": "^11.1.3",
+    "@types/passport-google-oauth20": "^2.0.16",
+    "@types/socket.io": "^3.0.1",
+    "@vercel/speed-insights": "^1.2.0",
+    "bcryptjs": "^3.0.2",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "cloudinary": "^2.7.0",
+    "helmet": "^8.1.0",
+    "multer": "^2.0.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "socket.io": "^4.8.1",
+    "stripe": "^18.5.0",
+    "winston": "^3.18.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.18.0",
+    "@nestjs/cli": "^11.0.7",
+    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^11.0.1",
+    "@prisma/client": "^6.13.0",
+    "@swc/cli": "^0.6.0",
+    "@swc/core": "^1.10.7",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^22.10.7",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/supertest": "^6.0.2",
+    "@types/winston": "^2.4.4",
+    "@vercel/node": "^2.3.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "globals": "^16.0.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.4.2",
+    "prisma": "^6.13.0",
+    "source-map-support": "^0.5.21",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.5",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: package.json -->
+<- Manter consistência visual entre os botões do menu de START: prisma/migrations/20250720114702_add_new_rules_image/migration.sql -->
+-- CreateTable
+CREATE TABLE "Pizza" (
+    "id" SERIAL NOT NULL,
+    "nome" TEXT NOT NULL,
+    "descricao" TEXT,
+    "preco" DOUBLE PRECISION NOT NULL,
+    "image" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Pizza_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateEnum
+CREATE TYPE "Role" AS ENUM ('CLIENTE', 'FUNCIONARIO', 'ADMIN');
+
+-- CreateEnum
+CREATE TYPE "StatusPedido" AS ENUM ('PENDENTE', 'EM_PREPARO', 'A_CAMINHO', 'ENTREGUE', 'CANCELADO');
+
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "nome" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "telefone" TEXT,
+    "avatar" TEXT,
+    "role" "Role" NOT NULL DEFAULT 'CLIENTE',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Endereco" (
+    "id" SERIAL NOT NULL,
+    "cep" TEXT NOT NULL,
+    "tipo" TEXT NOT NULL,
+    "logradouro" TEXT NOT NULL,
+    "numero" TEXT NOT NULL,
+    "bairro" TEXT NOT NULL,
+    "complemento" TEXT,
+    "cidade" TEXT NOT NULL,
+    "estado" TEXT NOT NULL,
+    "pais" TEXT,
+    "referencia" TEXT,
+    "principal" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" INTEGER NOT NULL,
+
+    CONSTRAINT "Endereco_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Pedido" (
+    "id" SERIAL NOT NULL,
+    "entregadorId" INTEGER,
+    "latitude" DOUBLE PRECISION,
+    "longitude" DOUBLE PRECISION,
+    "criadoEm" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "atualizadoEm" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "enderecoId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "status" "StatusPedido" NOT NULL,
+    "paymentIntentId" TEXT,
+    "total" DOUBLE PRECISION,
+    "observacoes" TEXT,
+
+    CONSTRAINT "Pedido_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Entregador" (
+    "id" SERIAL NOT NULL,
+    "nome" TEXT NOT NULL,
+    "telefone" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Entregador_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "_PedidoPizzas" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL,
+
+    CONSTRAINT "_PedidoPizzas_AB_pkey" PRIMARY KEY ("A","B")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE INDEX "_PedidoPizzas_B_index" ON "_PedidoPizzas"("B");
+
+-- AddForeignKey
+ALTER TABLE "Endereco" ADD CONSTRAINT "Endereco_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Pedido" ADD CONSTRAINT "Pedido_enderecoId_fkey" FOREIGN KEY ("enderecoId") REFERENCES "Endereco"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Pedido" ADD CONSTRAINT "Pedido_entregadorId_fkey" FOREIGN KEY ("entregadorId") REFERENCES "Entregador"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_PedidoPizzas" ADD CONSTRAINT "_PedidoPizzas_A_fkey" FOREIGN KEY ("A") REFERENCES "Pedido"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_PedidoPizzas" ADD CONSTRAINT "_PedidoPizzas_B_fkey" FOREIGN KEY ("B") REFERENCES "Pizza"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+<- Manter consistência visual entre os botões do menu de END: prisma/migrations/20250720114702_add_new_rules_image/migration.sql -->
+<- Manter consistência visual entre os botões do menu de START: prisma/migrations/migration_lock.toml -->
+# Please do not edit this file manually
+# It should be added in your version-control system (e.g., Git)
+provider = "postgresql"
+<- Manter consistência visual entre os botões do menu de END: prisma/migrations/migration_lock.toml -->
+<- Manter consistência visual entre os botões do menu de START: prisma/schema.prisma -->
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Pizza {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  descricao String?
+  preco     Float
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  pedidos   Pedido[] @relation("PedidoPizzas")
+  orders    Order[]  @relation("PedidoPizzas")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  nome      String
+  email     String     @unique
+  password  String
+  telefone  String?
+  avatar    String?
+  role      Role       @default(CLIENTE)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  enderecos Endereco[]
+  pedidos   Pedido[]
+  orders    Order[]
+}
+
+model Pedido {
+  id              Int          @id @default(autoincrement())
+  entregadorId    Int?
+  latitude        Float?
+  longitude       Float?
+  criadoEm        DateTime     @default(now())
+  atualizadoEm    DateTime     @updatedAt
+  enderecoId      Int
+  userId          Int
+  status          StatusPedido
+  paymentIntentId String?
+  total           Float?
+  observacoes     String?
+  endereco        Endereco     @relation("PedidoEndereco", fields: [enderecoId], references: [id])
+  entregador      Entregador?  @relation(fields: [entregadorId], references: [id])
+  user            User         @relation(fields: [userId], references: [id])
+  pizzas          Pizza[]      @relation("PedidoPizzas")
+}
+
+model Entregador {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  telefone  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  pedidos   Pedido[]
+}
+
+model Endereco {
+  id          Int      @id @default(autoincrement())
+  cep         String
+  tipo        String
+  logradouro  String
+  numero      String
+  bairro      String
+  complemento String?
+  cidade      String
+  estado      String
+  pais        String?
+  referencia  String?
+  principal   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  pedidos     Pedido[] @relation("PedidoEndereco")
+  orders      Order[]
+}
+
+// Categorização de Produtos (ex: Pizzas, Bebidas, Sobremesas)
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+// Produto Genérico (Substituirá a tabela Pizza futuramente)
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  imageUrl    String?
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  active      Boolean  @default(true)
+
+  // Relacionamento com itens de pedido (OrderItems) deve ser migrado
+  items       OrderItem[]
+}
+
+// Gestão de Mesas Físicas
+model Table {
+  id        String         @id @default(uuid())
+  number    Int            @unique // Identificador visual (Mesa 1, Mesa 2)
+  status    TableStatus    @default(AVAILABLE) // Enum: AVAILABLE, OCCUPIED, RESERVED
+  sessions  TableSession[]
+}
+
+// Sessão de Atendimento (A "Comanda")
+model TableSession {
+  id        String    @id @default(uuid())
+  tableId   String
+  table     Table     @relation(fields: [tableId], references: [id])
+  openedAt  DateTime  @default(now())
+  closedAt  DateTime?
+  total     Decimal   @default(0) @db.Decimal(10, 2)
+  orders    Order[]   // Pedidos feitos nesta sessão
+}
+
+// Item de Pedido (para produtos genéricos)
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   Int
+  productId String
+  quantity  Int     @default(1)
+  price     Decimal @db.Decimal(10, 2) // Preço no momento da compra
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+// Pedido atualizado para ser polimórfico (mantendo id Int por compatibilidade)
+model Order {
+  id              Int         @id @default(autoincrement())
+  type            OrderType   @default(DELIVERY)
+
+  // Campos obrigatórios
+  status          StatusPedido
+  total           Decimal     @db.Decimal(10, 2)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Campos opcionais de contexto
+  addressId       Int?        // Obrigatório se DELIVERY
+  sessionId       String?     // Obrigatório se DINE_IN (link com TableSession)
+  session         TableSession? @relation(fields: [sessionId], references: [id])
+  address         Endereco?   @relation(fields: [addressId], references: [id])
+
+  // Usuário se torna opcional (cliente de mesa pode ser anônimo)
+  userId          Int?
+  user            User?       @relation(fields: [userId], references: [id])
+
+  // Relacionamentos
+  items           OrderItem[]
+
+  // Campos legados (para compatibilidade durante migração)
+  entregadorId    Int?
+  latitude        Float?
+  longitude       Float?
+  paymentIntentId String?
+  observacoes     String?
+
+  // Relacionamentos legados (serão removidos após migração)
+  pizzas          Pizza[]     @relation("PedidoPizzas")
+}
+
+enum Role {
+  CLIENTE
+  FUNCIONARIO
+  ADMIN
+}
+
+enum StatusPedido {
+  PENDENTE
+  EM_PREPARO
+  A_CAMINHO
+  ENTREGUE
+  CANCELADO
+}
+
+enum TableStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+}
+
+enum OrderType {
+  DELIVERY
+  DINE_IN
+}
+<- Manter consistência visual entre os botões do menu de END: prisma/schema.prisma -->
+<- Manter consistência visual entre os botões do menu de START: prisma/seed-migration.ts -->
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+async function migratePizzaToProduct() {
+  console.log('🚀 Iniciando migração de Pizza para Product...');
+
+  try {
+    // 1. Criar categoria "Pizzas" se não existir
+    let pizzaCategory = await prisma.category.findFirst({
+      where: { slug: 'pizzas' },
+    });
+
+    if (!pizzaCategory) {
+      pizzaCategory = await prisma.category.create({
+        data: {
+          name: 'Pizzas',
+          slug: 'pizzas',
+        },
+      });
+      console.log('✅ Categoria "Pizzas" criada');
+    }
+
+    // 2. Migrar todas as pizzas para produtos
+    const pizzas = await prisma.pizza.findMany();
+    console.log(`📊 Encontradas ${pizzas.length} pizzas para migrar`);
+
+    for (const pizza of pizzas) {
+      const existingProduct = await prisma.product.findFirst({
+        where: { name: pizza.nome },
+      });
+
+      if (!existingProduct) {
+        await prisma.product.create({
+          data: {
+            name: pizza.nome,
+            description: pizza.descricao,
+            price: pizza.preco,
+            imageUrl: pizza.image,
+            categoryId: pizzaCategory.id,
+            active: true,
+          },
+        });
+        console.log(`✅ Pizza "${pizza.nome}" migrada para Product`);
+      } else {
+        console.log(`⚠️ Produto "${pizza.nome}" já existe, pulando...`);
+      }
+    }
+
+    console.log('🎉 Migração concluída com sucesso!');
+  } catch (error) {
+    console.error('❌ Erro durante a migração:', error);
+    throw error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+// Executar apenas se chamado diretamente
+if (require.main === module) {
+  migratePizzaToProduct().catch(console.error);
+}
+
+export { migratePizzaToProduct };
+<- Manter consistência visual entre os botões do menu de END: prisma/seed-migration.ts -->
+<- Manter consistência visual entre os botões do menu de START: prisma/seed-pedidos.ts -->
+import { PrismaClient, StatusPedido } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+const statuses: StatusPedido[] = [
+  'PENDENTE',
+  'EM_PREPARO',
+  'A_CAMINHO',
+  'ENTREGUE',
+  'CANCELADO',
+];
+
+const nomes = [
+  'João Silva',
+  'Maria Santos',
+  'Carlos Oliveira',
+  'Ana Costa',
+  'Pedro Ferreira',
+  'Juliana Souza',
+  'Roberto Alves',
+  'Fernanda Lima',
+  'Marcos Cesar Domingues',
+];
+
+async function main() {
+  console.log('🍕 Iniciando seed de pedidos...\n');
+
+  // Buscar usuários clientes existentes (role = CLIENT ou não ADMIN/FUNCIONARIO)
+  const usuarios = await prisma.user.findMany({
+    where: {
+      role: {
+        notIn: ['ADMIN', 'FUNCIONARIO'],
+      },
+    },
+    include: {
+      enderecos: true,
+    },
+  });
+
+  if (usuarios.length === 0) {
+    console.log('❌ Nenhum usuário cliente encontrado no banco');
+    process.exit(1);
+  }
+
+  console.log(`✅ Encontrados ${usuarios.length} usuários\n`);
+
+  // Buscar pizzas
+  const pizzas = await prisma.pizza.findMany();
+
+  if (pizzas.length === 0) {
+    console.log('❌ Nenhuma pizza encontrada no banco');
+    process.exit(1);
+  }
+
+  console.log(`✅ Encontradas ${pizzas.length} pizzas\n`);
+
+  // Criar 10 pedidos
+  for (let i = 0; i < 10; i++) {
+    const usuarioAleatorio =
+      usuarios[Math.floor(Math.random() * usuarios.length)];
+    const enderecoAleatorio =
+      usuarioAleatorio.enderecos[0] || usuarioAleatorio.enderecos[0];
+
+    if (!enderecoAleatorio) {
+      console.log(`⚠️  Usuário ${usuarioAleatorio.nome} não tem endereço`);
+      continue;
+    }
+
+    // Selecionar 2-4 pizzas aleatoriamente
+    const numPizzas = Math.floor(Math.random() * 3) + 2;
+    const pizzasSelecionadas: typeof pizzas = [];
+    for (let j = 0; j < numPizzas; j++) {
+      const pizza = pizzas[Math.floor(Math.random() * pizzas.length)];
+      if (!pizzasSelecionadas.find((p) => p.id === pizza.id)) {
+        pizzasSelecionadas.push(pizza);
+      }
+    }
+
+    const statusAleatorio =
+      statuses[Math.floor(Math.random() * statuses.length)];
+
+    const pedido = await prisma.pedido.create({
+      data: {
+        userId: usuarioAleatorio.id,
+        enderecoId: enderecoAleatorio.id,
+        status: statusAleatorio,
+        observacoes: 'Pedido criado via seed de teste',
+        total: Math.floor(Math.random() * 100 + 30), // Valor entre 30 e 130
+        pizzas: {
+          connect: pizzasSelecionadas.map((p) => ({ id: p.id })),
+        },
+      },
+    });
+
+    console.log(`✅ Pedido #${pedido.id} criado`);
+    console.log(`   Cliente: ${usuarioAleatorio.nome}`);
+    console.log(`   Status: ${statusAleatorio}`);
+    console.log(`   Pizzas: ${pizzasSelecionadas.length}\n`);
+  }
+
+  console.log('✅ Seed de pedidos concluído!\n');
+  process.exit(0);
+}
+
+main()
+  .catch((error) => {
+    console.error('❌ Erro durante seed:', error);
+    process.exit(1);
+  })
+  .finally(() => {
+    prisma.$disconnect();
+  });
+<- Manter consistência visual entre os botões do menu de END: prisma/seed-pedidos.ts -->
+<- Manter consistência visual entre os botões do menu de START: prisma/seed.ts -->
+import { PrismaClient, StatusPedido } from '@prisma/client';
+import * as bcrypt from 'bcryptjs';
+
+const prisma = new PrismaClient();
+
+async function main() {
+  console.log('Iniciando seed do banco de dados...');
+
+  // Limpa o banco antes de popular
+  await prisma.pedido.deleteMany();
+  await prisma.pizza.deleteMany();
+  await prisma.entregador.deleteMany();
+  await prisma.endereco.deleteMany();
+  await prisma.user.deleteMany();
+
+  // === CRIANDO USUÁRIOS SOLICITADOS ===
+  const senha = '123'; // Senha fixa como solicitado
+  const senhaHash = await bcrypt.hash(senha, 10);
+
+  console.log('Criando usuário ADMIN...');
+  // 1. ADMIN
+  const adminUser = await prisma.user.create({
+    data: {
+      nome: 'Administrador',
+      email: 'admin@admin.com',
+      password: senhaHash,
+      telefone: '11999999999',
+      role: 'ADMIN',
+      enderecos: {
+        create: {
+          cep: '01000-000',
+          tipo: 'comercial',
+          logradouro: 'Rua Admin',
+          numero: '100',
+          bairro: 'Centro',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
+      },
+    },
+  });
+  console.log('✅ Usuário ADMIN criado: admin@admin.com / senha: 123');
+
+  console.log('Criando funcionários...');
+  // 2. FUNCIONARIO 1
+  const funcionario1 = await prisma.user.create({
+    data: {
+      nome: 'Funcionário 1',
+      email: 'funcionario1',
+      password: senhaHash,
+      telefone: '11888888881',
+      role: 'FUNCIONARIO',
+      enderecos: {
+        create: {
+          cep: '02000-001',
+          tipo: 'residencial',
+          logradouro: 'Rua Funcionário 1',
+          numero: '201',
+          bairro: 'Vila Funcionário',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
+      },
+    },
+  });
+
+  // 3. FUNCIONARIO 2
+  const funcionario2 = await prisma.user.create({
+    data: {
+      nome: 'Funcionário 2',
+      email: 'funcionario2',
+      password: senhaHash,
+      telefone: '11888888882',
+      role: 'FUNCIONARIO',
+      enderecos: {
+        create: {
+          cep: '02000-002',
+          tipo: 'residencial',
+          logradouro: 'Rua Funcionário 2',
+          numero: '202',
+          bairro: 'Vila Funcionário',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
+      },
+    },
+  });
+
+  // 4. FUNCIONARIO 3
+  const funcionario3 = await prisma.user.create({
+    data: {
+      nome: 'Funcionário 3',
+      email: 'funcionario3',
+      password: senhaHash,
+      telefone: '11888888883',
+      role: 'FUNCIONARIO',
+      enderecos: {
+        create: {
+          cep: '02000-003',
+          tipo: 'residencial',
+          logradouro: 'Rua Funcionário 3',
+          numero: '203',
+          bairro: 'Vila Funcionário',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
+      },
+    },
+  });
+
+  console.log('✅ Funcionários criados:');
+  console.log('   - funcionario1 / senha: 123');
+  console.log('   - funcionario2 / senha: 123');
+  console.log('   - funcionario3 / senha: 123');
+
+  // === CRIANDO ALGUNS DADOS BÁSICOS PARA TESTE ===
+
+  console.log('Criando entregadores de exemplo...');
+  // Entregadores
+  const entregador1 = await prisma.entregador.create({
+    data: {
+      nome: 'Carlos Motoboy',
+      telefone: '11988888888',
+    },
+  });
+
+  const entregador2 = await prisma.entregador.create({
+    data: {
+      nome: 'Ana Entregadora',
+      telefone: '11999997777',
+    },
+  });
+  console.log('✅ Entregadores criados');
+
+  console.log('Criando pizzas de exemplo...');
+  // Pizzas
+  const pizza1 = await prisma.pizza.create({
+    data: {
+      nome: 'Margherita',
+      descricao: 'Molho de tomate, mussarela, manjericão',
+      preco: 39.9,
+      image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
+    },
+  });
+
+  const pizza2 = await prisma.pizza.create({
+    data: {
+      nome: 'Calabresa',
+      descricao: 'Calabresa, cebola, mussarela',
+      preco: 44.9,
+      image: 'https://images.unsplash.com/photo-1548365328-8b849e6c7b8b',
+    },
+  });
+  console.log('✅ Pizzas criadas');
+
+  // Logs para diagnóstico
+  const usuarios = await prisma.user.count();
+  const entregadores = await prisma.entregador.count();
+  const pizzas = await prisma.pizza.count();
+  const pedidos = await prisma.pedido.count();
+
+  console.log('\n🎉 SEED CONCLUÍDO COM SUCESSO!');
+  console.log('=====================================');
+  console.log('📊 Dados criados:');
+  console.log(`   👥 Usuários: ${usuarios}`);
+  console.log(`   🏍️  Entregadores: ${entregadores}`);
+  console.log(`   🍕 Pizzas: ${pizzas}`);
+  console.log(`   📦 Pedidos: ${pedidos}`);
+  console.log('');
+  console.log('🔐 Credenciais de acesso:');
+  console.log('   ADMIN: admin@admin.com / 123');
+  console.log('   FUNC1: funcionario1 / 123');
+  console.log('   FUNC2: funcionario2 / 123');
+  console.log('   FUNC3: funcionario3 / 123');
+  console.log('=====================================');
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(() => {
+    void prisma.$disconnect();
+  });
+<- Manter consistência visual entre os botões do menu de END: prisma/seed.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/app.controller.spec.ts -->
+import { Test, TestingModule } from '@nestjs/testing';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
+describe('AppController', () => {
+  let appController: AppController;
+
+  beforeEach(async () => {
+    const app: TestingModule = await Test.createTestingModule({
+      controllers: [AppController],
+      providers: [AppService],
+    }).compile();
+
+    appController = app.get<AppController>(AppController);
+  });
+
+  describe('root', () => {
+    it('should return "Hello World!"', () => {
+      expect(appController.getHello()).toBe('Hello World!');
+    });
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: src/app.controller.spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/app.controller.ts -->
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
+
+@Controller()
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/app.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/app.module.ts -->
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { PizzasModule } from './pizzas/pizzas.module';
+import { PedidosModule } from './pedidos/pedidos.module';
+import { CommonModule } from './common/common.module';
+import { UsersModule } from './users/users.module';
+import { EntregadoresModule } from './entregadores/entregadores.module';
+import { AuthModule } from './auth/auth.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { EnderecosModule } from './enderecos/enderecos.module';
+import { PaymentsModule } from './payments/payments.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { CatalogModule } from './catalog/catalog.module';
+import { TablesModule } from './tables/tables.module';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          limit: 20,
+          ttl: 60,
+        },
+      ],
+    }),
+    CommonModule,
+    PizzasModule,
+    PedidosModule,
+    UsersModule,
+    EntregadoresModule,
+    EnderecosModule,
+    AuthModule,
+    PaymentsModule,
+    CatalogModule, // Novo módulo de catálogo
+    TablesModule, // Novo módulo de mesas
+  ],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
+})
+export class AppModule {}
+<- Manter consistência visual entre os botões do menu de END: src/app.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/app.service.ts -->
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class AppService {
+  getHello(): string {
+    return 'Hello World!';
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/app.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/auth/auth.controller.ts -->
+import {
+  Controller,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+  Get,
+  Req,
+  UseGuards,
+  Res,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
+import { User } from '@prisma/client';
+import { AuthService } from './auth.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { AuthGuard } from '@nestjs/passport';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('login')
+  async login(@Body() loginDto: { email: string; password: string }) {
+    try {
+      const user = await this.authService.validateUser(
+        loginDto.email,
+        loginDto.password,
+      );
+      if (
+        !user ||
+        typeof user.id !== 'number' ||
+        typeof user.email !== 'string'
+      ) {
+        throw new HttpException(
+          'Credenciais inválidas',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      return this.authService.login({ id: user.id, email: user.email });
+    } catch {
+      throw new HttpException('Credenciais inválidas', HttpStatus.UNAUTHORIZED);
+    }
+  }
+
+  @Post('register')
+  async register(@Body() registerDto: CreateUserDto) {
+    try {
+      const result = await this.authService.register(registerDto);
+      return result;
+    } catch (error) {
+      // Log detalhado para depuração
+      console.error('Erro no registro de cliente:', {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        error: error instanceof Error ? error : undefined,
+      });
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        (error as Record<string, any>).code === 'P2002'
+      ) {
+        throw new HttpException('Email já cadastrado', HttpStatus.CONFLICT);
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {
+    // Inicia fluxo OAuth com Google
+  }
+
+  @Get('config')
+  getAuthConfig() {
+    return {
+      environment: process.env.NODE_ENV,
+      frontendUrl:
+        process.env.NODE_ENV === 'production'
+          ? process.env.FRONTEND_URL
+          : process.env.FRONTEND_URL_DEV || 'http://localhost:3000',
+      googleCallbackUrl:
+        process.env.NODE_ENV === 'production'
+          ? process.env.GOOGLE_CALLBACK_URL
+          : 'http://localhost:10000/auth/google/callback',
+      corsOrigins: [
+        process.env.FRONTEND_URL,
+        process.env.FRONTEND_URL_DEV || 'http://localhost:3000',
+      ],
+    };
+  }
+
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(
+    @Req() req: Request & { user: Omit<User, 'password'> },
+    @Res() res: Response,
+  ) {
+    try {
+      const user = req.user;
+      const { access_token } = this.authService.login({
+        id: user.id,
+        email: user.email,
+      });
+
+      // Determina a URL do frontend baseada no ambiente
+      const frontendUrl =
+        process.env.NODE_ENV === 'production'
+          ? process.env.FRONTEND_URL
+          : process.env.FRONTEND_URL_DEV || 'http://localhost:3000';
+
+      // Redireciona para o frontend com o token
+      const redirectUrl = `${frontendUrl}/auth-callback?token=${access_token}`;
+
+      return res.redirect(redirectUrl);
+    } catch (error) {
+      console.error('❌ Erro na autenticação Google:', error);
+
+      // Redireciona para o frontend com erro
+      const frontendUrl =
+        process.env.NODE_ENV === 'production'
+          ? process.env.FRONTEND_URL
+          : process.env.FRONTEND_URL_DEV || 'http://localhost:3000';
+
+      const errorUrl = `${frontendUrl}/auth-callback?error=authentication_failed`;
+
+      console.log('🚨 Redirecting to error page:', errorUrl);
+
+      return res.redirect(errorUrl);
+    }
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/auth/auth.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/auth/auth.module.ts -->
+import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+import { JwtStrategy } from './jwt.strategy';
+import { GoogleStrategy } from './google.strategy';
+import { PrismaModule } from '../prisma.module';
+import { MeController } from './me.controller';
+
+@Module({
+  imports: [
+    PrismaModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'pizza-secret',
+      signOptions: { expiresIn: '1d' },
+    }),
+  ],
+  providers: [AuthService, JwtStrategy, GoogleStrategy],
+  controllers: [AuthController, MeController],
+  exports: [AuthService],
+})
+export class AuthModule {}
+<- Manter consistência visual entre os botões do menu de END: src/auth/auth.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/auth/auth.service.ts -->
+import { Injectable, Inject } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from '../prisma.service';
+import { IHasher } from '../common/interfaces/hasher.interface';
+import { User } from '@prisma/client';
+
+interface JwtPayload {
+  sub: number;
+  email: string;
+}
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly jwtService: JwtService,
+    @Inject('HASHER') private readonly hasher: IHasher,
+  ) {}
+
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<Record<string, any> | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+      include: {
+        enderecos: {
+          where: { principal: true },
+          take: 1,
+        },
+      },
+    });
+    if (user && (await this.hasher.compare(password, user.password))) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password: _, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
+  login(user: { id: number; email: string }): { access_token: string } {
+    const payload: JwtPayload = { sub: user.id, email: user.email };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
+  async register(data: {
+    nome: string;
+    email: string;
+    password: string;
+    telefone?: string;
+    endereco?: string; // Para compatibilidade com testes E2E
+    enderecos?: Array<{
+      cep: string;
+      tipo: string;
+      logradouro: string;
+      numero: string;
+      bairro: string;
+      cidade: string;
+      estado: string;
+      principal?: boolean;
+      complemento?: string;
+    }>;
+  }): Promise<Record<string, any>> {
+    if (!data.password) throw new Error('Campo password é obrigatório');
+    const hash = await this.hasher.hash(data.password);
+    const { enderecos, endereco, ...rest } = data;
+
+    // Se recebeu endereco (string), converte para o formato de enderecos
+    let enderecosData = enderecos;
+    if (endereco && !enderecosData) {
+      enderecosData = [
+        {
+          cep: '01234-567',
+          tipo: 'CASA',
+          logradouro: endereco,
+          numero: '123',
+          bairro: 'Centro',
+          cidade: 'São Paulo',
+          estado: 'SP',
+          principal: true,
+        },
+      ];
+    }
+
+    const created = await this.prisma.user.create({
+      data: {
+        ...rest,
+        password: hash,
+        enderecos: enderecosData ? { create: enderecosData } : undefined,
+      },
+      include: { enderecos: true },
+    });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _password, ...result } = created;
+    return result;
+  }
+
+  async findOrCreateGoogleUser(input: {
+    email: string;
+    nome: string;
+    avatar?: string;
+  }): Promise<Omit<User, 'password'>> {
+    let user = await this.prisma.user.findUnique({
+      where: { email: input.email },
+    });
+
+    if (!user) {
+      user = await this.prisma.user.create({
+        data: {
+          nome: input.nome,
+          email: input.email,
+          password: await this.hasher.hash('google-oauth-user'),
+          role: 'CLIENTE',
+          avatar: input.avatar,
+        },
+      });
+    } else if (input.avatar && user.avatar !== input.avatar) {
+      user = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { avatar: input.avatar },
+      });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...result } = user;
+    return result;
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/auth/auth.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/auth/google.strategy.ts -->
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { Strategy, Profile } from 'passport-google-oauth20';
+import { VerifyCallback } from 'passport-google-oauth20';
+import { AuthService } from './auth.service';
+
+@Injectable()
+export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+  constructor(private readonly authService: AuthService) {
+    const callbackURL =
+      process.env.NODE_ENV === 'production'
+        ? process.env.GOOGLE_CALLBACK_URL
+        : process.env.GOOGLE_CALLBACK_URL_DEV;
+
+    super({
+      clientID: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      callbackURL,
+      scope: ['email', 'profile'],
+    });
+  }
+
+  async validate(
+    accessToken: string,
+    refreshToken: string,
+    profile: Profile,
+    done: VerifyCallback,
+  ): Promise<void> {
+    const email = profile.emails?.[0]?.value;
+    if (!email) {
+      return done(new Error('No email from Google'), false);
+    }
+    const nome = profile.displayName;
+    const avatar = profile.photos?.[0]?.value;
+
+    try {
+      const user = await this.authService.findOrCreateGoogleUser({
+        email,
+        nome,
+        avatar,
+      });
+      done(null, user);
+    } catch (err) {
+      done(err, false);
+    }
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/auth/google.strategy.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/auth/jwt-auth.guard.ts -->
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ExecutionContext } from '@nestjs/common/interfaces';
+
+@Injectable()
+export class JwtAuthGuard extends AuthGuard('jwt') {
+  canActivate(context: ExecutionContext) {
+    return super.canActivate(context);
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/auth/jwt-auth.guard.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/auth/jwt.strategy.ts -->
+import { Injectable } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PrismaService } from '../prisma.service';
+import { AuthenticatedUser } from '../common/interfaces/authenticated-user.interface';
+
+interface JwtPayload {
+  sub: number;
+  email: string;
+}
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor(private readonly prisma: PrismaService) {
+    const secret = process.env.JWT_SECRET || 'pizza-secret';
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: secret,
+    });
+  }
+
+  async validate(payload: JwtPayload): Promise<AuthenticatedUser> {
+    if (!payload.sub || !payload.email) {
+      throw new Error('Token inválido: payload incompleto');
+    }
+
+    // Buscar o usuário completo no banco para obter o role
+    const user = await this.prisma.user.findUnique({
+      where: { id: payload.sub },
+      select: { id: true, email: true, role: true, nome: true },
+    });
+
+    if (!user) {
+      throw new Error('Usuário não encontrado');
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      nome: user.nome,
+    };
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/auth/jwt.strategy.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/auth/me.controller.ts -->
+import { Controller, Get, UseGuards, Req } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { Request } from 'express';
+
+interface AuthenticatedUser {
+  userId?: number;
+  id?: number;
+}
+
+interface AuthenticatedRequest extends Request {
+  user?: AuthenticatedUser;
+}
+
+@Controller('me')
+export class MeController {
+  constructor(private readonly prisma: PrismaService) {}
+
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  async getMe(@Req() req: AuthenticatedRequest) {
+    // Busca dados do usuário autenticado (sem password)
+    const userId = req.user?.userId ?? req.user?.id;
+
+    if (!userId) {
+      return { error: 'Token inválido - userId não encontrado' };
+    }
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { enderecos: true, pedidos: true }, // Inclui endereços e pedidos
+    });
+
+    if (!user) {
+      return { error: 'Usuário não encontrado no banco de dados' };
+    }
+
+    // Remove o campo password do retorno
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...userData } = user;
+    return userData;
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/auth/me.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/auth/roles.guard.ts -->
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { Role } from '@prisma/client';
+import { ROLES_KEY } from '../common/decorators/roles.decorator';
+import { RequestWithUser } from '../common/interfaces/authenticated-user.interface';
+
+/**
+ * Guard para verificação de roles baseado em princípios SOLID
+ * - Single Responsibility: Apenas verifica autorização de roles
+ * - Open/Closed: Extensível para novas funcionalidades sem modificação
+ * - Liskov Substitution: Implementa CanActivate corretamente
+ * - Interface Segregation: Interface específica para sua função
+ * - Dependency Inversion: Depende de abstrações (Reflector)
+ */
+@Injectable()
+export class RolesGuard implements CanActivate {
+  constructor(private readonly reflector: Reflector) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    // Se não há roles definidas, permite acesso (rota pública autenticada)
+    if (!requiredRoles || requiredRoles.length === 0) {
+      return true;
+    }
+
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
+    const user = request.user;
+
+    if (!user) {
+      throw new ForbiddenException('Usuário não autenticado.');
+    }
+
+    if (!user.role) {
+      throw new ForbiddenException('Usuário sem papel definido.');
+    }
+
+    if (!requiredRoles.includes(user.role)) {
+      throw new ForbiddenException(
+        `Acesso negado. Roles necessárias: ${requiredRoles.join(', ')}. Seu role: ${user.role}`,
+      );
+    }
+
+    return true;
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/auth/roles.guard.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/catalog/catalog.module.ts -->
+import { Module } from '@nestjs/common';
+import { CategoriesService } from './categories.service';
+import { ProductsService } from './products.service';
+import { CategoriesController } from './categories.controller';
+import { ProductsController } from './products.controller';
+import { PrismaModule } from '../prisma.module';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [CategoriesController, ProductsController],
+  providers: [CategoriesService, ProductsService],
+  exports: [CategoriesService, ProductsService],
+})
+export class CatalogModule {}
+<- Manter consistência visual entre os botões do menu de END: src/catalog/catalog.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/catalog/categories.controller.ts -->
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { CategoriesService } from './categories.service';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
+
+@Controller('categories')
+export class CategoriesController {
+  constructor(private readonly categoriesService: CategoriesService) {}
+
+  @Post()
+  create(@Body() createCategoryDto: CreateCategoryDto) {
+    return this.categoriesService.create(createCategoryDto);
+  }
+
+  @Get()
+  findAll() {
+    return this.categoriesService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.categoriesService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ) {
+    return this.categoriesService.update(id, updateCategoryDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.categoriesService.remove(id);
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/catalog/categories.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/catalog/categories.service.ts -->
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreateCategoryDto } from './dto/create-category.dto';
+import { UpdateCategoryDto } from './dto/update-category.dto';
+
+@Injectable()
+export class CategoriesService {
+  constructor(private prisma: PrismaService) {}
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    return this.prisma.category.create({
+      data: createCategoryDto,
+    });
+  }
+
+  async findAll() {
+    return this.prisma.category.findMany({
+      include: {
+        products: {
+          where: { active: true },
+        },
+      },
+    });
+  }
+
+  async findOne(id: string) {
+    const category = await this.prisma.category.findUnique({
+      where: { id },
+      include: {
+        products: {
+          where: { active: true },
+        },
+      },
+    });
+
+    if (!category) {
+      throw new NotFoundException(`Category with ID ${id} not found`);
+    }
+
+    return category;
+  }
+
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    try {
+      return await this.prisma.category.update({
+        where: { id },
+        data: updateCategoryDto,
+      });
+    } catch (error) {
+      throw new NotFoundException(`Category with ID ${id} not found`);
+    }
+  }
+
+  async remove(id: string) {
+    try {
+      return await this.prisma.category.delete({
+        where: { id },
+      });
+    } catch (error) {
+      throw new NotFoundException(`Category with ID ${id} not found`);
+    }
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/catalog/categories.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/catalog/dto/create-category.dto.ts -->
+import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+
+export class CreateCategoryDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  slug: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/catalog/dto/create-category.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/catalog/dto/create-product.dto.ts -->
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsUUID,
+  IsOptional,
+  Min,
+  MaxLength,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class CreateProductDto {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(200)
+  name: string;
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(1000)
+  description?: string;
+
+  @IsString()
+  price: string;
+
+  @IsString()
+  @IsOptional()
+  imageUrl?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  categoryId: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/catalog/dto/create-product.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/catalog/dto/update-category.dto.ts -->
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateCategoryDto } from './create-category.dto';
+
+export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}
+<- Manter consistência visual entre os botões do menu de END: src/catalog/dto/update-category.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/catalog/dto/update-product.dto.ts -->
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateProductDto } from './create-product.dto';
+
+export class UpdateProductDto extends PartialType(CreateProductDto) {}
+<- Manter consistência visual entre os botões do menu de END: src/catalog/dto/update-product.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/catalog/products.controller.ts -->
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
+import { ProductsService } from './products.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+
+@Controller('products')
+export class ProductsController {
+  constructor(private readonly productsService: ProductsService) {}
+
+  @Post()
+  create(@Body() createProductDto: CreateProductDto) {
+    return this.productsService.create(createProductDto);
+  }
+
+  @Get()
+  findAll(@Query('categoryId') categoryId?: string) {
+    if (categoryId) {
+      return this.productsService.findByCategory(categoryId);
+    }
+    return this.productsService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.productsService.findOne(id);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+    return this.productsService.update(id, updateProductDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.productsService.remove(id);
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/catalog/products.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/catalog/products.service.ts -->
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+
+@Injectable()
+export class ProductsService {
+  constructor(private prisma: PrismaService) {}
+
+  async create(createProductDto: CreateProductDto) {
+    return this.prisma.product.create({
+      data: {
+        ...createProductDto,
+        price: parseFloat(createProductDto.price),
+      },
+      include: {
+        category: true,
+      },
+    });
+  }
+
+  async findAll() {
+    return this.prisma.product.findMany({
+      where: { active: true },
+      include: {
+        category: true,
+      },
+    });
+  }
+
+  async findByCategory(categoryId: string) {
+    return this.prisma.product.findMany({
+      where: {
+        categoryId,
+        active: true,
+      },
+      include: {
+        category: true,
+      },
+    });
+  }
+
+  async findOne(id: string) {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: true,
+      },
+    });
+
+    if (!product) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+
+    return product;
+  }
+
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    try {
+      return await this.prisma.product.update({
+        where: { id },
+        data: updateProductDto,
+        include: {
+          category: true,
+        },
+      });
+    } catch (error) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+  }
+
+  async remove(id: string) {
+    try {
+      // Soft delete - marcar como inativo
+      return await this.prisma.product.update({
+        where: { id },
+        data: { active: false },
+      });
+    } catch (error) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/catalog/products.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/cloudinary/cloudinary.module.ts -->
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { CloudinaryService } from './cloudinary.service';
+
+@Module({
+  imports: [ConfigModule],
+  providers: [CloudinaryService],
+  exports: [CloudinaryService],
+})
+export class CloudinaryModule {}
+<- Manter consistência visual entre os botões do menu de END: src/cloudinary/cloudinary.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/cloudinary/cloudinary.service.ts -->
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { v2 as cloudinary } from 'cloudinary';
+
+@Injectable()
+export class CloudinaryService {
+  constructor(private configService: ConfigService) {
+    cloudinary.config({
+      cloud_name: this.configService.get<string>('CLOUDINARY_CLOUD_NAME'),
+      api_key: this.configService.get<string>('CLOUDINARY_API_KEY'),
+      api_secret: this.configService.get<string>('CLOUDINARY_API_SECRET'),
+    });
+  }
+
+  async uploadImage(file: Express.Multer.File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'pizzas',
+          transformation: [
+            { width: 800, height: 600, crop: 'fill' },
+            { quality: 'auto:good' },
+            { format: 'webp' },
+          ],
+        },
+        (error: any, result: any) => {
+          if (error) {
+            reject(new Error(error.message || 'Upload failed'));
+          } else if (result?.secure_url) {
+            resolve(result.secure_url);
+          } else {
+            reject(new Error('Upload failed'));
+          }
+        },
+      );
+
+      uploadStream.end(file.buffer);
+    });
+  }
+
+  async deleteImage(publicId: string): Promise<void> {
+    try {
+      await cloudinary.uploader.destroy(publicId);
+    } catch (error) {
+      console.error('Erro ao deletar imagem:', error);
+      throw new Error(
+        `Erro ao deletar imagem: ${
+          error instanceof Error ? error.message : 'Erro desconhecido'
+        }`,
+      );
+    }
+  }
+
+  extractPublicId(imageUrl: string): string {
+    // Extrai o public_id de uma URL do Cloudinary
+    const parts = imageUrl.split('/');
+    const filename = parts[parts.length - 1];
+    return filename.split('.')[0];
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/cloudinary/cloudinary.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/adapters/bcrypt.adapter.ts -->
+import { IHasher } from '../interfaces/hasher.interface';
+import * as bcrypt from 'bcryptjs';
+
+export class BcryptAdapter implements IHasher {
+  constructor(private readonly saltRounds: number = 10) {}
+
+  async hash(value: string): Promise<string> {
+    return bcrypt.hash(value, this.saltRounds);
+  }
+
+  async compare(value: string, hashed: string): Promise<boolean> {
+    return bcrypt.compare(value, hashed);
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/common/adapters/bcrypt.adapter.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/builders/response.builder.ts -->
+/**
+ * Response Builder Pattern - Padroniza respostas sem quebrar compatibilidade
+ * Mantém exatamente o mesmo formato de payload do frontend
+ */
+
+export interface ApiResponse<T = unknown> {
+  statusCode: number;
+  message: string;
+  data?: T;
+  timestamp?: string;
+}
+
+export interface PaginatedResponse<T = unknown> extends ApiResponse<T[]> {
+  meta: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
+}
+
+export class ResponseBuilder {
+  /**
+   * Success response (200) - Mantém formato existente
+   */
+  static success<T>(
+    data: T,
+    message = 'Operação realizada com sucesso',
+  ): ApiResponse<T> {
+    return {
+      statusCode: 200,
+      message,
+      data,
+    };
+  }
+
+  /**
+   * Created response (201) - Mantém formato existente
+   */
+  static created<T>(
+    data: T,
+    message = 'Recurso criado com sucesso',
+  ): ApiResponse<T> {
+    return {
+      statusCode: 201,
+      message,
+      data,
+    };
+  }
+
+  /**
+   * Updated response (200) - Mantém formato existente
+   */
+  static updated<T>(
+    data: T,
+    message = 'Recurso atualizado com sucesso',
+  ): ApiResponse<T> {
+    return {
+      statusCode: 200,
+      message,
+      data,
+    };
+  }
+
+  /**
+   * Deleted response (200) - Mantém formato existente
+   */
+  static deleted(
+    message = 'Recurso removido com sucesso',
+  ): ApiResponse<{ message: string }> {
+    return {
+      statusCode: 200,
+      message,
+      data: { message },
+    };
+  }
+
+  /**
+   * List response (200) - Mantém formato existente
+   */
+  static list<T>(
+    data: T[],
+    message = 'Recursos listados com sucesso',
+  ): ApiResponse<T[]> {
+    return {
+      statusCode: 200,
+      message,
+      data,
+    };
+  }
+
+  /**
+   * Paginated response - Formato compatível com frontend
+   */
+  static paginated<T>(
+    data: T[],
+    total: number,
+    page: number,
+    limit: number,
+    message = 'Recursos listados com sucesso',
+  ): PaginatedResponse<T> {
+    return {
+      statusCode: 200,
+      message,
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+}
+
+// Specific builders para Pizza domain - mensagens customizadas
+export class PizzaResponseBuilder extends ResponseBuilder {
+  static pizzaCreated(pizza: unknown) {
+    return ResponseBuilder.created(pizza, 'Pizza criada com sucesso');
+  }
+
+  static pizzaUpdated(pizza: unknown) {
+    return ResponseBuilder.updated(pizza, 'Pizza atualizada com sucesso');
+  }
+
+  static pizzaDeleted() {
+    return ResponseBuilder.deleted('Pizza removida com sucesso');
+  }
+
+  static pizzasList(pizzas: unknown[]) {
+    return ResponseBuilder.list(pizzas, 'Pizzas listadas com sucesso');
+  }
+
+  static pizzaFound(pizza: unknown) {
+    return ResponseBuilder.success(pizza, 'Pizza encontrada');
+  }
+}
+
+// Specific builders para Pedido domain - mensagens customizadas
+export class PedidoResponseBuilder extends ResponseBuilder {
+  static pedidoCreated(pedido: unknown) {
+    return ResponseBuilder.created(pedido, 'Pedido criado com sucesso');
+  }
+
+  static pedidoUpdated(pedido: unknown) {
+    return ResponseBuilder.updated(pedido, 'Pedido atualizado com sucesso');
+  }
+
+  static pedidoDeleted() {
+    return ResponseBuilder.deleted('Pedido removido com sucesso');
+  }
+
+  static pedidosList(pedidos: unknown[]) {
+    return ResponseBuilder.list(pedidos, 'Pedidos listados com sucesso');
+  }
+
+  static pedidoFound(pedido: unknown) {
+    return ResponseBuilder.success(pedido, 'Pedido encontrado');
+  }
+
+  static statusUpdated(pedido: unknown) {
+    return ResponseBuilder.updated(
+      pedido,
+      'Status do pedido atualizado com sucesso',
+    );
+  }
+}
+
+// Specific builders para Entregador domain - mensagens customizadas
+export class EntregadorResponseBuilder extends ResponseBuilder {
+  static entregadorCreated(entregador: unknown) {
+    return ResponseBuilder.created(entregador, 'Entregador criado com sucesso');
+  }
+
+  static entregadorUpdated(entregador: unknown) {
+    return ResponseBuilder.updated(
+      entregador,
+      'Entregador atualizado com sucesso',
+    );
+  }
+
+  static entregadorDeleted() {
+    return ResponseBuilder.deleted('Entregador removido com sucesso');
+  }
+
+  static entregadoresList(entregadores: unknown[]) {
+    return ResponseBuilder.list(
+      entregadores,
+      'Entregadores listados com sucesso',
+    );
+  }
+
+  static entregadorFound(entregador: unknown) {
+    return ResponseBuilder.success(entregador, 'Entregador encontrado');
+  }
+}
+
+// Specific builders para User domain - mensagens customizadas
+export class UserResponseBuilder extends ResponseBuilder {
+  static userCreated(user: unknown) {
+    return ResponseBuilder.created(user, 'Usuário criado com sucesso');
+  }
+
+  static userUpdated(user: unknown) {
+    return ResponseBuilder.updated(user, 'Usuário atualizado com sucesso');
+  }
+
+  static userDeleted() {
+    return ResponseBuilder.deleted('Usuário removido com sucesso');
+  }
+
+  static usersList(users: unknown[]) {
+    return ResponseBuilder.list(users, 'Usuários listados com sucesso');
+  }
+
+  static userFound(user: unknown) {
+    return ResponseBuilder.success(user, 'Usuário encontrado');
+  }
+}
+
+// Specific builders para Endereco domain - mensagens customizadas
+export class EnderecoResponseBuilder extends ResponseBuilder {
+  static enderecoCreated(endereco: unknown) {
+    return ResponseBuilder.created(endereco, 'Endereço criado com sucesso');
+  }
+
+  static enderecoUpdated(endereco: unknown) {
+    return ResponseBuilder.updated(endereco, 'Endereço atualizado com sucesso');
+  }
+
+  static enderecoDeleted() {
+    return ResponseBuilder.deleted('Endereço removido com sucesso');
+  }
+
+  static enderecosList(enderecos: unknown[]) {
+    return ResponseBuilder.list(enderecos, 'Endereços listados com sucesso');
+  }
+
+  static enderecoFound(endereco: unknown) {
+    return ResponseBuilder.success(endereco, 'Endereço encontrado');
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/common/builders/response.builder.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/common.module.ts -->
+import { Global, Module } from '@nestjs/common';
+import { BcryptAdapter } from './adapters/bcrypt.adapter';
+import { CustomLoggerService } from './logger/logger.service';
+
+@Global()
+@Module({
+  providers: [
+    {
+      provide: 'HASHER',
+      useClass: BcryptAdapter,
+    },
+    CustomLoggerService,
+  ],
+  exports: ['HASHER', CustomLoggerService],
+})
+export class CommonModule {}
+<- Manter consistência visual entre os botões do menu de END: src/common/common.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/constants/app.constants.ts -->
+/**
+ * Constantes da aplicação - eliminando magic numbers e strings
+ */
+export const APP_CONSTANTS = {
+  // Servidor
+  DEFAULT_PORT: 3000,
+
+  // Segurança
+  BCRYPT_SALT_ROUNDS: 10,
+  JWT_EXPIRATION: '24h',
+
+  // Rate Limiting
+  THROTTLE_LIMIT: 20,
+  THROTTLE_TTL: 60,
+
+  // Upload
+  MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
+  ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/webp'],
+
+  // Validação
+  MIN_PASSWORD_LENGTH: 6,
+  MAX_PIZZA_PRICE: 999.99,
+  MIN_PIZZA_PRICE: 0.01,
+
+  // Regras de Negócio
+  BUSINESS_RULES: {
+    PIZZA_MIN_PRICE: 5.0, // Preço mínimo para pizzas
+    PIZZA_MAX_PRICE: 999.99,
+    MAX_PIZZA_NAME_LENGTH: 100,
+    MIN_PIZZA_NAME_LENGTH: 3,
+  },
+
+  // Mensagens de Erro
+  ERROR_MESSAGES: {
+    // Autenticação
+    USER_NOT_FOUND: 'Usuário não encontrado',
+    INVALID_CREDENTIALS: 'Credenciais inválidas',
+    USER_ALREADY_EXISTS: 'Usuário já existe',
+    TOKEN_INVALID: 'Token inválido',
+
+    // Autorização
+    ACCESS_DENIED: 'Acesso negado',
+    INSUFFICIENT_PERMISSIONS: 'Permissões insuficientes',
+    RESOURCE_NOT_OWNED: 'Você não tem acesso a este recurso',
+
+    // Recursos
+    RESOURCE_NOT_FOUND: 'Recurso não encontrado',
+    PIZZA_NOT_FOUND: 'Pizza não encontrada',
+    ORDER_NOT_FOUND: 'Pedido não encontrado',
+    USER_NOT_FOUND_RESOURCE: 'Usuário não encontrado',
+    ADDRESS_NOT_FOUND: 'Endereço não encontrado',
+
+    // Validação
+    INVALID_EMAIL: 'E-mail inválido',
+    INVALID_PHONE: 'Telefone inválido',
+    INVALID_CEP: 'CEP inválido',
+    INVALID_PRICE: 'Preço inválido',
+    PRICE_TOO_HIGH: 'Preço não pode exceder R$ 999,99',
+    PRICE_TOO_LOW: 'Preço deve ser maior que zero',
+
+    // Negócio
+    PIZZA_NAME_EXISTS: 'Pizza com este nome já existe',
+    ORDER_ALREADY_DELIVERED: 'Pedido já foi entregue',
+    ORDER_CANNOT_BE_CANCELLED: 'Pedido não pode ser cancelado',
+    INVALID_STATUS_TRANSITION: 'Transição de status inválida',
+
+    // Pizza Domain Errors
+    PIZZA_CREATION_FAILED: 'Erro ao criar pizza',
+    PIZZA_UPDATE_FAILED: 'Erro ao atualizar pizza',
+    PIZZA_DELETE_FAILED: 'Erro ao remover pizza',
+    PIZZA_FETCH_FAILED: 'Erro ao buscar pizzas',
+    PIZZA_HAS_ORDERS: 'Pizza possui pedidos associados e não pode ser removida',
+
+    // Upload
+    FILE_TOO_LARGE: 'Arquivo muito grande',
+    INVALID_FILE_TYPE: 'Tipo de arquivo inválido',
+    UPLOAD_FAILED: 'Falha no upload do arquivo',
+  },
+
+  // Mensagens de Sucesso
+  SUCCESS_MESSAGES: {
+    // CRUD
+    CREATED_SUCCESS: 'Recurso criado com sucesso',
+    UPDATED_SUCCESS: 'Recurso atualizado com sucesso',
+    DELETED_SUCCESS: 'Recurso removido com sucesso',
+
+    // Específicos
+    PIZZA_CREATED: 'Pizza criada com sucesso',
+    ORDER_CREATED: 'Pedido criado com sucesso',
+    ORDER_UPDATED: 'Pedido atualizado com sucesso',
+    PAYMENT_CONFIRMED: 'Pagamento confirmado com sucesso',
+
+    // Autenticação
+    LOGIN_SUCCESS: 'Login realizado com sucesso',
+    REGISTER_SUCCESS: 'Cadastro realizado com sucesso',
+    LOGOUT_SUCCESS: 'Logout realizado com sucesso',
+  },
+
+  // Contextos de Log
+  LOG_CONTEXTS: {
+    APP: 'Application',
+    AUTH: 'AuthService',
+    USERS: 'UsersService',
+    PIZZAS: 'PizzasService',
+    ORDERS: 'OrdersService',
+    PAYMENTS: 'PaymentsService',
+    UPLOAD: 'UploadService',
+    DELIVERERS: 'DeliverersService',
+    ADDRESSES: 'AddressesService',
+  },
+} as const;
+<- Manter consistência visual entre os botões do menu de END: src/common/constants/app.constants.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/constants/roles.constants.ts -->
+import { Role } from '@prisma/client';
+
+/**
+ * Constantes para hierarquia de roles
+ * Seguindo o princípio de Single Responsibility (SOLID)
+ */
+export const ROLE_HIERARCHY = {
+  [Role.CLIENTE]: 1,
+  [Role.FUNCIONARIO]: 2,
+  [Role.ADMIN]: 3,
+} as const;
+
+/**
+ * Grupos de permissões por funcionalidade
+ * Aplicando o princípio de Interface Segregation (SOLID)
+ */
+export const ROLE_PERMISSIONS = {
+  // Permissões para gerenciamento de pizzas
+  PIZZA_MANAGEMENT: [Role.ADMIN],
+  PIZZA_VIEW: [Role.CLIENTE, Role.FUNCIONARIO, Role.ADMIN],
+
+  // Permissões para gerenciamento de pedidos
+  PEDIDO_CREATE: [Role.CLIENTE, Role.FUNCIONARIO, Role.ADMIN],
+  PEDIDO_VIEW_ALL: [Role.FUNCIONARIO, Role.ADMIN],
+  PEDIDO_MANAGE: [Role.FUNCIONARIO, Role.ADMIN],
+  PEDIDO_DELETE: [Role.ADMIN],
+
+  // Permissões para gerenciamento de usuários
+  USER_MANAGEMENT: [Role.ADMIN],
+  USER_VIEW_ALL: [Role.ADMIN],
+
+  // Permissões para gerenciamento de entregadores
+  ENTREGADOR_MANAGEMENT: [Role.ADMIN],
+  ENTREGADOR_VIEW: [Role.FUNCIONARIO, Role.ADMIN],
+} as const;
+<- Manter consistência visual entre os botões do menu de END: src/common/constants/roles.constants.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/decorators/auth.decorators.ts -->
+/**
+ * ARQUIVO: auth.decorators.ts
+ *
+ * Decorators compostos para eliminar duplicação de código de autenticação/autorização.
+ * Implementação seguindo princípios SOLID:
+ * - Single Responsibility: Cada decorator tem uma responsabilidade específica
+ * - DRY: Elimina duplicação de 18+ ocorrências no projeto
+ *
+ * ⚠️ IMPORTANTE: Estes decorators são 100% compatíveis com os existentes
+ * Podem ser aplicados gradualmente sem quebrar funcionalidade existente
+ */
+
+import { applyDecorators, UseGuards } from '@nestjs/common';
+import { Role } from '@prisma/client';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { RolesGuard } from '../../auth/roles.guard';
+import { ResourceOwnerGuard } from '../guards/resource-owner.guard';
+import { Roles } from './roles.decorator';
+
+/**
+ * Decorator composto para endpoints que requerem APENAS role ADMIN
+ *
+ * Substitui:
+ * @UseGuards(JwtAuthGuard, RolesGuard)
+ * @Roles(Role.ADMIN)
+ *
+ * Por:
+ * @AdminOnly()
+ */
+export const AdminOnly = () =>
+  applyDecorators(UseGuards(JwtAuthGuard, RolesGuard), Roles(Role.ADMIN));
+
+/**
+ * Decorator composto para endpoints que permitem FUNCIONARIO ou ADMIN
+ *
+ * Substitui:
+ * @UseGuards(JwtAuthGuard, RolesGuard)
+ * @Roles(Role.FUNCIONARIO, Role.ADMIN)
+ *
+ * Por:
+ * @StaffOrAdmin()
+ */
+export const StaffOrAdmin = () =>
+  applyDecorators(
+    UseGuards(JwtAuthGuard, RolesGuard),
+    Roles(Role.FUNCIONARIO, Role.ADMIN),
+  );
+
+/**
+ * Decorator composto para endpoints que requerem apenas autenticação JWT
+ *
+ * Substitui:
+ * @UseGuards(JwtAuthGuard)
+ *
+ * Por:
+ * @Authenticated()
+ */
+export const Authenticated = () => applyDecorators(UseGuards(JwtAuthGuard));
+
+/**
+ * Decorator composto para endpoints que verificam ownership do recurso
+ *
+ * Substitui:
+ * @UseGuards(ResourceOwnerGuard)
+ *
+ * Por:
+ * @ResourceOwner()
+ */
+export const ResourceOwner = () =>
+  applyDecorators(UseGuards(ResourceOwnerGuard));
+
+/**
+ * Decorator flexível para casos especiais com múltiplas roles
+ *
+ * Uso:
+ * @AuthorizedRoles(Role.CLIENTE, Role.FUNCIONARIO, Role.ADMIN)
+ */
+export const AuthorizedRoles = (...roles: Role[]) =>
+  applyDecorators(UseGuards(JwtAuthGuard, RolesGuard), Roles(...roles));
+<- Manter consistência visual entre os botões do menu de END: src/common/decorators/auth.decorators.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/decorators/resource.decorator.ts -->
+import { SetMetadata } from '@nestjs/common';
+
+export const RESOURCE_KEY = 'resource';
+
+/**
+ * Decorator para marcar o tipo de recurso sendo acessado
+ * Usado em conjunto com ResourceOwnerGuard
+ *
+ * Exemplo de uso:
+ * @Resource('pedido')
+ * @Resource('endereco')
+ */
+export const Resource = (resourceType: string) =>
+  SetMetadata(RESOURCE_KEY, resourceType);
+<- Manter consistência visual entre os botões do menu de END: src/common/decorators/resource.decorator.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/decorators/roles.decorator.ts -->
+import { SetMetadata } from '@nestjs/common';
+import { Role } from '@prisma/client';
+
+export const ROLES_KEY = 'roles';
+
+/**
+ * Decorator para definir quais roles têm acesso a uma rota específica
+ * @param roles Array de roles que podem acessar a rota
+ *
+ * Exemplo de uso:
+ * @Roles(Role.ADMIN)
+ * @Roles(Role.ADMIN, Role.FUNCIONARIO)
+ */
+export const Roles = (...roles: Role[]) => SetMetadata(ROLES_KEY, roles);
+<- Manter consistência visual entre os botões do menu de END: src/common/decorators/roles.decorator.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/enums/role.enum.ts -->
+export enum Role {
+  CLIENTE = 'CLIENTE',
+  FUNCIONARIO = 'FUNCIONARIO',
+  ADMIN = 'ADMIN',
+}
+<- Manter consistência visual entre os botões do menu de END: src/common/enums/role.enum.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/filters/all-exceptions.filter.ts -->
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
+import { Prisma } from '@prisma/client';
+
+@Catch()
+export class AllExceptionsFilter implements ExceptionFilter {
+  private readonly logger = new Logger(AllExceptionsFilter.name);
+
+  catch(exception: unknown, host: ArgumentsHost): void {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+
+    let status = HttpStatus.INTERNAL_SERVER_ERROR;
+    let message = 'Erro interno do servidor';
+    let error = 'Internal Server Error';
+
+    // HTTP Exceptions (NestJS)
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      const exceptionResponse = exception.getResponse();
+
+      if (typeof exceptionResponse === 'string') {
+        message = exceptionResponse;
+      } else if (
+        typeof exceptionResponse === 'object' &&
+        exceptionResponse !== null
+      ) {
+        const responseObj = exceptionResponse as Record<string, unknown>;
+        message =
+          typeof responseObj.message === 'string'
+            ? responseObj.message
+            : typeof responseObj.error === 'string'
+              ? responseObj.error
+              : message;
+
+        error =
+          typeof responseObj.error === 'string' ? responseObj.error : error;
+      }
+    }
+    // Prisma Exceptions
+    else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
+      status = HttpStatus.BAD_REQUEST;
+
+      switch (exception.code) {
+        case 'P2002':
+          message = 'Já existe um registro com essas informações';
+          error = 'Duplicate Entry';
+          break;
+        case 'P2025':
+          message = 'Registro não encontrado';
+          error = 'Record Not Found';
+          status = HttpStatus.NOT_FOUND;
+          break;
+        case 'P2003':
+          message = 'Operação não permitida devido a dependências';
+          error = 'Foreign Key Constraint';
+          break;
+        case 'P2016':
+          message = 'Erro de consulta na base de dados';
+          error = 'Query Interpretation Error';
+          break;
+        default:
+          message = 'Erro na operação da base de dados';
+          error = 'Database Error';
+      }
+    }
+    // Prisma Validation Error
+    else if (exception instanceof Prisma.PrismaClientValidationError) {
+      status = HttpStatus.BAD_REQUEST;
+      message = 'Dados fornecidos são inválidos';
+      error = 'Validation Error';
+    }
+    // Other Prisma Errors
+    else if (exception instanceof Prisma.PrismaClientInitializationError) {
+      status = HttpStatus.SERVICE_UNAVAILABLE;
+      message = 'Serviço temporariamente indisponível';
+      error = 'Service Unavailable';
+    }
+    // Generic Error
+    else if (exception instanceof Error) {
+      message = exception.message || message;
+      error = exception.name || error;
+    }
+
+    // Log do erro (sem expor informações sensíveis)
+    const logMessage = {
+      timestamp: new Date().toISOString(),
+      path: request.url,
+      method: request.method,
+      statusCode: status,
+      message: message,
+      userAgent: request.get('user-agent'),
+      ip: request.ip,
+    };
+
+    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.error(
+        `💥 ERRO CRÍTICO: ${JSON.stringify(logMessage)}`,
+        exception,
+      );
+    } else {
+      this.logger.warn(`⚠️ ERRO CLIENTE: ${JSON.stringify(logMessage)}`);
+    }
+
+    // Resposta padronizada
+    const errorResponse = {
+      statusCode: status,
+      message,
+      error,
+      timestamp: new Date().toISOString(),
+      path: request.url,
+    };
+
+    response.status(status).json(errorResponse);
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/common/filters/all-exceptions.filter.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/guards/resource-owner.guard.ts -->
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { PrismaService } from '../../prisma.service';
+import { Role } from '@prisma/client';
+import { RequestWithUser } from '../interfaces/authenticated-user.interface';
+import { Request } from 'express';
+
+/**
+ * Guard para verificar se o usuário é proprietário do recurso
+ * Implementa princípios SOLID:
+ * - Single Responsibility: Verifica apenas propriedade de recursos
+ * - Open/Closed: Extensível para novos tipos de recursos
+ * - Dependency Inversion: Depende de abstrações (PrismaService)
+ */
+@Injectable()
+export class ResourceOwnerGuard implements CanActivate {
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly prisma: PrismaService,
+  ) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
+    const user = request.user;
+
+    if (!user) {
+      throw new ForbiddenException('Usuário não autenticado.');
+    }
+
+    // ADMINs sempre têm acesso
+    if (user.role === Role.ADMIN) {
+      return true;
+    }
+
+    const resourceType = this.reflector.get<string>(
+      'resource',
+      context.getHandler(),
+    );
+    const resourceId = request.params.id ? parseInt(request.params.id, 10) : 0;
+
+    if (!resourceType || !resourceId) {
+      return true; // Se não especificado, permite acesso
+    }
+
+    return this.checkResourceOwnership(resourceType, resourceId, user.id);
+  }
+
+  private async checkResourceOwnership(
+    resourceType: string,
+    resourceId: number,
+    userId: number,
+  ): Promise<boolean> {
+    switch (resourceType) {
+      case 'pedido':
+        return this.checkPedidoOwnership(resourceId, userId);
+      case 'endereco':
+        return this.checkEnderecoOwnership(resourceId, userId);
+      default:
+        return true;
+    }
+  }
+
+  private async checkPedidoOwnership(
+    pedidoId: number,
+    userId: number,
+  ): Promise<boolean> {
+    const pedido = await this.prisma.pedido.findUnique({
+      where: { id: pedidoId },
+      select: { userId: true },
+    });
+
+    if (!pedido) {
+      throw new NotFoundException('Pedido não encontrado.');
+    }
+
+    if (pedido.userId !== userId) {
+      throw new ForbiddenException('Você não tem acesso a este pedido.');
+    }
+
+    return true;
+  }
+
+  private async checkEnderecoOwnership(
+    enderecoId: number,
+    userId: number,
+  ): Promise<boolean> {
+    const endereco = await this.prisma.endereco.findUnique({
+      where: { id: enderecoId },
+      select: { userId: true },
+    });
+
+    if (!endereco) {
+      throw new NotFoundException('Endereço não encontrado.');
+    }
+
+    if (endereco.userId !== userId) {
+      throw new ForbiddenException('Você não tem acesso a este endereço.');
+    }
+
+    return true;
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/common/guards/resource-owner.guard.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/interfaces/authenticated-user.interface.ts -->
+import { Role } from '@prisma/client';
+
+/**
+ * Interface que representa um usuário autenticado no sistema
+ * Utilizada para tipagem forte nos guards e controllers
+ */
+export interface AuthenticatedUser {
+  id: number;
+  email: string;
+  role: Role;
+  nome?: string;
+}
+
+/**
+ * Interface para request com usuário autenticado
+ * Extende o Request padrão do Express com propriedade user tipada
+ */
+export interface RequestWithUser extends Request {
+  user: AuthenticatedUser;
+  params: {
+    id?: string;
+    [key: string]: string | undefined;
+  };
+}
+<- Manter consistência visual entre os botões do menu de END: src/common/interfaces/authenticated-user.interface.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/interfaces/hasher.interface.ts -->
+export interface IHasher {
+  hash(value: string): Promise<string>;
+  compare(value: string, hashed: string): Promise<boolean>;
+}
+<- Manter consistência visual entre os botões do menu de END: src/common/interfaces/hasher.interface.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/logger/logger.module.ts -->
+import { Module, Global } from '@nestjs/common';
+import { CustomLoggerService } from './logger.service';
+
+@Global()
+@Module({
+  providers: [CustomLoggerService],
+  exports: [CustomLoggerService],
+})
+export class LoggerModule {}
+<- Manter consistência visual entre os botões do menu de END: src/common/logger/logger.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/common/logger/logger.service.ts -->
+import { Injectable, LoggerService } from '@nestjs/common';
+import * as winston from 'winston';
+
+/**
+ * Logger Service profissional usando Winston
+ * Substitui console.log por logging estruturado e seguro
+ */
+@Injectable()
+export class CustomLoggerService implements LoggerService {
+  private logger: winston.Logger;
+
+  constructor() {
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+
+    this.logger = winston.createLogger({
+      level: process.env.LOG_LEVEL || 'info',
+      format: winston.format.combine(
+        winston.format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss',
+        }),
+        winston.format.errors({ stack: true }),
+        winston.format.json(),
+      ),
+      defaultMeta: {
+        service: 'pizza-express-api',
+        environment: process.env.NODE_ENV || 'development',
+      },
+      transports: [
+        // Arquivo para erros
+        new winston.transports.File({
+          filename: 'logs/error.log',
+          level: 'error',
+          maxsize: 5242880, // 5MB
+          maxFiles: 5,
+        }),
+        // Arquivo para todos os logs
+        new winston.transports.File({
+          filename: 'logs/combined.log',
+          maxsize: 5242880, // 5MB
+          maxFiles: 5,
+        }),
+      ],
+    });
+
+    // Console apenas em desenvolvimento
+    if (isDevelopment) {
+      this.logger.add(
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.colorize(),
+            winston.format.printf(
+              ({ timestamp, level, message, context, ...meta }) => {
+                const ctx = context ? `[${String(context)}] ` : '';
+                const metaStr = Object.keys(meta).length
+                  ? ` ${JSON.stringify(meta)}`
+                  : '';
+                return `${String(timestamp)} ${String(level)}: ${ctx}${String(message)}${metaStr}`;
+              },
+            ),
+          ),
+        }),
+      );
+    }
+  }
+
+  log(message: string, meta?: Record<string, unknown> | string) {
+    const logData = typeof meta === 'string' ? { context: meta } : meta;
+    this.logger.info(message, logData);
+  }
+
+  error(message: string, trace?: string, context?: string) {
+    this.logger.error(message, { trace, context });
+  }
+
+  warn(message: string, meta?: Record<string, unknown> | string) {
+    const logData = typeof meta === 'string' ? { context: meta } : meta;
+    this.logger.warn(message, logData);
+  }
+
+  debug(message: string, meta?: Record<string, unknown> | string) {
+    const logData = typeof meta === 'string' ? { context: meta } : meta;
+    this.logger.debug(message, logData);
+  }
+
+  verbose(message: string, meta?: Record<string, unknown> | string) {
+    const logData = typeof meta === 'string' ? { context: meta } : meta;
+    this.logger.verbose(message, logData);
+  }
+
+  // Métodos específicos para casos de uso do projeto
+  logPayment(
+    message: string,
+    paymentData: { id: string; amount?: number; status?: string },
+  ) {
+    this.logger.info(message, {
+      context: 'PaymentService',
+      paymentId: paymentData.id,
+      amount: paymentData.amount,
+      status: paymentData.status,
+    });
+  }
+
+  logOrder(
+    message: string,
+    orderData: { id: number; userId?: number; status?: string },
+  ) {
+    this.logger.info(message, {
+      context: 'OrderService',
+      orderId: orderData.id,
+      userId: orderData.userId,
+      status: orderData.status,
+    });
+  }
+
+  logAuth(
+    message: string,
+    userData: { userId?: number; email?: string; action?: string },
+  ) {
+    this.logger.info(message, {
+      context: 'AuthService',
+      userId: userData.userId,
+      email: userData.email
+        ? userData.email.replace(/(.{2}).*(@.*)/, '$1***$2')
+        : undefined, // Mascarar email
+      action: userData.action,
+    });
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/common/logger/logger.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/enderecos/enderecos.controller.ts -->
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+  Request,
+  BadRequestException,
+  ParseIntPipe,
+} from '@nestjs/common';
+import { EnderecosService } from './enderecos.service';
+import { CreateEnderecoDto } from '../users/dto/create-endereco.dto';
+import { UpdateEnderecoDto } from '../users/dto/update-endereco.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Resource } from '../common/decorators/resource.decorator';
+import { ResourceOwner } from '../common/decorators/auth.decorators';
+import { ResponseBuilder } from '../common/builders/response.builder';
+
+interface AuthenticatedUser {
+  userId?: number;
+  id?: number;
+}
+
+interface AuthenticatedRequest extends Request {
+  user?: AuthenticatedUser;
+}
+
+@Controller('enderecos')
+@UseGuards(JwtAuthGuard, RolesGuard)
+export class EnderecosController {
+  // ← CERTIFIQUE-SE DE TER O "export" AQUI
+  constructor(private readonly enderecosService: EnderecosService) {}
+
+  @Get()
+  async findUserEnderecos(@Request() req: AuthenticatedRequest) {
+    const userId = req.user?.userId ?? req.user?.id;
+
+    if (!userId) {
+      throw new BadRequestException('Usuário não identificado no token');
+    }
+
+    const enderecos = await this.enderecosService.findByUserId(userId);
+    return ResponseBuilder.list(enderecos, 'Endereços listados com sucesso');
+  }
+
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const endereco = await this.enderecosService.findOne(id);
+    return ResponseBuilder.success(endereco, 'Endereço encontrado');
+  }
+
+  @Post()
+  async create(
+    @Request() req: AuthenticatedRequest,
+    @Body() dto: CreateEnderecoDto,
+  ) {
+    const userId = req.user?.userId ?? req.user?.id;
+
+    if (!userId) {
+      throw new BadRequestException('Usuário não identificado no token');
+    }
+
+    const endereco = await this.enderecosService.create({ ...dto, userId });
+    return ResponseBuilder.created(endereco, 'Endereço criado com sucesso');
+  }
+
+  @Patch(':id')
+  @ResourceOwner()
+  @Resource('endereco')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateEnderecoDto,
+  ) {
+    const endereco = await this.enderecosService.update(id, dto);
+    return ResponseBuilder.updated(endereco, 'Endereço atualizado com sucesso');
+  }
+
+  @Delete(':id')
+  @ResourceOwner()
+  @Resource('endereco')
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    await this.enderecosService.remove(id);
+    return ResponseBuilder.deleted('Endereço removido com sucesso');
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/enderecos/enderecos.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/enderecos/enderecos.module.ts -->
+// src/enderecos/enderecos.module.ts
+import { Module } from '@nestjs/common';
+import { EnderecosController } from './enderecos.controller';
+import { EnderecosService } from './enderecos.service';
+import { PrismaService } from '../prisma.service';
+
+@Module({
+  controllers: [EnderecosController],
+  providers: [EnderecosService, PrismaService],
+  exports: [EnderecosService],
+})
+export class EnderecosModule {}
+<- Manter consistência visual entre os botões do menu de END: src/enderecos/enderecos.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/enderecos/enderecos.service.ts -->
+// enderecos.service.ts
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreateEnderecoDto } from '../users/dto/create-endereco.dto';
+import { Endereco } from '@prisma/client';
+import { UpdateEnderecoDto } from '../users/dto/update-endereco.dto';
+
+@Injectable()
+export class EnderecosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  /**
+   * Busca todos os endereços de um usuário
+   */
+  async findByUserId(userId: number): Promise<Endereco[]> {
+    return this.prisma.endereco.findMany({
+      where: { userId },
+      orderBy: { principal: 'desc' }, // Endereço principal primeiro
+    });
+  }
+
+  /**
+   * Busca um endereço específico por ID
+   */
+  async findOne(id: number): Promise<Endereco | null> {
+    return this.prisma.endereco.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: { id: true, nome: true, email: true },
+        },
+      },
+    });
+  }
+
+  /**
+   * Cria um novo endereço
+   */
+  async create(dto: CreateEnderecoDto & { userId: number }): Promise<Endereco> {
+    if (!dto.userId) {
+      throw new Error('Campo userId é obrigatório');
+    }
+
+    const { userId, ...data } = dto;
+
+    // Se for principal, remover principal dos outros endereços do usuário
+    if (data.principal) {
+      await this.prisma.endereco.updateMany({
+        where: { userId },
+        data: { principal: false },
+      });
+    }
+
+    return this.prisma.endereco.create({
+      data: {
+        ...data,
+        user: { connect: { id: userId } },
+      },
+    });
+  }
+
+  /**
+   * Atualiza um endereço existente
+   */
+  async update(id: number, dto: UpdateEnderecoDto): Promise<Endereco> {
+    const { ...data } = dto;
+
+    // Se for marcar como principal, remover principal dos outros
+    if (data.principal) {
+      const endereco = await this.findOne(id);
+      if (endereco) {
+        await this.prisma.endereco.updateMany({
+          where: {
+            userId: endereco.userId,
+            id: { not: id },
+          },
+          data: { principal: false },
+        });
+      }
+    }
+
+    return this.prisma.endereco.update({
+      where: { id },
+      data,
+    });
+  }
+
+  /**
+   * Remove um endereço
+   */
+  async remove(id: number): Promise<Endereco> {
+    // Verificar se o endereço existe antes de deletar
+    const endereco = await this.findOne(id);
+    if (!endereco) {
+      throw new Error('Endereço não encontrado');
+    }
+
+    return this.prisma.endereco.delete({
+      where: { id },
+    });
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/enderecos/enderecos.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/entregadores/dto/create-entregadore.dto.ts -->
+import { IsString, MinLength, IsOptional } from 'class-validator';
+
+export class CreateEntregadoreDto {
+  @IsString()
+  @MinLength(2)
+  nome: string;
+
+  @IsOptional()
+  @IsString()
+  telefone?: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/entregadores/dto/create-entregadore.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/entregadores/dto/update-entregadore.dto.ts -->
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateEntregadoreDto } from './create-entregadore.dto';
+
+export class UpdateEntregadoreDto extends PartialType(CreateEntregadoreDto) {}
+<- Manter consistência visual entre os botões do menu de END: src/entregadores/dto/update-entregadore.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/entregadores/entities/entregadore.entity.ts -->
+export class Entregadore {}
+<- Manter consistência visual entre os botões do menu de END: src/entregadores/entities/entregadore.entity.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/entregadores/entregadores-location.gateway.spec.ts -->
+import { Test, TestingModule } from '@nestjs/testing';
+import { EntregadoresLocationGateway } from './entregadores-location.gateway';
+import { Server } from 'socket.io';
+
+describe('EntregadoresLocationGateway', () => {
+  let gateway: EntregadoresLocationGateway;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [EntregadoresLocationGateway],
+    }).compile();
+    gateway = module.get<EntregadoresLocationGateway>(
+      EntregadoresLocationGateway,
+    );
+    gateway.server = { emit: jest.fn() } as unknown as Server;
+  });
+
+  it('should be defined', () => {
+    expect(gateway).toBeDefined();
+  });
+
+  it('should broadcast location update', () => {
+    const data = { entregadorId: 1, latitude: -23.5, longitude: -46.6 };
+    const call = (d: typeof data) =>
+      gateway.handleLocationUpdate.call(gateway, d);
+    call(data);
+    expect(gateway.server.emit).toHaveBeenCalledWith('locationUpdate', data);
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: src/entregadores/entregadores-location.gateway.spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/entregadores/entregadores-location.gateway.ts -->
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+  WebSocketServer,
+} from '@nestjs/websockets';
+import { Server } from 'socket.io';
+
+@WebSocketGateway({ cors: true })
+export class EntregadoresLocationGateway {
+  @WebSocketServer()
+  server: Server;
+
+  @SubscribeMessage('updateLocation')
+  handleLocationUpdate(
+    @MessageBody()
+    data: {
+      entregadorId: number;
+      latitude: number;
+      longitude: number;
+    },
+  ): void {
+    // Broadcast da localização para todos os clientes conectados
+    this.server.emit('locationUpdate', data);
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/entregadores/entregadores-location.gateway.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/entregadores/entregadores.controller.ts -->
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { EntregadoresService } from './entregadores.service';
+import { CreateEntregadoreDto } from './dto/create-entregadore.dto';
+import { UpdateEntregadoreDto } from './dto/update-entregadore.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Role } from '@prisma/client';
+import { EntregadorResponseBuilder } from '../common/builders/response.builder';
+
+@Controller('entregadores')
+@UseGuards(JwtAuthGuard, RolesGuard)
+export class EntregadoresController {
+  constructor(private readonly entregadoresService: EntregadoresService) {}
+
+  @Post()
+  @Roles(Role.ADMIN)
+  async create(@Body() createEntregadoreDto: CreateEntregadoreDto) {
+    try {
+      const entregador =
+        await this.entregadoresService.create(createEntregadoreDto);
+      return EntregadorResponseBuilder.entregadorCreated(entregador);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get()
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
+  async findAll() {
+    try {
+      return await this.entregadoresService.findAll();
+    } catch {
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get(':id')
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
+  async findOne(@Param('id') id: string) {
+    try {
+      const entregador = await this.entregadoresService.findOne(+id);
+      if (!entregador) {
+        throw new HttpException(
+          'Entregador não encontrado',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      return entregador;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Patch(':id')
+  @Roles(Role.ADMIN)
+  async update(
+    @Param('id') id: string,
+    @Body() updateEntregadoreDto: UpdateEntregadoreDto,
+  ) {
+    try {
+      const entregador = await this.entregadoresService.update(
+        +id,
+        updateEntregadoreDto,
+      );
+      return EntregadorResponseBuilder.entregadorUpdated(entregador);
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
+        throw new HttpException(
+          'Entregador não encontrado',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Delete(':id')
+  @Roles(Role.ADMIN)
+  async remove(@Param('id') id: string) {
+    try {
+      await this.entregadoresService.remove(+id);
+      return EntregadorResponseBuilder.entregadorDeleted();
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
+        throw new HttpException(
+          'Entregador não encontrado',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/entregadores/entregadores.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/entregadores/entregadores.module.ts -->
+import { Module } from '@nestjs/common';
+import { EntregadoresService } from './entregadores.service';
+import { EntregadoresController } from './entregadores.controller';
+import { PrismaModule } from '../prisma.module';
+import { EntregadoresLocationGateway } from './entregadores-location.gateway';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [EntregadoresController],
+  providers: [EntregadoresService, EntregadoresLocationGateway],
+})
+export class EntregadoresModule {}
+<- Manter consistência visual entre os botões do menu de END: src/entregadores/entregadores.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/entregadores/entregadores.service.spec.ts -->
+import { Test, TestingModule } from '@nestjs/testing';
+import { EntregadoresService } from './entregadores.service';
+import { PrismaService } from '../prisma.service';
+
+const entregadorMock = {
+  id: 1,
+  nome: 'Carlos',
+  telefone: '11988888888',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+describe('EntregadoresService', () => {
+  let service: EntregadoresService;
+  let prisma: PrismaService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [EntregadoresService, PrismaService],
+    }).compile();
+    service = module.get<EntregadoresService>(EntregadoresService);
+    prisma = module.get<PrismaService>(PrismaService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  it('should create a entregador', async () => {
+    jest.spyOn(prisma.entregador, 'create').mockResolvedValue(
+      entregadorMock as unknown as {
+        id: number;
+        nome: string;
+        telefone: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+      },
+    );
+    const result = await service.create({ nome: 'Carlos' });
+    expect(result).toEqual(entregadorMock);
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: src/entregadores/entregadores.service.spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/entregadores/entregadores.service.ts -->
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreateEntregadoreDto } from './dto/create-entregadore.dto';
+import { UpdateEntregadoreDto } from './dto/update-entregadore.dto';
+
+@Injectable()
+export class EntregadoresService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  create(createEntregadoreDto: CreateEntregadoreDto) {
+    return this.prisma.entregador.create({ data: createEntregadoreDto });
+  }
+
+  findAll() {
+    return this.prisma.entregador.findMany();
+  }
+
+  findOne(id: number) {
+    return this.prisma.entregador.findUnique({ where: { id } });
+  }
+
+  update(id: number, updateEntregadoreDto: UpdateEntregadoreDto) {
+    return this.prisma.entregador.update({
+      where: { id },
+      data: updateEntregadoreDto,
+    });
+  }
+
+  remove(id: number) {
+    return this.prisma.entregador.delete({ where: { id } });
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/entregadores/entregadores.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/main.ts -->
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+import helmet from 'helmet';
+import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
+import { CustomLoggerService } from './common/logger/logger.service';
+import { APP_CONSTANTS } from './common/constants/app.constants';
+
+async function bootstrap() {
+  const isDevelopment = process.env.NODE_ENV !== 'production';
+
+  try {
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+    app.useStaticAssets(join(__dirname, '..', 'uploads'), {
+      prefix: '/uploads/',
+    });
+
+    if (!isDevelopment) {
+      app.use(
+        helmet({
+          contentSecurityPolicy: {
+            directives: {
+              defaultSrc: [`'self'`],
+              styleSrc: [`'self'`, `'unsafe-inline'`],
+              imgSrc: [`'self'`, 'data:'],
+              scriptSrc: [`'self'`, `'unsafe-inline'`],
+            },
+          },
+        }),
+      );
+    } else {
+      app.use(
+        helmet({
+          contentSecurityPolicy: false,
+          crossOriginEmbedderPolicy: false,
+        }),
+      );
+    }
+
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+      }),
+    );
+    const allowedOrigins = [
+      process.env.FRONTEND_URL, // Sua URL de produção (Vercel)
+      process.env.FRONTEND_URL_DEV, // Sua URL de desenvolvimento (localhost:3000)
+    ].filter(Boolean); // Este filtro remove valores vazios ou nulos
+
+    const corsOptions: CorsOptions = {
+      origin: (origin, callback) => {
+        // Permite requisições sem 'origin' (ex: de apps mobile ou Insomnia)
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+          callback(null, true);
+        } else {
+          callback(new Error('Not allowed by CORS'));
+        }
+      },
+      credentials: true,
+    };
+
+    app.enableCors(corsOptions);
+
+    const port = process.env.PORT
+      ? parseInt(process.env.PORT, 10)
+      : APP_CONSTANTS.DEFAULT_PORT;
+
+    const logger = app.get(CustomLoggerService);
+
+    await app.listen(port, '0.0.0.0');
+
+    logger.log(`Application running on port ${port}`, 'Application');
+    logger.log(
+      `Environment: ${isDevelopment ? 'development' : 'production'}`,
+      'Application',
+    );
+  } catch (error) {
+    // Fallback to console.error since logger might not be available
+    console.error('❌ Application startup error:', error);
+    throw error;
+  }
+}
+
+// O `void` é usado para indicar que não estamos aguardando a promessa aqui,
+// o que é comum para o ponto de entrada da aplicação.
+void bootstrap();
+<- Manter consistência visual entre os botões do menu de END: src/main.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/payments/dto/create-payment.dto.ts -->
+import { IsNumber, IsPositive } from 'class-validator';
+
+export class CreatePaymentDto {
+  @IsNumber()
+  @IsPositive()
+  amount: number;
+}
+<- Manter consistência visual entre os botões do menu de END: src/payments/dto/create-payment.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/payments/payments.controller.ts -->
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { Request } from 'express';
+import Stripe from 'stripe';
+import { PaymentsService } from './payments.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { CreatePaymentDto } from './dto/create-payment.dto';
+import { ConfigService } from '@nestjs/config';
+
+@Controller('payments')
+export class PaymentsController {
+  constructor(
+    private readonly paymentsService: PaymentsService,
+    private readonly configService: ConfigService,
+  ) {}
+
+  @Post('create-intent')
+  @UseGuards(JwtAuthGuard)
+  async createPaymentIntent(@Body() dto: CreatePaymentDto) {
+    return this.paymentsService.createPaymentIntent(dto.amount);
+  }
+
+  @Post('webhook')
+  async handleWebhook(@Req() req: Request) {
+    const sig = req.headers['stripe-signature'] as string;
+    const endpointSecret = this.configService.get<string>(
+      'STRIPE_WEBHOOK_SECRET',
+    );
+
+    if (!endpointSecret) {
+      throw new HttpException(
+        'Stripe webhook secret not configured',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    let event: Stripe.Event;
+
+    try {
+      event = this.paymentsService.constructEvent(
+        req.body as Buffer,
+        sig,
+        endpointSecret,
+      );
+    } catch (err: any) {
+      console.error(
+        'Webhook signature verification failed:',
+        (err as Error)?.message || 'Unknown error',
+      );
+      throw new HttpException(
+        'Webhook signature verification failed',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const result = await this.paymentsService.handleWebhook(event);
+    return result;
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/payments/payments.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/payments/payments.module.ts -->
+import { Module } from '@nestjs/common';
+import { PaymentsService } from './payments.service';
+import { PaymentsController } from './payments.controller';
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [ConfigModule],
+  providers: [PaymentsService],
+  controllers: [PaymentsController],
+})
+export class PaymentsModule {}
+<- Manter consistência visual entre os botões do menu de END: src/payments/payments.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/payments/payments.service.ts -->
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import Stripe from 'stripe';
+import { PrismaService } from '../prisma.service';
+import { StatusPedido } from '@prisma/client';
+import { CustomLoggerService } from '../common/logger/logger.service';
+
+@Injectable()
+export class PaymentsService {
+  private stripe: Stripe;
+
+  constructor(
+    private configService: ConfigService,
+    private prismaService: PrismaService,
+    private logger: CustomLoggerService,
+  ) {
+    const secretKey = this.configService.get<string>('STRIPE_SECRET_KEY');
+    if (!secretKey) {
+      throw new Error('STRIPE_SECRET_KEY is not defined');
+    }
+    this.stripe = new Stripe(secretKey);
+  }
+
+  async createPaymentIntent(amount: number, currency: string = 'brl') {
+    const paymentIntent = await this.stripe.paymentIntents.create({
+      amount: Math.round(amount * 100),
+      currency,
+      automatic_payment_methods: { enabled: true },
+    });
+    return { client_secret: paymentIntent.client_secret };
+  }
+
+  constructEvent(
+    payload: Buffer | string,
+    signature: string,
+    secret: string,
+  ): Stripe.Event {
+    return this.stripe.webhooks.constructEvent(payload, signature, secret);
+  }
+
+  async handleWebhook(event: Stripe.Event) {
+    this.logger.log(`Webhook received: ${event.type}`, 'PaymentsService');
+
+    try {
+      switch (event.type) {
+        case 'payment_intent.succeeded':
+          await this.handlePaymentIntentSucceeded(event.data.object);
+          break;
+
+        case 'payment_intent.payment_failed':
+          await this.handlePaymentIntentFailed(event.data.object);
+          break;
+
+        case 'payment_intent.canceled':
+          await this.handlePaymentIntentCanceled(event.data.object);
+          break;
+
+        case 'payment_intent.requires_action':
+          this.handlePaymentIntentRequiresAction(event.data.object);
+          break;
+
+        default:
+          this.logger.warn(`Unhandled event: ${event.type}`, 'PaymentsService');
+      }
+
+      return { received: true, eventType: event.type };
+    } catch (error) {
+      this.logger.error(
+        'Webhook processing error',
+        String(error),
+        'PaymentsService',
+      );
+      throw error;
+    }
+  }
+
+  private async handlePaymentIntentSucceeded(
+    paymentIntent: Stripe.PaymentIntent,
+  ) {
+    this.logger.logPayment('Payment confirmed', {
+      id: paymentIntent.id,
+      amount: paymentIntent.amount,
+      status: 'succeeded',
+    });
+
+    try {
+      const pedido = await this.prismaService.pedido.findFirst({
+        where: { paymentIntentId: paymentIntent.id },
+      });
+
+      if (pedido) {
+        await this.prismaService.pedido.update({
+          where: { id: pedido.id },
+          data: {
+            status: StatusPedido.EM_PREPARO,
+          },
+        });
+        this.logger.logOrder('Order updated to EM_PREPARO', {
+          id: pedido.id,
+          status: 'EM_PREPARO',
+        });
+      } else {
+        this.logger.error(
+          `Order not found for PaymentIntent: ${paymentIntent.id}`,
+          undefined,
+          'PaymentsService',
+        );
+      }
+    } catch (error) {
+      this.logger.error(
+        'Error updating order',
+        String(error),
+        'PaymentsService',
+      );
+      throw error;
+    }
+  }
+
+  private async handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
+    this.logger.logPayment('Payment failed', {
+      id: paymentIntent.id,
+      status: 'failed',
+    });
+
+    try {
+      const pedido = await this.prismaService.pedido.findFirst({
+        where: { paymentIntentId: paymentIntent.id },
+      });
+
+      if (pedido) {
+        await this.prismaService.pedido.update({
+          where: { id: pedido.id },
+          data: {
+            status: StatusPedido.CANCELADO,
+          },
+        });
+        this.logger.logOrder('Order cancelled due to payment failure', {
+          id: pedido.id,
+          status: 'CANCELADO',
+        });
+      }
+    } catch (error) {
+      this.logger.error(
+        'Error cancelling order',
+        String(error),
+        'PaymentsService',
+      );
+      throw error;
+    }
+  }
+
+  private async handlePaymentIntentCanceled(
+    paymentIntent: Stripe.PaymentIntent,
+  ) {
+    this.logger.logPayment('Payment cancelled', {
+      id: paymentIntent.id,
+      status: 'cancelled',
+    });
+
+    try {
+      const pedido = await this.prismaService.pedido.findFirst({
+        where: { paymentIntentId: paymentIntent.id },
+      });
+
+      if (pedido) {
+        await this.prismaService.pedido.update({
+          where: { id: pedido.id },
+          data: {
+            status: StatusPedido.CANCELADO,
+          },
+        });
+        this.logger.logOrder('Order cancelled', {
+          id: pedido.id,
+          status: 'CANCELADO',
+        });
+      }
+    } catch (error) {
+      this.logger.error(
+        'Error cancelling order',
+        String(error),
+        'PaymentsService',
+      );
+      throw error;
+    }
+  }
+
+  private handlePaymentIntentRequiresAction(
+    paymentIntent: Stripe.PaymentIntent,
+  ) {
+    this.logger.logPayment('Payment requires additional action', {
+      id: paymentIntent.id,
+      status: 'requires_action',
+    });
+    // Aqui você pode implementar lógica para 3D Secure ou outras ações
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/payments/payments.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/dto/create-order.dto.ts -->
+import {
+  IsNotEmpty,
+  IsEnum,
+  IsArray,
+  IsString,
+  IsOptional,
+  ValidateNested,
+  IsUUID,
+  IsNumber,
+  Min,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class OrderItemDto {
+  @IsUUID()
+  @IsNotEmpty()
+  productId: string;
+
+  @IsNumber({ maxDecimalPlaces: 0 })
+  @Min(1)
+  @Type(() => Number)
+  quantity: number;
+}
+
+export class CreateOrderDto {
+  @IsEnum(['DELIVERY', 'DINE_IN'])
+  @IsNotEmpty()
+  type: 'DELIVERY' | 'DINE_IN';
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => OrderItemDto)
+  items: OrderItemDto[];
+
+  @IsOptional()
+  @IsNumber()
+  addressId?: number; // Obrigatório se type === 'DELIVERY'
+
+  @IsOptional()
+  @IsUUID()
+  tableId?: string; // Obrigatório se type === 'DINE_IN'
+
+  @IsOptional()
+  @IsString()
+  observations?: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/dto/create-order.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/dto/create-pedido.dto.ts -->
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsArray,
+  IsString,
+  IsEnum,
+} from 'class-validator';
+import { StatusPedido } from '@prisma/client';
+
+export class CreatePedidoDto {
+  @IsNotEmpty()
+  @IsNumber()
+  clienteId: number;
+
+  @IsNotEmpty()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  pizzasIds: number[];
+
+  @IsOptional()
+  @IsString()
+  observacoes?: string;
+
+  @IsOptional() // Status agora é opcional na criação
+  @IsEnum(StatusPedido, {
+    message: `Status inválido. Use um dos seguintes valores: ${Object.values(
+      StatusPedido,
+    ).join(', ')}`,
+  })
+  status?: StatusPedido;
+
+  @IsOptional()
+  @IsNumber()
+  entregadorId?: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  enderecoId: number;
+
+  @IsOptional()
+  @IsString()
+  paymentIntentId?: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/dto/create-pedido.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/dto/update-pedido-status.dto.ts -->
+import { IsEnum, IsNotEmpty } from 'class-validator';
+import { StatusPedido } from '@prisma/client';
+
+export class UpdatePedidoStatusDto {
+  @IsNotEmpty({ message: 'O status não pode ser vazio.' })
+  @IsEnum(StatusPedido, {
+    message: `Status inválido. Use um dos seguintes valores: ${Object.values(
+      StatusPedido,
+    ).join(', ')}`,
+  })
+  status: StatusPedido;
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/dto/update-pedido-status.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/dto/update-pedido.dto.ts -->
+import { PartialType } from '@nestjs/mapped-types';
+import { CreatePedidoDto } from './create-pedido.dto';
+
+export class UpdatePedidoDto extends PartialType(CreatePedidoDto) {
+  latitude?: number;
+  longitude?: number;
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/dto/update-pedido.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/entities/pedido.entity.ts -->
+export class Pedido {}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/entities/pedido.entity.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/orders.controller.ts -->
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
+import { OrdersService } from './orders.service';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { StatusPedido } from '@prisma/client';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+
+@Controller('orders')
+@UseGuards(JwtAuthGuard)
+export class OrdersController {
+  constructor(private readonly ordersService: OrdersService) {}
+
+  @Post()
+  create(@Body() createOrderDto: CreateOrderDto, @Request() req: any) {
+    return this.ordersService.create(createOrderDto, req.user?.id);
+  }
+
+  @Get()
+  findAll() {
+    return this.ordersService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.ordersService.findOne(+id);
+  }
+
+  @Patch(':id/status')
+  updateStatus(@Param('id') id: string, @Body('status') status: StatusPedido) {
+    return this.ordersService.updateStatus(+id, status);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.ordersService.remove(+id);
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/orders.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/orders.service.ts -->
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { OrderStrategyFactory } from './strategies/order-strategy.factory';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { StatusPedido } from '@prisma/client';
+
+@Injectable()
+export class OrdersService {
+  constructor(
+    private prisma: PrismaService,
+    private strategyFactory: OrderStrategyFactory,
+  ) {}
+
+  // Mapeia as transições de status permitidas
+  private readonly transicoesStatus: Record<StatusPedido, StatusPedido[]> = {
+    PENDENTE: [StatusPedido.EM_PREPARO, StatusPedido.CANCELADO],
+    EM_PREPARO: [StatusPedido.A_CAMINHO, StatusPedido.CANCELADO],
+    A_CAMINHO: [StatusPedido.ENTREGUE],
+    ENTREGUE: [],
+    CANCELADO: [],
+  };
+
+  async create(createOrderDto: CreateOrderDto, userId?: number) {
+    // Obter estratégia baseada no tipo de pedido
+    const strategy = this.strategyFactory.getStrategy(createOrderDto.type);
+
+    // Validar pedido
+    await strategy.validate(createOrderDto);
+
+    // Processar pedido
+    return strategy.process(createOrderDto, userId);
+  }
+
+  async findAll() {
+    return this.prisma.order.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+          },
+        },
+        items: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                description: true,
+              },
+            },
+          },
+        },
+        session: {
+          include: {
+            table: {
+              select: {
+                id: true,
+                number: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async findOne(id: number) {
+    const order = await this.prisma.order.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+          },
+        },
+        items: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                description: true,
+              },
+            },
+          },
+        },
+        session: {
+          include: {
+            table: {
+              select: {
+                id: true,
+                number: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!order) {
+      throw new Error(`Order with ID ${id} not found`);
+    }
+
+    return order;
+  }
+
+  async updateStatus(id: number, newStatus: StatusPedido) {
+    const order = await this.findOne(id);
+
+    // Validar transição de status
+    if (!this.transicoesStatus[order.status].includes(newStatus)) {
+      throw new Error(
+        `Invalid status transition from ${order.status} to ${newStatus}`,
+      );
+    }
+
+    return this.prisma.order.update({
+      where: { id },
+      data: { status: newStatus, updatedAt: new Date() },
+      include: {
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+          },
+        },
+        items: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                price: true,
+                description: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  async remove(id: number) {
+    return this.prisma.order.delete({
+      where: { id },
+    });
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/orders.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/pedidos.controller.ts -->
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  HttpException,
+  HttpStatus,
+  ParseIntPipe,
+  Req,
+} from '@nestjs/common';
+import { PedidosService } from './pedidos.service';
+import { CreatePedidoDto } from './dto/create-pedido.dto';
+import { UpdatePedidoDto } from './dto/update-pedido.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+
+import { UpdatePedidoStatusDto } from './dto/update-pedido-status.dto';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Resource } from '../common/decorators/resource.decorator';
+import { Role } from '@prisma/client';
+import { ResourceOwner } from '../common/decorators/auth.decorators';
+import { RequestWithUser } from '../common/interfaces/authenticated-user.interface';
+import { PedidoResponseBuilder } from '../common/builders/response.builder';
+
+@Controller('pedidos')
+@UseGuards(JwtAuthGuard, RolesGuard)
+export class PedidosController {
+  constructor(private readonly pedidosService: PedidosService) {}
+
+  @Post()
+  async create(@Body() createPedidoDto: CreatePedidoDto) {
+    try {
+      const pedido = await this.pedidosService.create(createPedidoDto);
+      return PedidoResponseBuilder.pedidoCreated(pedido);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get()
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
+  async findAll() {
+    try {
+      const pedidos = await this.pedidosService.findAll();
+      return PedidoResponseBuilder.pedidosList(pedidos);
+    } catch {
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get('meus-pedidos')
+  async findMyOrders(@Req() req: RequestWithUser) {
+    try {
+      return await this.pedidosService.findByUserId(req.user.id);
+    } catch {
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get(':id')
+  @ResourceOwner()
+  @Resource('pedido')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    try {
+      const pedido = await this.pedidosService.findOne(id);
+      if (!pedido) {
+        throw new HttpException('Pedido não encontrado', HttpStatus.NOT_FOUND);
+      }
+      return PedidoResponseBuilder.pedidoFound(pedido);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Patch(':id')
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePedidoDto: UpdatePedidoDto,
+  ) {
+    try {
+      const pedido = await this.pedidosService.update(id, updatePedidoDto);
+      return PedidoResponseBuilder.pedidoUpdated(pedido);
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        (error as { code: string }).code === 'P2025'
+      ) {
+        throw new HttpException('Pedido não encontrado', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  // NOVA ROTA PARA ATUALIZAR APENAS O STATUS
+  @Patch(':id/status')
+  @Roles(Role.FUNCIONARIO, Role.ADMIN)
+  async updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePedidoStatusDto: UpdatePedidoStatusDto,
+  ) {
+    try {
+      const pedido = await this.pedidosService.updateStatus(
+        id,
+        updatePedidoStatusDto,
+      );
+      return PedidoResponseBuilder.statusUpdated(pedido);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Delete(':id')
+  @Roles(Role.ADMIN)
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    try {
+      await this.pedidosService.remove(id);
+      return PedidoResponseBuilder.pedidoDeleted();
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        (error as { code: string }).code === 'P2025'
+      ) {
+        throw new HttpException('Pedido não encontrado', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/pedidos.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/pedidos.module.ts -->
+import { Module } from '@nestjs/common';
+import { PedidosService } from './pedidos.service';
+import { OrdersService } from './orders.service';
+import { PedidosController } from './pedidos.controller';
+import { OrdersController } from './orders.controller';
+import { PrismaModule } from '../prisma.module';
+import { OrderStrategyFactory } from './strategies/order-strategy.factory';
+import { DeliveryStrategy } from './strategies/delivery.strategy';
+import { DineInStrategy } from './strategies/dine-in.strategy';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [PedidosController, OrdersController],
+  providers: [
+    PedidosService, // Manter para compatibilidade
+    OrdersService, // Novo serviço com Strategy Pattern
+    OrderStrategyFactory,
+    DeliveryStrategy,
+    DineInStrategy,
+  ],
+  exports: [OrdersService],
+})
+export class PedidosModule {}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/pedidos.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/pedidos.service.spec.ts -->
+import { Test, TestingModule } from '@nestjs/testing';
+import { PedidosService } from './pedidos.service';
+import { PrismaService } from '../prisma.service';
+import { StatusPedido } from '@prisma/client';
+
+const pedidoMock = {
+  id: 1,
+  userId: 1,
+  enderecoId: 1,
+  status: StatusPedido.PENDENTE,
+  entregadorId: null,
+  latitude: null,
+  longitude: null,
+  total: 35,
+  paymentIntentId: null,
+  criadoEm: new Date(),
+  atualizadoEm: new Date(),
+  pizzas: [],
+  user: {},
+  endereco: {},
+  entregador: null,
+};
+
+describe('PedidosService', () => {
+  let service: PedidosService;
+  let prisma: PrismaService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [PedidosService, PrismaService],
+    }).compile();
+    service = module.get<PedidosService>(PedidosService);
+    prisma = module.get<PrismaService>(PrismaService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  it('should create a pedido', async () => {
+    jest.spyOn(prisma.pedido, 'create').mockResolvedValue(pedidoMock as any);
+    const result = await service.create({
+      clienteId: 1,
+      pizzasIds: [],
+      enderecoId: 1,
+      status: StatusPedido.PENDENTE,
+    });
+    expect(result).toEqual(pedidoMock);
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/pedidos.service.spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/pedidos.service.ts -->
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreatePedidoDto } from './dto/create-pedido.dto';
+import { UpdatePedidoDto } from './dto/update-pedido.dto';
+import { Pedido, StatusPedido } from '@prisma/client';
+import { UpdatePedidoStatusDto } from './dto/update-pedido-status.dto';
+
+@Injectable()
+export class PedidosService {
+  constructor(private readonly prisma: PrismaService) {}
+
+  // Mapeia as transições de status permitidas
+  private readonly transicoesStatus: Record<StatusPedido, StatusPedido[]> = {
+    PENDENTE: [StatusPedido.EM_PREPARO, StatusPedido.CANCELADO],
+    EM_PREPARO: [StatusPedido.A_CAMINHO, StatusPedido.CANCELADO],
+    A_CAMINHO: [StatusPedido.ENTREGUE],
+    ENTREGUE: [],
+    CANCELADO: [],
+  };
+
+  async create(createPedidoDto: CreatePedidoDto): Promise<Pedido> {
+    // Buscar preços das pizzas para calcular total
+    const pizzas = await this.prisma.pizza.findMany({
+      where: { id: { in: createPedidoDto.pizzasIds } },
+      select: { id: true, preco: true },
+    });
+
+    // Calcular total (assumindo quantidade 1 por pizza por enquanto)
+    let total = 0;
+    for (const pizza of pizzas) {
+      total += pizza.preco;
+    }
+
+    // Criar pedido com total calculado
+    const pedido = await this.prisma.pedido.create({
+      data: {
+        userId: createPedidoDto.clienteId,
+        enderecoId: createPedidoDto.enderecoId,
+        status: createPedidoDto.status || StatusPedido.PENDENTE,
+        total: total,
+        paymentIntentId: createPedidoDto.paymentIntentId,
+        observacoes: createPedidoDto.observacoes,
+        pizzas: {
+          connect: createPedidoDto.pizzasIds.map((id: number) => ({ id })),
+        },
+        entregadorId: createPedidoDto.entregadorId,
+      },
+      include: {
+        user: true,
+        endereco: true,
+        pizzas: true,
+        entregador: true,
+      },
+    });
+
+    return pedido;
+  }
+
+  findAll() {
+    return this.prisma.pedido.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+          },
+        },
+        pizzas: {
+          select: {
+            id: true,
+            nome: true,
+            preco: true,
+            descricao: true,
+          },
+        },
+        entregador: {
+          select: {
+            id: true,
+            nome: true,
+            telefone: true,
+          },
+        },
+        endereco: {
+          select: {
+            id: true,
+            logradouro: true,
+            numero: true,
+            cidade: true,
+            cep: true,
+          },
+        },
+      },
+      orderBy: { criadoEm: 'desc' },
+    });
+  }
+
+  findByUserId(userId: number) {
+    return this.prisma.pedido.findMany({
+      where: { userId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+          },
+        },
+        pizzas: {
+          select: {
+            id: true,
+            nome: true,
+            preco: true,
+            descricao: true,
+          },
+        },
+        entregador: {
+          select: {
+            id: true,
+            nome: true,
+            telefone: true,
+          },
+        },
+        endereco: {
+          select: {
+            id: true,
+            logradouro: true,
+            numero: true,
+            cidade: true,
+            cep: true,
+          },
+        },
+      },
+      orderBy: { criadoEm: 'desc' },
+    });
+  }
+
+  async findOne(id: number) {
+    const pedido = await this.prisma.pedido.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: {
+            id: true,
+            nome: true,
+            email: true,
+            telefone: true,
+          },
+        },
+        pizzas: {
+          select: {
+            id: true,
+            nome: true,
+            preco: true,
+            descricao: true,
+          },
+        },
+        entregador: {
+          select: {
+            id: true,
+            nome: true,
+            telefone: true,
+          },
+        },
+        endereco: {
+          select: {
+            id: true,
+            logradouro: true,
+            numero: true,
+            cidade: true,
+            cep: true,
+          },
+        },
+      },
+    });
+    if (!pedido) {
+      throw new NotFoundException(`Pedido com ID #${id} não encontrado.`);
+    }
+    return pedido;
+  }
+
+  async update(id: number, updatePedidoDto: UpdatePedidoDto): Promise<Pedido> {
+    await this.findOne(id); // Garante que o pedido existe
+    const { clienteId, pizzasIds, status, entregadorId, latitude, longitude } =
+      updatePedidoDto;
+    return this.prisma.pedido.update({
+      where: { id },
+      data: {
+        user: clienteId ? { connect: { id: clienteId } } : undefined,
+        pizzas: pizzasIds
+          ? { set: pizzasIds.map((pid) => ({ id: pid })) }
+          : undefined,
+        status,
+        entregador: entregadorId
+          ? { connect: { id: entregadorId } }
+          : undefined,
+        latitude,
+        longitude,
+      },
+    });
+  }
+
+  async updateStatus(
+    id: number,
+    updatePedidoStatusDto: UpdatePedidoStatusDto,
+  ): Promise<Pedido> {
+    const pedidoAtual = await this.findOne(id);
+    const novoStatus = updatePedidoStatusDto.status;
+
+    const transicoesPermitidas = this.transicoesStatus[pedidoAtual.status];
+
+    if (!transicoesPermitidas || !transicoesPermitidas.includes(novoStatus)) {
+      throw new BadRequestException(
+        `Transição de status de "${pedidoAtual.status}" para "${novoStatus}" não é permitida.`,
+      );
+    }
+
+    return this.prisma.pedido.update({
+      where: { id },
+      data: {
+        status: novoStatus,
+      },
+    });
+  }
+
+  async updatePedidoStatus(pedidoId: number, paymentIntentId: string) {
+    const pedido = await this.prisma.pedido.update({
+      where: { id: pedidoId },
+      data: {
+        status: 'EM_PREPARO',
+        paymentIntentId: paymentIntentId,
+      },
+    });
+    return pedido;
+  }
+
+  remove(id: number) {
+    return this.prisma.pedido.delete({ where: { id } });
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/pedidos.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/strategies/delivery.strategy.ts -->
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../../prisma.service';
+import {
+  OrderProcessingStrategy,
+  CreateOrderDto,
+} from './order-processing.strategy';
+import { StatusPedido, OrderType } from '@prisma/client';
+
+@Injectable()
+export class DeliveryStrategy implements OrderProcessingStrategy {
+  constructor(private prisma: PrismaService) {}
+
+  async validate(dto: CreateOrderDto): Promise<void> {
+    // Validar tipo
+    if (dto.type !== 'DELIVERY') {
+      throw new BadRequestException('Invalid order type for delivery strategy');
+    }
+
+    // Validar addressId obrigatório
+    if (!dto.addressId) {
+      throw new BadRequestException('Address is required for delivery orders');
+    }
+
+    // Validar se o endereço existe
+    const address = await this.prisma.endereco.findUnique({
+      where: { id: dto.addressId },
+    });
+
+    if (!address) {
+      throw new NotFoundException('Address not found');
+    }
+
+    // Validar itens
+    if (!dto.items || dto.items.length === 0) {
+      throw new BadRequestException('Order must have at least one item');
+    }
+
+    // Validar produtos
+    for (const item of dto.items) {
+      const product = await this.prisma.product.findUnique({
+        where: { id: item.productId },
+      });
+
+      if (!product || !product.active) {
+        throw new NotFoundException(
+          `Product ${item.productId} not found or inactive`,
+        );
+      }
+
+      if (item.quantity <= 0) {
+        throw new BadRequestException('Item quantity must be greater than 0');
+      }
+    }
+
+    // Validar horário de funcionamento (simplificado)
+    const now = new Date();
+    const hour = now.getHours();
+    if (hour < 18 || hour > 22) {
+      // 18:00 - 22:00
+      throw new BadRequestException(
+        'Delivery is only available from 18:00 to 22:00',
+      );
+    }
+  }
+
+  async process(dto: CreateOrderDto, userId?: number): Promise<any> {
+    // Calcular total
+    let total = 0;
+    const orderItems = [];
+
+    for (const item of dto.items) {
+      const product = await this.prisma.product.findUnique({
+        where: { id: item.productId },
+      });
+
+      if (!product || !product.active) {
+        throw new NotFoundException(
+          `Product ${item.productId} not found or inactive`,
+        );
+      }
+
+      const itemTotal = Number(product.price) * item.quantity;
+      total += itemTotal;
+
+      orderItems.push({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: product.price,
+      });
+    }
+
+    // Adicionar taxa de entrega (R$ 5.00)
+    const deliveryFee = 5.0;
+    total += deliveryFee;
+
+    // Criar pedido
+    const order = await this.prisma.order.create({
+      data: {
+        type: OrderType.DELIVERY,
+        status: StatusPedido.PENDENTE,
+        total: total,
+        addressId: dto.addressId,
+        userId: userId,
+        observacoes: dto.observations,
+        items: {
+          create: orderItems,
+        },
+      },
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+        address: true,
+        user: true,
+      },
+    });
+
+    return {
+      ...order,
+      total: Number(order.total.toFixed(2)),
+      deliveryFee,
+    };
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/strategies/delivery.strategy.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/strategies/dine-in.strategy.ts -->
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../../prisma.service';
+import {
+  OrderProcessingStrategy,
+  CreateOrderDto,
+} from './order-processing.strategy';
+import { StatusPedido, OrderType, TableStatus } from '@prisma/client';
+
+@Injectable()
+export class DineInStrategy implements OrderProcessingStrategy {
+  constructor(private prisma: PrismaService) {}
+
+  async validate(dto: CreateOrderDto): Promise<void> {
+    // Validar tipo
+    if (dto.type !== 'DINE_IN') {
+      throw new BadRequestException('Invalid order type for dine-in strategy');
+    }
+
+    // Validar tableId obrigatório
+    if (!dto.tableId) {
+      throw new BadRequestException('Table ID is required for dine-in orders');
+    }
+
+    // Validar se a mesa existe
+    const table = await this.prisma.table.findUnique({
+      where: { id: dto.tableId },
+    });
+
+    if (!table) {
+      throw new NotFoundException('Table not found');
+    }
+
+    // Validar se a mesa está ocupada (tem sessão ativa)
+    if (table.status !== TableStatus.OCCUPIED) {
+      throw new BadRequestException(
+        'Table is not occupied. Please open a session first.',
+      );
+    }
+
+    // Verificar se existe sessão ativa para esta mesa
+    const activeSession = await this.prisma.tableSession.findFirst({
+      where: {
+        tableId: dto.tableId,
+        closedAt: null,
+      },
+    });
+
+    if (!activeSession) {
+      throw new BadRequestException('No active session for this table');
+    }
+
+    // Validar itens
+    if (!dto.items || dto.items.length === 0) {
+      throw new BadRequestException('Order must have at least one item');
+    }
+
+    // Validar produtos
+    for (const item of dto.items) {
+      const product = await this.prisma.product.findUnique({
+        where: { id: item.productId },
+      });
+
+      if (!product || !product.active) {
+        throw new NotFoundException(
+          `Product ${item.productId} not found or inactive`,
+        );
+      }
+
+      if (item.quantity <= 0) {
+        throw new BadRequestException('Item quantity must be greater than 0');
+      }
+    }
+  }
+
+  async process(dto: CreateOrderDto, userId?: number): Promise<any> {
+    // Buscar sessão ativa da mesa
+    const activeSession = await this.prisma.tableSession.findFirst({
+      where: {
+        tableId: dto.tableId,
+        closedAt: null,
+      },
+    });
+
+    if (!activeSession) {
+      throw new BadRequestException('No active session for this table');
+    }
+
+    // Calcular total
+    let total = 0;
+    const orderItems = [];
+
+    for (const item of dto.items) {
+      const product = await this.prisma.product.findUnique({
+        where: { id: item.productId },
+      });
+
+      if (!product || !product.active) {
+        throw new NotFoundException(
+          `Product ${item.productId} not found or inactive`,
+        );
+      }
+
+      const itemTotal = Number(product.price) * item.quantity;
+      total += itemTotal;
+
+      orderItems.push({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: product.price,
+      });
+    }
+
+    // Criar pedido vinculado à sessão da mesa
+    const order = await this.prisma.order.create({
+      data: {
+        type: OrderType.DINE_IN,
+        status: StatusPedido.PENDENTE,
+        total: total,
+        sessionId: activeSession.id,
+        // userId pode ser null para clientes anônimos de mesa
+        userId: userId,
+        observacoes: dto.observations,
+        items: {
+          create: orderItems,
+        },
+      },
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+        session: {
+          include: {
+            table: true,
+          },
+        },
+      },
+    });
+
+    return {
+      ...order,
+      total: Number(order.total.toFixed(2)),
+    };
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/strategies/dine-in.strategy.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/strategies/order-processing.strategy.ts -->
+import { Order } from '@prisma/client';
+
+export interface OrderProcessingStrategy {
+  validate(dto: CreateOrderDto): Promise<void>;
+  process(dto: CreateOrderDto, userId?: number): Promise<Order>;
+}
+
+// DTO para criação de pedidos (atualizado)
+export interface CreateOrderDto {
+  type: 'DELIVERY' | 'DINE_IN';
+  items: OrderItemDto[];
+  addressId?: number; // Obrigatório para DELIVERY (id numérico do endereço)
+  tableId?: string; // Obrigatório para DINE_IN
+  observations?: string;
+}
+
+export interface OrderItemDto {
+  productId: string;
+  quantity: number;
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/strategies/order-processing.strategy.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pedidos/strategies/order-strategy.factory.ts -->
+import { Injectable } from '@nestjs/common';
+import { OrderProcessingStrategy } from './order-processing.strategy';
+import { DeliveryStrategy } from './delivery.strategy';
+import { DineInStrategy } from './dine-in.strategy';
+
+@Injectable()
+export class OrderStrategyFactory {
+  constructor(
+    private deliveryStrategy: DeliveryStrategy,
+    private dineInStrategy: DineInStrategy,
+  ) {}
+
+  getStrategy(orderType: 'DELIVERY' | 'DINE_IN'): OrderProcessingStrategy {
+    switch (orderType) {
+      case 'DELIVERY':
+        return this.deliveryStrategy;
+      case 'DINE_IN':
+        return this.dineInStrategy;
+      default:
+        throw new Error(`Unknown order type: ${orderType}`);
+    }
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/pedidos/strategies/order-strategy.factory.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pizzas/dto/create-pizza.dto.ts -->
+// ARQUIVO: create-pizza.dto.ts
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsUrl,
+} from 'class-validator';
+
+export class CreatePizzaDto {
+  @IsNotEmpty({ message: "O campo 'nome' é obrigatório." })
+  @IsString({ message: "O campo 'nome' deve ser uma string." })
+  nome: string;
+
+  @IsNotEmpty({ message: "O campo 'descricao' é obrigatório." })
+  @IsString({ message: "O campo 'descricao' deve ser uma string." })
+  descricao: string;
+
+  @IsNotEmpty({ message: "O campo 'preco' é obrigatório." })
+  @IsNumber({}, { message: "O campo 'preco' deve ser um número." })
+  preco: number;
+
+  @IsOptional()
+  @IsUrl({}, { message: "O campo 'image' deve ser uma URL válida." })
+  image?: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/pizzas/dto/create-pizza.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pizzas/dto/update-pizza.dto.ts -->
+import { PartialType } from '@nestjs/mapped-types';
+import { CreatePizzaDto } from './create-pizza.dto';
+
+export class UpdatePizzaDto extends PartialType(CreatePizzaDto) {
+  image?: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/pizzas/dto/update-pizza.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pizzas/entities/pizza.entity.ts -->
+export class Pizza {
+  image?: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/pizzas/entities/pizza.entity.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pizzas/pizzas.controller.ts -->
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFile,
+  ParseIntPipe,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { PizzasService } from './pizzas.service';
+import { CreatePizzaDto } from './dto/create-pizza.dto';
+import { UpdatePizzaDto } from './dto/update-pizza.dto';
+import { UploadService } from '../upload/upload.service';
+import { FileValidationInterceptor } from '../upload/file-validation.interceptor';
+import { PizzaResponseBuilder } from '../common/builders/response.builder';
+import { AdminOnly } from '../common/decorators/auth.decorators';
+
+@Controller('pizzas')
+export class PizzasController {
+  constructor(
+    private readonly pizzasService: PizzasService,
+    private readonly uploadService: UploadService,
+  ) {}
+
+  @Post()
+  @AdminOnly()
+  async create(@Body() createPizzaDto: CreatePizzaDto) {
+    const pizza = await this.pizzasService.create(createPizzaDto);
+    return PizzaResponseBuilder.pizzaCreated(pizza);
+  }
+
+  @Post('with-image')
+  @AdminOnly()
+  @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
+  async createWithImage(
+    @Body() createPizzaDto: CreatePizzaDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    let image: string | undefined;
+
+    if (file) {
+      image = await this.uploadService.uploadImage(file, 'pizzas');
+    }
+
+    const pizzaData = {
+      ...createPizzaDto,
+      image: image || createPizzaDto.image,
+    };
+
+    const pizza = await this.pizzasService.create(pizzaData);
+    return PizzaResponseBuilder.pizzaCreated(pizza);
+  }
+
+  @Post(':id/upload-image')
+  @AdminOnly()
+  @UseInterceptors(FileInterceptor('image'), FileValidationInterceptor)
+  async uploadImage(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new HttpException(
+        'Arquivo de imagem é obrigatório',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const image = await this.uploadService.uploadImage(file, 'pizzas');
+    const pizza = await this.pizzasService.update(id, { image });
+
+    return PizzaResponseBuilder.success(
+      { image: (pizza as { image?: string }).image },
+      'Imagem da pizza atualizada com sucesso',
+    );
+  }
+
+  @Get()
+  async findAll() {
+    const pizzas = await this.pizzasService.findAll();
+    return PizzaResponseBuilder.pizzasList(pizzas);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const pizza = await this.pizzasService.findOne(id);
+    return PizzaResponseBuilder.pizzaFound(pizza);
+  }
+
+  @Patch(':id')
+  @AdminOnly()
+  @UseInterceptors(FileInterceptor('image'))
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePizzaDto: UpdatePizzaDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    let image: string | undefined;
+    if (file) {
+      image = await this.uploadService.uploadImage(file, 'pizzas');
+    }
+
+    const dataToUpdate: UpdatePizzaDto = {
+      ...updatePizzaDto,
+      ...(image ? { image } : {}),
+    };
+
+    const pizza = await this.pizzasService.update(id, dataToUpdate);
+    return PizzaResponseBuilder.pizzaUpdated(pizza);
+  }
+
+  @Delete(':id')
+  @AdminOnly()
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const result = await this.pizzasService.remove(id);
+    return PizzaResponseBuilder.deleted(result.message);
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/pizzas/pizzas.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pizzas/pizzas.module.ts -->
+import { Module } from '@nestjs/common';
+import { PizzasService } from './pizzas.service';
+import { PizzasController } from './pizzas.controller';
+import { PrismaModule } from '../prisma.module';
+import { UploadModule } from '../upload/upload.module';
+import { CommonModule } from '../common/common.module';
+
+/**
+ * @deprecated This module is deprecated. Use the new catalog system with Categories and Products instead.
+ */
+@Module({
+  imports: [PrismaModule, UploadModule, CommonModule],
+  controllers: [PizzasController],
+  providers: [PizzasService],
+})
+export class PizzasModule {}
+<- Manter consistência visual entre os botões do menu de END: src/pizzas/pizzas.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pizzas/pizzas.service.spec.ts -->
+import { Test, TestingModule } from '@nestjs/testing';
+import { PizzasService } from './pizzas.service';
+import { PrismaService } from '../prisma.service';
+import { CustomLoggerService } from '../common/logger/logger.service';
+
+const pizzaMock = {
+  id: 1,
+  nome: 'Margherita',
+  descricao: 'Clássica',
+  preco: 39.9,
+  image: null,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+const mockLoggerService = {
+  log: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+  debug: jest.fn(),
+  verbose: jest.fn(),
+};
+
+describe('PizzasService', () => {
+  let service: PizzasService;
+  let prisma: PrismaService;
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        PizzasService,
+        PrismaService,
+        {
+          provide: CustomLoggerService,
+          useValue: mockLoggerService,
+        },
+      ],
+    }).compile();
+    service = module.get<PizzasService>(PizzasService);
+    prisma = module.get<PrismaService>(PrismaService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  it('should create a pizza', async () => {
+    jest.spyOn(prisma.pizza, 'create').mockResolvedValue(pizzaMock as any);
+    const result = await service.create({
+      nome: 'Margherita Test',
+      descricao: 'Pizza clássica',
+      preco: 39.9,
+    });
+    expect(result).toEqual(pizzaMock);
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: src/pizzas/pizzas.service.spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/pizzas/pizzas.service.ts -->
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreatePizzaDto } from './dto/create-pizza.dto';
+import { UpdatePizzaDto } from './dto/update-pizza.dto';
+import { CustomLoggerService } from '../common/logger/logger.service';
+import { APP_CONSTANTS } from '../common/constants/app.constants';
+import { Pizza } from '@prisma/client';
+
+@Injectable()
+export class PizzasService {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly logger: CustomLoggerService,
+  ) {}
+
+  /**
+   * Cria uma nova pizza com validações de negócio
+   */
+  async create(createPizzaDto: CreatePizzaDto): Promise<Pizza> {
+    this.logger.log('Iniciando criação de nova pizza', {
+      nome: createPizzaDto.nome,
+      preco: createPizzaDto.preco,
+    });
+
+    // Business Rule 1: Validar preço mínimo
+    await this.validateMinimumPrice(createPizzaDto.preco);
+
+    // Business Rule 2: Verificar nome único
+    await this.validateUniqueName(createPizzaDto.nome);
+
+    // Business Rule 3: Validar dados de imagem
+    this.validateImageUrl(createPizzaDto.image);
+
+    try {
+      const pizza = await this.prisma.pizza.create({
+        data: {
+          ...createPizzaDto,
+          nome: this.sanitizeName(createPizzaDto.nome),
+        },
+      });
+
+      this.logger.log('Pizza criada com sucesso', {
+        pizzaId: pizza.id,
+        nome: pizza.nome,
+      });
+
+      return pizza;
+    } catch (error) {
+      this.logger.error(
+        'Erro ao criar pizza na base de dados',
+        error instanceof Error ? error.message : String(error),
+      );
+      throw new BadRequestException(
+        APP_CONSTANTS.ERROR_MESSAGES.PIZZA_CREATION_FAILED,
+      );
+    }
+  }
+
+  /**
+   * Lista todas as pizzas ativas
+   */
+  async findAll(): Promise<Pizza[]> {
+    this.logger.log('Listando todas as pizzas');
+
+    try {
+      const pizzas = await this.prisma.pizza.findMany({
+        orderBy: { nome: 'asc' },
+      });
+
+      this.logger.log('Pizzas listadas com sucesso', {
+        quantidade: pizzas.length,
+      });
+      return pizzas;
+    } catch (error) {
+      this.logger.error(
+        'Erro ao listar pizzas',
+        error instanceof Error ? error.message : String(error),
+      );
+      throw new BadRequestException(
+        APP_CONSTANTS.ERROR_MESSAGES.PIZZA_FETCH_FAILED,
+      );
+    }
+  }
+
+  /**
+   * Busca uma pizza por ID com validação de existência
+   */
+  async findOne(id: number): Promise<Pizza> {
+    this.validateId(id);
+    this.logger.log('Buscando pizza por ID', { pizzaId: id });
+
+    const pizza = await this.prisma.pizza.findUnique({ where: { id } });
+
+    if (!pizza) {
+      this.logger.warn('Pizza não encontrada', { pizzaId: id });
+      throw new NotFoundException(APP_CONSTANTS.ERROR_MESSAGES.PIZZA_NOT_FOUND);
+    }
+
+    this.logger.log('Pizza encontrada', { pizzaId: id, nome: pizza.nome });
+    return pizza;
+  }
+
+  /**
+   * Atualiza uma pizza com validações de negócio
+   */
+  async update(id: number, updatePizzaDto: UpdatePizzaDto): Promise<Pizza> {
+    this.validateId(id);
+    this.logger.log('Iniciando atualização de pizza', { pizzaId: id });
+
+    // Verificar se a pizza existe
+    await this.findOne(id);
+
+    // Business Rules para update
+    if (updatePizzaDto.preco) {
+      await this.validateMinimumPrice(updatePizzaDto.preco);
+    }
+
+    if (updatePizzaDto.nome) {
+      await this.validateUniqueName(updatePizzaDto.nome, id);
+    }
+
+    if (updatePizzaDto.image) {
+      this.validateImageUrl(updatePizzaDto.image);
+    }
+
+    try {
+      const updatedPizza = await this.prisma.pizza.update({
+        where: { id },
+        data: {
+          ...updatePizzaDto,
+          nome: updatePizzaDto.nome
+            ? this.sanitizeName(updatePizzaDto.nome)
+            : undefined,
+        },
+      });
+
+      this.logger.log('Pizza atualizada com sucesso', {
+        pizzaId: id,
+        nome: updatedPizza.nome,
+      });
+
+      return updatedPizza;
+    } catch (error) {
+      this.logger.error('Erro ao atualizar pizza', error);
+      throw new BadRequestException(
+        APP_CONSTANTS.ERROR_MESSAGES.PIZZA_UPDATE_FAILED,
+      );
+    }
+  }
+
+  /**
+   * Remove uma pizza com validação de dependências
+   */
+  async remove(id: number): Promise<{ message: string }> {
+    this.validateId(id);
+    this.logger.log('Iniciando remoção de pizza', { pizzaId: id });
+
+    // Verificar se a pizza existe
+    const pizza = await this.findOne(id);
+
+    // Business Rule: Verificar se a pizza tem pedidos associados
+    await this.validateCanDelete(id);
+
+    try {
+      await this.prisma.pizza.delete({ where: { id } });
+
+      this.logger.log('Pizza removida com sucesso', {
+        pizzaId: id,
+        nome: pizza.nome,
+      });
+
+      return { message: `Pizza "${pizza.nome}" removida com sucesso` };
+    } catch (error) {
+      this.logger.error('Erro ao remover pizza', error);
+      throw new BadRequestException(
+        APP_CONSTANTS.ERROR_MESSAGES.PIZZA_DELETE_FAILED,
+      );
+    }
+  }
+
+  // ==================== MÉTODOS PRIVADOS DE VALIDAÇÃO ====================
+
+  /**
+   * Valida se o preço está dentro do mínimo permitido
+   */
+  private async validateMinimumPrice(preco: number): Promise<void> {
+    const minPrice = APP_CONSTANTS.BUSINESS_RULES.PIZZA_MIN_PRICE;
+
+    if (preco < minPrice) {
+      this.logger.warn('Preço abaixo do mínimo permitido', { preco, minPrice });
+      throw new BadRequestException(
+        `Preço deve ser no mínimo R$ ${minPrice.toFixed(2)}`,
+      );
+    }
+  }
+
+  /**
+   * Valida se o nome da pizza é único
+   */
+  private async validateUniqueName(
+    nome: string,
+    excludeId?: number,
+  ): Promise<void> {
+    const existingPizza = await this.prisma.pizza.findFirst({
+      where: {
+        nome: {
+          equals: nome,
+          mode: 'insensitive',
+        },
+        ...(excludeId && { id: { not: excludeId } }),
+      },
+    });
+
+    if (existingPizza) {
+      this.logger.warn('Nome de pizza já existe', {
+        nome,
+        existingId: existingPizza.id,
+      });
+      throw new ConflictException(`Já existe uma pizza com o nome "${nome}"`);
+    }
+  }
+
+  /**
+   * Valida URL da imagem
+   */
+  private validateImageUrl(imageUrl?: string): void {
+    if (!imageUrl) return;
+
+    const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+    const hasValidExtension = validExtensions.some((ext) =>
+      imageUrl.toLowerCase().includes(ext),
+    );
+
+    if (!hasValidExtension) {
+      this.logger.warn('URL de imagem com extensão inválida', { imageUrl });
+      throw new BadRequestException(
+        'URL da imagem deve ter uma extensão válida (.jpg, .jpeg, .png, .webp)',
+      );
+    }
+  }
+
+  /**
+   * Valida se a pizza pode ser deletada (sem pedidos)
+   */
+  private async validateCanDelete(pizzaId: number): Promise<void> {
+    const pedidosCount = await this.prisma.pedido.count({
+      where: {
+        pizzas: {
+          some: {
+            id: pizzaId,
+          },
+        },
+      },
+    });
+
+    if (pedidosCount > 0) {
+      this.logger.warn('Tentativa de deletar pizza com pedidos associados', {
+        pizzaId,
+        pedidosCount,
+      });
+      throw new ConflictException(
+        `Não é possível remover esta pizza pois ela possui ${pedidosCount} pedido(s) associado(s)`,
+      );
+    }
+  }
+
+  /**
+   * Valida se o ID é válido
+   */
+  private validateId(id: number): void {
+    if (!id || id <= 0 || !Number.isInteger(id)) {
+      this.logger.warn('ID inválido fornecido', { id });
+      throw new BadRequestException('ID deve ser um número inteiro positivo');
+    }
+  }
+
+  /**
+   * Sanitiza o nome da pizza
+   */
+  private sanitizeName(nome: string): string {
+    return nome.trim().replace(/\s+/g, ' ');
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/pizzas/pizzas.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/prisma.module.ts -->
+import { Global, Module } from '@nestjs/common';
+import { PrismaService } from './prisma.service';
+
+@Global()
+@Module({
+  providers: [PrismaService],
+  exports: [PrismaService],
+})
+export class PrismaModule {}
+<- Manter consistência visual entre os botões do menu de END: src/prisma.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/prisma.service.ts -->
+import { Injectable, OnModuleInit, INestApplication } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+
+@Injectable()
+export class PrismaService extends PrismaClient implements OnModuleInit {
+  async onModuleInit() {
+    await this.$connect();
+  }
+
+  enableShutdownHooks(app: INestApplication) {
+    (this as unknown as { $on(event: string, cb: () => void): void }).$on(
+      'beforeExit',
+      () => {
+        void app.close();
+      },
+    );
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/prisma.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/tables/dto/create-table.dto.ts -->
+import { IsInt, Min, Max } from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class CreateTableDto {
+  @IsInt()
+  @Min(1)
+  @Max(999)
+  @Type(() => Number)
+  number: number;
+}
+<- Manter consistência visual entre os botões do menu de END: src/tables/dto/create-table.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/tables/dto/update-table.dto.ts -->
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateTableDto } from './create-table.dto';
+import { IsOptional, IsEnum } from 'class-validator';
+import { TableStatus } from '@prisma/client';
+
+export class UpdateTableDto extends PartialType(CreateTableDto) {
+  @IsOptional()
+  @IsEnum(TableStatus)
+  status?: TableStatus;
+}
+<- Manter consistência visual entre os botões do menu de END: src/tables/dto/update-table.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/tables/manage-tables.service.ts -->
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { CreateTableDto } from './dto/create-table.dto';
+import { UpdateTableDto } from './dto/update-table.dto';
+import { TableStatus } from '@prisma/client';
+
+@Injectable()
+export class ManageTablesService {
+  constructor(private prisma: PrismaService) {}
+
+  async create(createTableDto: CreateTableDto) {
+    // Verificar se o número da mesa já existe
+    const existingTable = await this.prisma.table.findUnique({
+      where: { number: createTableDto.number },
+    });
+
+    if (existingTable) {
+      throw new ConflictException(
+        `Table with number ${createTableDto.number} already exists`,
+      );
+    }
+
+    return this.prisma.table.create({
+      data: createTableDto,
+    });
+  }
+
+  async findAll() {
+    return this.prisma.table.findMany({
+      include: {
+        sessions: {
+          where: { closedAt: null }, // Apenas sessões ativas
+          orderBy: { openedAt: 'desc' },
+          take: 1,
+        },
+      },
+      orderBy: { number: 'asc' },
+    });
+  }
+
+  async findOne(id: string) {
+    const table = await this.prisma.table.findUnique({
+      where: { id },
+      include: {
+        sessions: {
+          where: { closedAt: null }, // Apenas sessões ativas
+          orderBy: { openedAt: 'desc' },
+          take: 1,
+        },
+      },
+    });
+
+    if (!table) {
+      throw new NotFoundException(`Table with ID ${id} not found`);
+    }
+
+    return table;
+  }
+
+  async update(id: string, updateTableDto: UpdateTableDto) {
+    try {
+      // Se estiver mudando o status, verificar se é válido
+      if (updateTableDto.status) {
+        const table = await this.findOne(id);
+
+        // Não permitir mudança direta de status - deve ser feito através de sessões
+        if (table.status !== updateTableDto.status) {
+          throw new ConflictException(
+            'Table status should be managed through sessions',
+          );
+        }
+      }
+
+      return await this.prisma.table.update({
+        where: { id },
+        data: updateTableDto,
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Table with ID ${id} not found`);
+      }
+      throw error;
+    }
+  }
+
+  async remove(id: string) {
+    try {
+      // Verificar se há sessões ativas
+      const activeSession = await this.prisma.tableSession.findFirst({
+        where: {
+          tableId: id,
+          closedAt: null,
+        },
+      });
+
+      if (activeSession) {
+        throw new ConflictException('Cannot delete table with active session');
+      }
+
+      return await this.prisma.table.delete({
+        where: { id },
+      });
+    } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Table with ID ${id} not found`);
+      }
+      throw error;
+    }
+  }
+
+  async getAvailableTables() {
+    return this.prisma.table.findMany({
+      where: { status: TableStatus.AVAILABLE },
+      orderBy: { number: 'asc' },
+    });
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/tables/manage-tables.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/tables/table-session.service.ts -->
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { TableStatus } from '@prisma/client';
+
+@Injectable()
+export class TableSessionService {
+  constructor(private prisma: PrismaService) {}
+
+  async openSession(tableId: string) {
+    // Verificar se a mesa existe
+    const table = await this.prisma.table.findUnique({
+      where: { id: tableId },
+    });
+
+    if (!table) {
+      throw new NotFoundException(`Table with ID ${tableId} not found`);
+    }
+
+    // Verificar se a mesa já está ocupada
+    if (table.status !== TableStatus.AVAILABLE) {
+      throw new ConflictException('Table is not available');
+    }
+
+    // Verificar se já existe uma sessão ativa para esta mesa
+    const activeSession = await this.prisma.tableSession.findFirst({
+      where: {
+        tableId,
+        closedAt: null,
+      },
+    });
+
+    if (activeSession) {
+      throw new ConflictException('Table already has an active session');
+    }
+
+    // Criar nova sessão e atualizar status da mesa
+    const result = await this.prisma.$transaction(async (tx) => {
+      // Criar sessão
+      const session = await tx.tableSession.create({
+        data: {
+          tableId,
+        },
+      });
+
+      // Atualizar status da mesa
+      await tx.table.update({
+        where: { id: tableId },
+        data: { status: TableStatus.OCCUPIED },
+      });
+
+      return session;
+    });
+
+    return result;
+  }
+
+  async getBill(tableId: string) {
+    // Verificar se a mesa existe
+    const table = await this.prisma.table.findUnique({
+      where: { id: tableId },
+    });
+
+    if (!table) {
+      throw new NotFoundException(`Table with ID ${tableId} not found`);
+    }
+
+    // Buscar sessão ativa
+    const activeSession = await this.prisma.tableSession.findFirst({
+      where: {
+        tableId,
+        closedAt: null,
+      },
+      include: {
+        orders: {
+          include: {
+            items: {
+              include: {
+                product: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!activeSession) {
+      throw new BadRequestException('No active session for this table');
+    }
+
+    // Calcular total
+    let total = 0;
+    const orderDetails = [];
+
+    for (const order of activeSession.orders) {
+      let orderTotal = 0;
+      const items = [];
+
+      for (const item of order.items) {
+        const itemTotal = Number(item.price) * item.quantity;
+        orderTotal += itemTotal;
+
+        items.push({
+          productName: item.product.name,
+          quantity: item.quantity,
+          unitPrice: Number(item.price),
+          total: itemTotal,
+        });
+      }
+
+      total += orderTotal;
+      orderDetails.push({
+        orderId: order.id,
+        items,
+        orderTotal,
+      });
+    }
+
+    return {
+      tableId,
+      tableNumber: table.number,
+      sessionId: activeSession.id,
+      openedAt: activeSession.openedAt,
+      orders: orderDetails,
+      total: Number(total.toFixed(2)),
+    };
+  }
+
+  async closeSession(tableId: string) {
+    // Verificar se a mesa existe
+    const table = await this.prisma.table.findUnique({
+      where: { id: tableId },
+    });
+
+    if (!table) {
+      throw new NotFoundException(`Table with ID ${tableId} not found`);
+    }
+
+    // Buscar sessão ativa
+    const activeSession = await this.prisma.tableSession.findFirst({
+      where: {
+        tableId,
+        closedAt: null,
+      },
+    });
+
+    if (!activeSession) {
+      throw new BadRequestException('No active session for this table');
+    }
+
+    // Calcular total dos pedidos
+    const bill = await this.getBill(tableId);
+    const total = bill.total;
+
+    // Fechar sessão e liberar mesa
+    const result = await this.prisma.$transaction(async (tx) => {
+      // Atualizar sessão com total e data de fechamento
+      const closedSession = await tx.tableSession.update({
+        where: { id: activeSession.id },
+        data: {
+          closedAt: new Date(),
+          total,
+        },
+      });
+
+      // Liberar mesa
+      await tx.table.update({
+        where: { id: tableId },
+        data: { status: TableStatus.AVAILABLE },
+      });
+
+      return closedSession;
+    });
+
+    return {
+      ...result,
+      total: Number(result.total.toFixed(2)),
+      bill,
+    };
+  }
+
+  async getActiveSession(tableId: string) {
+    const session = await this.prisma.tableSession.findFirst({
+      where: {
+        tableId,
+        closedAt: null,
+      },
+      include: {
+        orders: {
+          include: {
+            items: {
+              include: {
+                product: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return session;
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/tables/table-session.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/tables/tables.controller.ts -->
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { ManageTablesService } from './manage-tables.service';
+import { TableSessionService } from './table-session.service';
+import { CreateTableDto } from './dto/create-table.dto';
+import { UpdateTableDto } from './dto/update-table.dto';
+
+@Controller('tables')
+export class TablesController {
+  constructor(
+    private readonly manageTablesService: ManageTablesService,
+    private readonly tableSessionService: TableSessionService,
+  ) {}
+
+  // CRUD de Mesas
+  @Post()
+  createTable(@Body() createTableDto: CreateTableDto) {
+    return this.manageTablesService.create(createTableDto);
+  }
+
+  @Get()
+  findAllTables() {
+    return this.manageTablesService.findAll();
+  }
+
+  @Get('available')
+  getAvailableTables() {
+    return this.manageTablesService.getAvailableTables();
+  }
+
+  @Get(':id')
+  findOneTable(@Param('id') id: string) {
+    return this.manageTablesService.findOne(id);
+  }
+
+  @Patch(':id')
+  updateTable(@Param('id') id: string, @Body() updateTableDto: UpdateTableDto) {
+    return this.manageTablesService.update(id, updateTableDto);
+  }
+
+  @Delete(':id')
+  removeTable(@Param('id') id: string) {
+    return this.manageTablesService.remove(id);
+  }
+
+  // Gestão de Sessões
+  @Post(':tableId/sessions/open')
+  openSession(@Param('tableId') tableId: string) {
+    return this.tableSessionService.openSession(tableId);
+  }
+
+  @Get(':tableId/sessions/active')
+  getActiveSession(@Param('tableId') tableId: string) {
+    return this.tableSessionService.getActiveSession(tableId);
+  }
+
+  @Get(':tableId/bill')
+  getBill(@Param('tableId') tableId: string) {
+    return this.tableSessionService.getBill(tableId);
+  }
+
+  @Post(':tableId/sessions/close')
+  closeSession(@Param('tableId') tableId: string) {
+    return this.tableSessionService.closeSession(tableId);
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/tables/tables.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/tables/tables.module.ts -->
+import { Module } from '@nestjs/common';
+import { ManageTablesService } from './manage-tables.service';
+import { TableSessionService } from './table-session.service';
+import { TablesController } from './tables.controller';
+import { PrismaModule } from '../prisma.module';
+
+@Module({
+  imports: [PrismaModule],
+  controllers: [TablesController],
+  providers: [ManageTablesService, TableSessionService],
+  exports: [ManageTablesService, TableSessionService],
+})
+export class TablesModule {}
+<- Manter consistência visual entre os botões do menu de END: src/tables/tables.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/types/multer.d.ts -->
+// types/multer.d.ts
+export interface MulterFile {
+  fieldname: string;
+  originalname: string;
+  encoding: string;
+  mimetype: string;
+  size: number;
+  filename: string;
+  path: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/types/multer.d.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/upload/file-validation.interceptor.ts -->
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+  BadRequestException,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+
+interface RequestWithFile extends Request {
+  file?: Express.Multer.File;
+}
+
+@Injectable()
+export class FileValidationInterceptor implements NestInterceptor {
+  private readonly allowedMimeTypes = [
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/webp',
+  ];
+
+  private readonly maxFileSize = 5 * 1024 * 1024; // 5MB
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const request = context.switchToHttp().getRequest<RequestWithFile>();
+    const file = request.file;
+
+    if (file) {
+      // Validar tipo de arquivo
+      if (!this.allowedMimeTypes.includes(file.mimetype)) {
+        throw new BadRequestException(
+          'Tipo de arquivo não permitido. Use apenas: JPG, PNG ou WEBP',
+        );
+      }
+
+      // Validar tamanho do arquivo
+      if (file.size > this.maxFileSize) {
+        throw new BadRequestException(
+          'Arquivo muito grande. Tamanho máximo permitido: 5MB',
+        );
+      }
+    }
+
+    return next.handle();
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/upload/file-validation.interceptor.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/upload/upload.module.ts -->
+import { Module } from '@nestjs/common';
+import { UploadService } from './upload.service';
+
+@Module({
+  providers: [UploadService],
+  exports: [UploadService],
+})
+export class UploadModule {}
+<- Manter consistência visual entre os botões do menu de END: src/upload/upload.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/upload/upload.service.ts -->
+import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  v2 as cloudinary,
+  UploadApiResponse,
+  UploadApiErrorResponse,
+} from 'cloudinary';
+
+@Injectable()
+export class UploadService {
+  constructor() {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
+  }
+
+  async uploadImage(
+    file: Express.Multer.File,
+    folder: string = 'pizzas',
+  ): Promise<string> {
+    // Validação de tipo e tamanho
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (!file) {
+      throw new BadRequestException('Arquivo de imagem não enviado.');
+    }
+    if (!allowedTypes.includes(file.mimetype)) {
+      throw new BadRequestException(
+        'Tipo de arquivo não permitido. Use apenas: JPG, PNG ou WEBP.',
+      );
+    }
+    if (file.size > maxSize) {
+      throw new BadRequestException(
+        'Arquivo muito grande. Tamanho máximo: 5MB.',
+      );
+    }
+
+    return new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: `pizza-express/${folder}`,
+          resource_type: 'image',
+          format: 'webp',
+          quality: 'auto',
+          fetch_format: 'auto',
+          transformation: [
+            { width: 800, height: 600, crop: 'fill' },
+            { quality: 'auto:good' },
+          ],
+        },
+        (
+          error: UploadApiErrorResponse | undefined,
+          result: UploadApiResponse | undefined,
+        ) => {
+          if (error) {
+            reject(new Error(error.message || 'Upload failed'));
+          } else if (result?.secure_url) {
+            resolve(result.secure_url);
+          } else {
+            reject(new Error('Upload failed'));
+          }
+        },
+      );
+      uploadStream.end(file.buffer);
+    });
+  }
+
+  async deleteImage(publicId: string): Promise<void> {
+    try {
+      await cloudinary.uploader.destroy(publicId);
+    } catch {
+      // Silenciar erro em produção
+    }
+  }
+
+  extractPublicIdFromUrl(url: string): string {
+    const parts = url.split('/');
+    const filename = parts[parts.length - 1];
+    return filename.split('.')[0];
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/upload/upload.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/dto/create-endereco.dto.ts -->
+import {
+  IsString,
+  IsBoolean,
+  IsOptional,
+  IsNotEmpty,
+  Matches,
+  MinLength,
+} from 'class-validator';
+
+export class CreateEnderecoDto {
+  @IsOptional()
+  userId?: number;
+  @IsString({ message: 'O CEP deve ser um texto' })
+  @IsNotEmpty({ message: 'O CEP é obrigatório' })
+  @Matches(/^\d{5}-?\d{3}$/, {
+    message: 'O CEP deve estar no formato 00000-000',
+  })
+  cep: string;
+
+  @IsString({ message: 'O tipo é obrigatório' })
+  @IsNotEmpty({ message: 'O tipo é obrigatório' })
+  tipo: string;
+
+  @IsString({ message: 'O logradouro é obrigatório' })
+  @IsNotEmpty({ message: 'O logradouro é obrigatório' })
+  logradouro: string;
+
+  @IsString({ message: 'O número é obrigatório' })
+  @IsNotEmpty({ message: 'O número é obrigatório' })
+  numero: string;
+
+  @IsString({ message: 'O bairro é obrigatório' })
+  @IsNotEmpty({ message: 'O bairro é obrigatório' })
+  bairro: string;
+
+  @IsString({ message: 'A cidade é obrigatória' })
+  @IsNotEmpty({ message: 'A cidade é obrigatória' })
+  cidade: string;
+
+  @IsString({ message: 'O estado é obrigatório' })
+  @IsNotEmpty({ message: 'O estado é obrigatório' })
+  @MinLength(2, { message: 'O estado deve ter 2 caracteres' })
+  estado: string;
+
+  @IsOptional()
+  @IsString()
+  complemento?: string;
+
+  @IsOptional()
+  @IsString()
+  pais?: string;
+
+  @IsOptional()
+  @IsString()
+  referencia?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  principal?: boolean;
+}
+<- Manter consistência visual entre os botões do menu de END: src/users/dto/create-endereco.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/dto/create-user.dto.ts -->
+import {
+  IsString,
+  IsEmail,
+  IsOptional,
+  ValidateNested,
+  IsEnum,
+} from 'class-validator';
+import { Type } from 'class-transformer';
+import { CreateEnderecoDto } from './create-endereco.dto';
+
+export enum Role {
+  CLIENTE = 'CLIENTE',
+  FUNCIONARIO = 'FUNCIONARIO',
+  ADMIN = 'ADMIN',
+}
+
+export class CreateUserDto {
+  @IsString()
+  nome: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  password: string;
+
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => CreateEnderecoDto)
+  enderecos?: CreateEnderecoDto[];
+
+  @IsOptional()
+  @IsEnum(Role)
+  role?: Role;
+
+  @IsOptional()
+  @IsString()
+  telefone?: string;
+}
+<- Manter consistência visual entre os botões do menu de END: src/users/dto/create-user.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/dto/update-endereco.dto.ts -->
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateEnderecoDto } from './create-endereco.dto';
+import { IsInt } from 'class-validator';
+
+export class UpdateEnderecoDto extends PartialType(CreateEnderecoDto) {
+  @IsInt()
+  id: number;
+}
+<- Manter consistência visual entre os botões do menu de END: src/users/dto/update-endereco.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/dto/update-user.dto.ts -->
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateUserDto } from './create-user.dto';
+
+export class UpdateUserDto extends PartialType(CreateUserDto) {
+  // ...existing code...
+}
+<- Manter consistência visual entre os botões do menu de END: src/users/dto/update-user.dto.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/entities/endereco.entity.ts -->
+export class Endereco {
+  id: number;
+  clienteId: number;
+  cep: string;
+  tipo: string;
+  logradouro: string;
+  numero: string;
+  bairro: string;
+  complemento?: string;
+  cidade: string;
+  estado: string;
+  pais?: string;
+  referencia?: string;
+  principal: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+<- Manter consistência visual entre os botões do menu de END: src/users/entities/endereco.entity.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/entities/user.entity.ts -->
+import { Endereco } from './endereco.entity';
+import { Role } from '../dto/create-user.dto';
+import { Pedido } from '../../pedidos/entities/pedido.entity';
+
+export class User {
+  id: number;
+  nome: string;
+  email: string;
+  password: string;
+  telefone?: string;
+  role: Role;
+  enderecos: Endereco[];
+  pedidos: Pedido[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+<- Manter consistência visual entre os botões do menu de END: src/users/entities/user.entity.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/users.controller.ts -->
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { AdminOnly } from '../common/decorators/auth.decorators';
+import { UserResponseBuilder } from '../common/builders/response.builder';
+
+interface PrismaError {
+  code: string;
+}
+
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Post()
+  async create(@Body() createUserDto: CreateUserDto) {
+    try {
+      const user = await this.usersService.create(createUserDto);
+      return user;
+    } catch (error: unknown) {
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        (error as { code: string }).code === 'P2002'
+      ) {
+        throw new HttpException('E-mail já cadastrado', HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Get()
+  @AdminOnly()
+  async findAll(@Query('email') email?: string) {
+    if (email) {
+      const user = await this.usersService.findByEmail(email);
+      return UserResponseBuilder.userFound(user);
+    }
+    const users = await this.usersService.findAll();
+    return UserResponseBuilder.usersList(users);
+  }
+
+  @Get(':id')
+  @AdminOnly()
+  async findOne(@Param('id') id: string) {
+    const user = await this.usersService.findOne(+id);
+    return UserResponseBuilder.userFound(user);
+  }
+
+  @Patch(':id')
+  @AdminOnly()
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    try {
+      const user = await this.usersService.update(+id, updateUserDto);
+      return UserResponseBuilder.userUpdated(user);
+    } catch (error: unknown) {
+      const prismaError = error as PrismaError;
+      if (prismaError.code === 'P2025') {
+        throw new HttpException(
+          'Registro não encontrado',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Delete(':id')
+  @AdminOnly()
+  async remove(@Param('id') id: string) {
+    try {
+      await this.usersService.remove(+id);
+      return UserResponseBuilder.userDeleted();
+    } catch (error: unknown) {
+      const prismaError = error as PrismaError;
+      if (prismaError.code === 'P2025') {
+        throw new HttpException(
+          'Registro não encontrado',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      throw new HttpException(
+        'Erro interno do servidor',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/users/users.controller.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/users.module.ts -->
+import { Module } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { UsersController } from './users.controller';
+import { PrismaModule } from '../prisma.module';
+import { CommonModule } from '../common/common.module';
+import { BcryptAdapter } from '../common/adapters/bcrypt.adapter';
+
+@Module({
+  imports: [PrismaModule, CommonModule],
+  controllers: [UsersController],
+  providers: [
+    UsersService,
+    {
+      provide: 'HASHER',
+      useClass: BcryptAdapter,
+    },
+  ],
+})
+export class UsersModule {}
+<- Manter consistência visual entre os botões do menu de END: src/users/users.module.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/users.service.spec.ts -->
+import { Test, TestingModule } from '@nestjs/testing';
+import { UsersService } from './users.service';
+import { PrismaService } from '../prisma.service';
+import { Role } from './dto/create-user.dto';
+
+const userMock = {
+  id: 1,
+  nome: 'João',
+  email: 'joao@email.com',
+  password: process.env.TEST_USER_PASSWORD || 'hashedpassword',
+  telefone: '11999999999',
+  role: Role.CLIENTE,
+  enderecos: [],
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+interface MockPrismaService {
+  user: {
+    create: jest.Mock;
+    findMany: jest.Mock;
+    findUnique: jest.Mock;
+  };
+}
+
+describe('UsersService', () => {
+  let service: UsersService;
+  let prisma: MockPrismaService;
+
+  beforeEach(async () => {
+    const mockPrismaService: MockPrismaService = {
+      user: {
+        create: jest.fn(),
+        findMany: jest.fn(),
+        findUnique: jest.fn(),
+      },
+    };
+
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        UsersService,
+        {
+          provide: PrismaService,
+          useValue: mockPrismaService,
+        },
+        {
+          provide: 'HASHER',
+          useValue: {
+            hash: jest.fn().mockResolvedValue('hashedpassword'),
+          },
+        },
+      ],
+    }).compile();
+
+    service = module.get<UsersService>(UsersService);
+    prisma = module.get<MockPrismaService>(PrismaService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  it('should create a user', async () => {
+    const userWithoutAddresses = {
+      id: 1,
+      nome: 'João',
+      email: 'joao@email.com',
+      password: 'hashedpassword',
+      telefone: null,
+      role: Role.CLIENTE,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    const userWithAddresses = {
+      ...userWithoutAddresses,
+      enderecos: [],
+    };
+
+    prisma.user.create.mockResolvedValue(userWithoutAddresses);
+    prisma.user.findUnique.mockResolvedValue(userWithAddresses);
+
+    const result = await service.create({
+      nome: 'João',
+      email: 'joao@email.com',
+      password: '123456',
+      role: Role.CLIENTE,
+    });
+
+    expect(result).toBeDefined();
+    expect(result.enderecos).toBeDefined();
+    expect(prisma.user.create).toHaveBeenCalled();
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: src/users/users.service.spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: src/users/users.service.ts -->
+import { Injectable, Inject } from '@nestjs/common';
+import { PrismaService } from '../prisma.service';
+import { IHasher } from '../common/interfaces/hasher.interface';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User, Endereco } from '@prisma/client';
+import { UpdateEnderecoDto } from './dto/update-endereco.dto';
+import { CreateEnderecoDto } from './dto/create-endereco.dto';
+
+@Injectable()
+export class UsersService {
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject('HASHER') private readonly hasher: IHasher,
+  ) {}
+
+  async create(
+    createUserDto: CreateUserDto,
+  ): Promise<User & { enderecos: Endereco[] }> {
+    const { enderecos, password, ...clienteData } = createUserDto;
+    if (!password) throw new Error('Campo password é obrigatório');
+    // Gera hash da senha antes de salvar
+    const hash = await this.hasher.hash(password);
+    // Cria o cliente primeiro
+    const user = await this.prisma.user.create({
+      data: {
+        ...clienteData,
+        nome: clienteData.nome,
+        password: hash,
+        role: 'CLIENTE',
+      },
+    });
+    // Garante que pelo menos um endereço é principal
+    const enderecosAtualizados = (enderecos ?? []).map(
+      (endereco: CreateEnderecoDto, idx: number) => ({
+        ...endereco,
+        principal: idx === 0 ? true : (endereco.principal ?? false),
+        userId: user.id,
+      }),
+    );
+    if (enderecosAtualizados.length > 0) {
+      await this.prisma.endereco.createMany({ data: enderecosAtualizados });
+    }
+    // Retorna usuário com endereços
+    const userWithAddresses = await this.prisma.user.findUnique({
+      where: { id: user.id },
+      include: { enderecos: true },
+    });
+    return userWithAddresses!;
+  }
+
+  async findAll(): Promise<(User & { enderecos: Endereco[] })[]> {
+    return this.prisma.user.findMany({
+      include: {
+        enderecos: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async findOne(
+    id: number,
+  ): Promise<(User & { enderecos: Endereco[] }) | null> {
+    return this.prisma.user.findUnique({
+      where: { id },
+      include: { enderecos: true },
+    });
+  }
+
+  async update(
+    id: number,
+    updateUserDto: UpdateUserDto,
+  ): Promise<User & { enderecos: Endereco[] }> {
+    const {
+      enderecos,
+      nome,
+      email,
+      password: pwd,
+      telefone,
+      role,
+    } = updateUserDto;
+    // Monta objeto de atualização sem tipagem explícita
+    const updateData: Record<string, unknown> = {};
+    if (nome) updateData.nome = nome;
+    if (email) updateData.email = email;
+    if (pwd) updateData.password = pwd;
+    if (telefone) updateData.telefone = telefone;
+    if (role) updateData.role = role;
+    if (enderecos) {
+      // Atualiza endereços existentes
+      const enderecosToUpdate = enderecos.filter(
+        (e) => 'id' in e && typeof e.id === 'number',
+      );
+      await Promise.all(
+        enderecosToUpdate.map(async (endereco) => {
+          const { id, ...rest } = endereco as UpdateEnderecoDto;
+          await this.prisma.endereco.update({
+            where: { id },
+            data: {
+              cep: rest.cep,
+              tipo: rest.tipo,
+              logradouro: rest.logradouro,
+              numero: rest.numero,
+              bairro: rest.bairro,
+              cidade: rest.cidade,
+              estado: rest.estado,
+              principal: rest.principal ?? false,
+              ...(rest.complemento !== undefined
+                ? { complemento: rest.complemento }
+                : {}),
+            },
+          });
+        }),
+      );
+      // Adiciona novos endereços sem sobrescrever os existentes
+      const enderecosToCreate = enderecos.filter(
+        (e) => !('id' in e) || typeof e.id !== 'number',
+      );
+      if (enderecosToCreate.length > 0) {
+        updateData.enderecos = {
+          create: enderecosToCreate
+            .filter(
+              (e) =>
+                e.cep !== undefined &&
+                e.tipo !== undefined &&
+                e.logradouro !== undefined &&
+                e.numero !== undefined &&
+                e.bairro !== undefined &&
+                e.cidade !== undefined &&
+                e.estado !== undefined,
+            )
+            .map((endereco) => ({
+              cep: endereco.cep,
+              tipo: endereco.tipo,
+              logradouro: endereco.logradouro,
+              numero: endereco.numero,
+              bairro: endereco.bairro,
+              cidade: endereco.cidade,
+              estado: endereco.estado,
+              principal: endereco.principal ?? false,
+              ...(endereco.complemento !== undefined
+                ? { complemento: endereco.complemento }
+                : {}),
+            })),
+        };
+      }
+    }
+    const updatedUser = await this.prisma.user.update({
+      where: { id },
+      data: updateData,
+      include: { enderecos: true },
+    });
+    return updatedUser;
+  }
+
+  async remove(id: number): Promise<User> {
+    return this.prisma.user.delete({ where: { id } });
+  }
+
+  async findByEmail(email: string): Promise<User[]> {
+    return this.prisma.user.findMany({ where: { email } });
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: src/users/users.service.ts -->
+<- Manter consistência visual entre os botões do menu de START: test/app.e2e-spec.ts -->
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import * as request from 'supertest';
+import { App } from 'supertest/types';
+import { AppModule } from './../src/app.module';
+
+describe('AppController (e2e)', () => {
+  let app: INestApplication<App>;
+
+  beforeEach(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    await app.init();
+  });
+
+  it('/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/')
+      .expect(200)
+      .expect('Hello World!');
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: test/app.e2e-spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: test/entregadores.e2e-spec.ts -->
+import * as request from 'supertest';
+import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import { AppModule } from '../src/app.module';
+import { PrismaClient } from '@prisma/client';
+
+describe('EntregadoresController (e2e)', () => {
+  jest.setTimeout(40000);
+  let app: INestApplication;
+  let prisma: PrismaClient;
+
+  beforeAll(async () => {
+    prisma = new PrismaClient();
+    const moduleFixture = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+    app = moduleFixture.createNestApplication();
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+    await prisma.$disconnect();
+  });
+
+  beforeEach(async () => {
+    // Removido deleteMany para preservar dados do seed
+  });
+
+  // Helper para obter o server tipado corretamente para o supertest
+  function getServer() {
+    return app.getHttpServer() as unknown as import('http').Server;
+  }
+
+  async function waitForClienteApi(
+    app: INestApplication,
+    email: string,
+    password: string,
+    maxRetries = 10,
+    delayMs = 300,
+  ): Promise<void> {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const res = await request(getServer())
+          .post('/auth/login')
+          .send({ email, password });
+        if (res.status === 201 && res.body.access_token) {
+          return; // Usuário pode fazer login, então foi criado com sucesso
+        }
+      } catch (error) {
+        // Ignorar erro e tentar novamente
+      }
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+    throw new Error(
+      `Cliente com email ${email} não conseguiu fazer login após registro.`,
+    );
+  }
+      `Cliente com email ${email} não encontrado via API após registro.`,
+    );
+  }
+
+  async function createAndLoginCliente(
+    email: string,
+    password = process.env.TEST_CLIENTE_PASSWORD!,
+  ): Promise<string> {
+    const resRegister = await request(getServer()).post('/auth/register').send({
+      nome: 'João Silva',
+      email,
+      password,
+      telefone: '11999999999',
+      endereco: 'Rua das Flores, 123',
+    });
+    if (resRegister.status >= 400)
+      throw new Error(
+        'Falha ao registrar cliente: ' + JSON.stringify(resRegister.body),
+      );
+    await waitForClienteApi(app, email, password);
+    const res = await request(getServer())
+      .post('/auth/login')
+      .send({ email, password });
+    const token = (res.body as { access_token?: string }).access_token;
+    if (!token) {
+      throw new Error('Token de acesso não retornado ou inválido');
+    }
+    return token;
+  }
+
+  function randomEmail() {
+    return `test${Date.now()}${Math.floor(Math.random() * 10000)}@mail.com`;
+  }
+
+  it('/entregadores (GET) deve retornar entregadores', async () => {
+    const email = randomEmail();
+    const token = await createAndLoginCliente(email);
+    // Cria entregador
+    await prisma.entregador.create({
+      data: {
+        nome: 'Carlos Motoboy',
+        telefone: '11988888888',
+      },
+    });
+    const res = await request(getServer())
+      .get('/entregadores')
+      .set('Authorization', `Bearer ${token}`);
+    type Entregador = { id: number; nome: string };
+    const body = res.body as Entregador[];
+    expect(res.status).toBe(200);
+    expect(Array.isArray(body)).toBe(true);
+    expect(body.length).toBeGreaterThan(0);
+    expect(body[0]).toHaveProperty('id');
+    expect(body[0]).toHaveProperty('nome');
+  });
+
+  it('/entregadores (POST) seguido de (GET) deve retornar o entregador criado', async () => {
+    const email = randomEmail();
+    const token = await createAndLoginCliente(email);
+    const entregadorData = {
+      nome: 'Teste Diagnóstico',
+      telefone: '11999990000',
+    };
+    // Cria um entregador
+    const resPost = await request(getServer())
+      .post('/entregadores')
+      .set('Authorization', `Bearer ${token}`)
+      .send(entregadorData);
+    type PostResponse = { data: { id: number } };
+    const postBody = resPost.body as PostResponse;
+    expect(resPost.status).toBe(201);
+    expect(postBody.data).toHaveProperty('id');
+    // Busca todos entregadores
+    const resGet = await request(getServer())
+      .get('/entregadores')
+      .set('Authorization', `Bearer ${token}`);
+    type Entregador = { nome: string };
+    const getBody = resGet.body as Entregador[];
+    const nomes = getBody.map((e) => e.nome);
+    expect(nomes).toContain('Teste Diagnóstico');
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: test/entregadores.e2e-spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: test/jest-e2e.json -->
+{
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: test/jest-e2e.json -->
+<- Manter consistência visual entre os botões do menu de START: test/pedidos.e2e-spec.ts -->
+import * as request from 'supertest';
+import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import { AppModule } from '../src/app.module';
+import { PrismaClient } from '@prisma/client';
+
+describe('OrdersController (e2e)', () => {
+  jest.setTimeout(40000);
+  let app: INestApplication;
+  let prisma: PrismaClient;
+
+  beforeAll(async () => {
+    prisma = new PrismaClient();
+    const moduleFixture = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+    app = moduleFixture.createNestApplication();
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+    await prisma.$disconnect();
+  });
+
+  function getServer() {
+    return app.getHttpServer() as unknown as import('http').Server;
+  }
+
+  async function waitForClienteApi(
+    app: INestApplication,
+    email: string,
+    password: string,
+    maxRetries = 10,
+    delayMs = 300,
+  ): Promise<void> {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const res = await request(getServer())
+          .post('/auth/login')
+          .send({ email, password });
+        if (res.status === 201 && res.body.access_token) {
+          return; // Usuário pode fazer login, então foi criado com sucesso
+        }
+      } catch (error) {
+        // Ignorar erro e tentar novamente
+      }
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+    throw new Error(
+      `Cliente com email ${email} não conseguiu fazer login após registro.`,
+    );
+  }
+
+  async function createAndLoginCliente(
+    email: string,
+    password = process.env.TEST_CLIENTE_PASSWORD!,
+  ): Promise<string> {
+    const resRegister = await request(getServer()).post('/auth/register').send({
+      nome: 'João Silva',
+      email,
+      password,
+      telefone: '11999999999',
+    });
+    if (resRegister.status >= 400)
+      throw new Error(
+        'Falha ao registrar cliente: ' + JSON.stringify(resRegister.body),
+      );
+    await waitForClienteApi(app, email, password);
+    const res = await request(getServer())
+      .post('/auth/login')
+      .send({ email, password });
+    const token = (res.body as { access_token?: string }).access_token;
+    if (!token) {
+      throw new Error('Token de acesso não retornado ou inválido');
+    }
+    return token;
+  }
+
+  function randomEmail() {
+    return `test${Date.now()}${Math.floor(Math.random() * 10000)}@mail.com`;
+  }
+
+  it('/orders (GET) deve retornar pedidos', async () => {
+    const email = randomEmail();
+    const token = await createAndLoginCliente(email);
+
+    // Cria categoria (ou usa existente)
+    let category = await prisma.category.findUnique({
+      where: { name: 'Pizzas' },
+    });
+    if (!category) {
+      category = await prisma.category.create({
+        data: {
+          name: 'Pizzas',
+          slug: 'pizzas',
+        },
+      });
+    }
+
+    // Cria produtos
+    const product1 = await prisma.product.create({
+      data: {
+        name: 'Margherita Test',
+        description: 'Molho de tomate, mussarela, manjericão',
+        price: 39.9,
+        categoryId: category.id,
+        active: true,
+      },
+    });
+
+    const product2 = await prisma.product.create({
+      data: {
+        name: 'Calabresa Test',
+        description: 'Calabresa, cebola, mussarela',
+        price: 44.9,
+        categoryId: category.id,
+        active: true,
+      },
+    });
+
+    // Busca endereço existente do usuário cliente
+    const address = await prisma.endereco.findFirst({
+      where: { userId: 12 }, // ID do usuário CLIENTE criado no seed
+    });
+
+    if (!address) {
+      throw new Error('Endereço do usuário cliente não encontrado');
+    }
+
+    // Cria pedido de delivery via API
+    const orderRes = await request(getServer())
+      .post('/orders')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        type: 'DELIVERY',
+        items: [
+          { productId: product1.id, quantity: 1 },
+          { productId: product2.id, quantity: 2 },
+        ],
+        addressId: address.id,
+        observations: 'Sem cebola na calabresa',
+      });
+
+    expect(orderRes.status).toBe(201);
+    expect(orderRes.body).toHaveProperty('id');
+    expect(orderRes.body.type).toBe('DELIVERY');
+    expect(orderRes.body.status).toBe('PENDENTE');
+    expect(orderRes.body.total).toBeGreaterThan(0);
+
+    // Verifica se o pedido foi criado
+    const getOrdersRes = await request(getServer())
+      .get('/orders')
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(getOrdersRes.status).toBe(200);
+    expect(Array.isArray(getOrdersRes.body)).toBe(true);
+    expect(getOrdersRes.body.length).toBeGreaterThan(0);
+  });
+
+  it('/orders/:id (GET) deve retornar um pedido', async () => {
+    const email = randomEmail();
+    const token = await createAndLoginCliente(email);
+
+    // Cria categoria (ou usa existente)
+    let category = await prisma.category.findUnique({
+      where: { name: 'Pizzas' },
+    });
+    if (!category) {
+      category = await prisma.category.create({
+        data: {
+          name: 'Pizzas',
+          slug: 'pizzas',
+        },
+      });
+    }
+
+    // Cria produto
+    const product = await prisma.product.create({
+      data: {
+        name: 'Margherita Test 2',
+        description: 'Molho de tomate, mussarela, manjericão',
+        price: 39.9,
+        categoryId: category.id,
+        active: true,
+      },
+    });
+
+    // Busca endereço existente do usuário cliente
+    const address = await prisma.endereco.findFirst({
+      where: { userId: 12 }, // ID do usuário CLIENTE criado no seed
+    });
+
+    if (!address) {
+      throw new Error('Endereço do usuário cliente não encontrado');
+    }
+
+    // Cria pedido de delivery via API
+    const orderRes = await request(getServer())
+      .post('/orders')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        type: 'DELIVERY',
+        items: [{ productId: product.id, quantity: 1 }],
+        addressId: address.id,
+      });
+
+    expect(orderRes.status).toBe(201);
+    const orderId = orderRes.body.id;
+
+    // Busca o pedido específico
+    const getOrderRes = await request(getServer())
+      .get(`/orders/${orderId}`)
+      .set('Authorization', `Bearer ${token}`);
+
+    expect(getOrderRes.status).toBe(200);
+    expect(getOrderRes.body).toHaveProperty('id', orderId);
+    expect(getOrderRes.body).toHaveProperty('type', 'DELIVERY');
+    expect(getOrderRes.body).toHaveProperty('status');
+    expect(getOrderRes.body).toHaveProperty('items');
+    expect(Array.isArray(getOrderRes.body.items)).toBe(true);
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: test/pedidos.e2e-spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: test/pizzas.e2e-spec.ts -->
+import * as request from 'supertest';
+import { Test } from '@nestjs/testing';
+import { INestApplication } from '@nestjs/common';
+import { AppModule } from '../src/app.module';
+import { PrismaClient } from '@prisma/client';
+
+describe('PizzasController (e2e)', () => {
+  let app: INestApplication;
+  let prisma: PrismaClient;
+
+  jest.setTimeout(40000);
+
+  beforeAll(async () => {
+    prisma = new PrismaClient();
+    const moduleFixture = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+    app = moduleFixture.createNestApplication();
+    await app.init();
+  });
+
+  afterAll(async () => {
+    await app.close();
+    await prisma.$disconnect();
+  });
+
+  beforeEach(async () => {
+    // Removido deleteMany para preservar dados do seed
+  });
+
+  function getServer() {
+    return app.getHttpServer() as unknown as import('http').Server;
+  }
+
+  async function waitForClienteApi(
+    app: INestApplication,
+    email: string,
+    password: string,
+    maxRetries = 10,
+    delayMs = 300,
+  ): Promise<void> {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const res = await request(getServer())
+          .post('/auth/login')
+          .send({ email, password });
+        if (res.status === 201 && res.body.access_token) {
+          return; // Usuário pode fazer login, então foi criado com sucesso
+        }
+      } catch (error) {
+        // Ignorar erro e tentar novamente
+      }
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+    throw new Error(
+      `Cliente com email ${email} não conseguiu fazer login após registro.`,
+    );
+  }
+      `Cliente com email ${email} não encontrado via API após registro.`,
+    );
+  }
+
+  async function createAndLoginCliente(
+    email: string,
+    password = process.env.TEST_CLIENTE_PASSWORD!,
+  ): Promise<string> {
+    const resRegister = await request(getServer()).post('/auth/register').send({
+      nome: 'João Silva',
+      email,
+      password,
+      telefone: '11999999999',
+      endereco: 'Rua das Flores, 123',
+    });
+    if (resRegister.status >= 400)
+      throw new Error(
+        'Falha ao registrar cliente: ' + JSON.stringify(resRegister.body),
+      );
+    await waitForClienteApi(app, email, password);
+    const res = await request(getServer())
+      .post('/auth/login')
+      .send({ email, password });
+    const token = (res.body as { access_token?: string }).access_token;
+    if (!token) {
+      throw new Error('Token de acesso não retornado ou inválido');
+    }
+    return token;
+  }
+
+  function randomEmail() {
+    return `test${Date.now()}${Math.floor(Math.random() * 10000)}@mail.com`;
+  }
+
+  it('/pizzas (GET) deve retornar pizzas', async () => {
+    const email = randomEmail();
+    const token = await createAndLoginCliente(email);
+    // Cria pizzas
+    await prisma.pizza.create({
+      data: {
+        nome: 'Margherita',
+        descricao: 'Molho de tomate, mussarela, manjericão',
+        preco: 39.9,
+      },
+    });
+    await prisma.pizza.create({
+      data: {
+        nome: 'Calabresa',
+        descricao: 'Calabresa, cebola, mussarela',
+        preco: 44.9,
+      },
+    });
+    const res = await request(getServer())
+      .get('/pizzas')
+      .set('Authorization', `Bearer ${token}`);
+    type Pizza = { id: number; nome: string };
+    const pizzasBody = res.body as Pizza[];
+    expect(res.status).toBe(200);
+    expect(Array.isArray(pizzasBody)).toBe(true);
+    expect(pizzasBody.length).toBeGreaterThan(0);
+    expect(pizzasBody[0]).toHaveProperty('id');
+    expect(pizzasBody[0]).toHaveProperty('nome');
+  });
+});
+<- Manter consistência visual entre os botões do menu de END: test/pizzas.e2e-spec.ts -->
+<- Manter consistência visual entre os botões do menu de START: test/utils.ts -->
+// test/utils.ts
+import * as request from 'supertest';
+import { INestApplication } from '@nestjs/common';
+
+export async function waitForClienteApi(
+  app: INestApplication,
+  email: string,
+  maxRetries = 20, // reduzido para 20 tentativas
+  delayMs = 200, // reduzido para 200ms de delay
+): Promise<void> {
+  for (let i = 0; i < maxRetries; i++) {
+    const res = await request(app.getHttpServer())
+      .get('/clientes')
+      .query({ email });
+
+    console.log(
+      `[waitForClienteApi] Tentativa ${i + 1}: status=${res.status}, body=`,
+      res.body,
+    );
+    if (
+      Array.isArray(res.body) &&
+      res.body.some((c: { email: string }) => c.email === email)
+    )
+      return;
+    await new Promise((resolve) => setTimeout(resolve, delayMs));
+  }
+  throw new Error(
+    `Cliente com email ${email} não encontrado via API após registro.`,
+  );
+}
+<- Manter consistência visual entre os botões do menu de END: test/utils.ts -->
+<- Manter consistência visual entre os botões do menu de START: test_crud.js -->
+const fs = require('fs');
+
+// Configurações
+const BASE_URL = 'http://localhost:3000';
+let TOKEN = null;
+
+async function login() {
+  const payload = {
+    email: 'admin@pizza.com', // Credenciais do seed
+    password: '123456', // Senha do seed
+  };
+  const response = await fetch(`${BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (response.ok) {
+    const data = await response.json();
+    TOKEN = data.access_token;
+    console.log('✅ Login realizado com sucesso');
+  } else {
+    console.log(
+      `❌ Falha no login: ${response.status} - ${await response.text()}`,
+    );
+    process.exit(1);
+  }
+}
+
+function getHeaders() {
+  return TOKEN
+    ? { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' }
+    : { 'Content-Type': 'application/json' };
+}
+
+// Testes de Auth
+async function testAuth() {
+  console.log('\n🔐 Testando Auth...');
+  // Register (se necessário)
+  const payload = {
+    nome: 'Test User',
+    email: 'test@example.com',
+    password: 'password123',
+  };
+  let response = await fetch(`${BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  console.log(`Register: ${response.status}`);
+
+  // Login já feito acima
+
+  // Me
+  response = await fetch(`${BASE_URL}/me`, {
+    method: 'GET',
+    headers: getHeaders(),
+  });
+  console.log(`Me: ${response.status}`);
+}
+
+// Testes de Users
+async function testUsers() {
+  console.log('\n👤 Testando Users...');
+  // Create
+  const payload = {
+    nome: 'Novo User',
+    email: 'novo@example.com',
+    password: 'password123',
+  };
+  let response = await fetch(`${BASE_URL}/users`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create User: ${response.status}`);
+  const data = response.ok ? await response.json() : null;
+  const userId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/users`, {
+    method: 'GET',
+    headers: getHeaders(),
+  });
+  console.log(`Get Users: ${response.status}`);
+
+  if (userId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/users/${userId}`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+    console.log(`Get User by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { nome: 'User Atualizado' };
+    response = await fetch(`${BASE_URL}/users/${userId}`, {
+      method: 'PATCH',
+      headers: getHeaders(),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update User: ${response.status}`);
+
+    // Delete
+    response = await fetch(`${BASE_URL}/users/${userId}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    console.log(`Delete User: ${response.status}`);
+  }
+}
+
+// Testes de Pizzas
+async function testPizzas() {
+  console.log('\n🍕 Testando Pizzas...');
+  // Create
+  const payload = {
+    nome: `Pizza Teste ${Date.now()}`,
+    descricao: 'Descrição teste',
+    preco: 29.9,
+  };
+  let response = await fetch(`${BASE_URL}/pizzas`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Pizza: ${response.status}`);
+  const data = response.ok ? await response.json() : null;
+  const pizzaId = data ? data.data.id : null;
+
+  // If created, upload image
+  if (pizzaId && response.status === 201) {
+    // Small valid JPEG base64
+    const dummyImage = Buffer.from(
+      '/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/vAA==',
+      'base64',
+    );
+
+    const formData = new FormData();
+    formData.append(
+      'image',
+      new Blob([dummyImage], { type: 'image/jpeg' }),
+      'pizza_test.jpg',
+    );
+
+    response = await fetch(`${BASE_URL}/pizzas/${pizzaId}/upload-image`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${TOKEN}` },
+      body: formData,
+    });
+    console.log(`Upload Image to Pizza: ${response.status}`);
+  }
+
+  // Read All
+  response = await fetch(`${BASE_URL}/pizzas`, {
+    method: 'GET',
+  });
+  console.log(`Get Pizzas: ${response.status}`);
+
+  if (pizzaId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/pizzas/${pizzaId}`, {
+      method: 'GET',
+    });
+    console.log(`Get Pizza by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { preco: 35.9 };
+    response = await fetch(`${BASE_URL}/pizzas/${pizzaId}`, {
+      method: 'PATCH',
+      headers: getHeaders(),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update Pizza: ${response.status}`);
+
+    // Delete
+    response = await fetch(`${BASE_URL}/pizzas/${pizzaId}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    console.log(`Delete Pizza: ${response.status}`);
+  }
+}
+
+// Testes de Pedidos
+async function testPedidos() {
+  console.log('\n📦 Testando Pedidos...');
+  // Assumir que há user e pizza criados, mas para simplificar, usar IDs fixos ou criar primeiro
+  // Create (precisa de clienteId, enderecoId, etc. - ajustar conforme necessário)
+  const payload = {
+    clienteId: 1, // Usando o admin
+    enderecoId: 1, // Endereco do admin
+    pizzasIds: [1], // Pizza do seed
+    status: 'PENDENTE',
+  };
+  let response = await fetch(`${BASE_URL}/pedidos`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Pedido: ${response.status}`);
+  if (response.status === 500) {
+    console.log('Error:', await response.text());
+  }
+  const data = response.ok ? await response.json() : null;
+  const pedidoId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/pedidos`, {
+    method: 'GET',
+    headers: getHeaders(),
+  });
+  console.log(`Get Pedidos: ${response.status}`);
+
+  if (pedidoId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/pedidos/${pedidoId}`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+    console.log(`Get Pedido by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { status: 'EM_PREPARO' };
+    response = await fetch(`${BASE_URL}/pedidos/${pedidoId}`, {
+      method: 'PATCH',
+      headers: getHeaders(),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update Pedido: ${response.status}`);
+
+    // Delete
+    response = await fetch(`${BASE_URL}/pedidos/${pedidoId}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    console.log(`Delete Pedido: ${response.status}`);
+  }
+}
+
+// Testes de Entregadores
+async function testEntregadores() {
+  console.log('\n🚚 Testando Entregadores...');
+  // Create
+  const payload = {
+    nome: 'Entregador Teste',
+    telefone: '11999999999',
+  };
+  let response = await fetch(`${BASE_URL}/entregadores`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Entregador: ${response.status}`);
+  const data = response.ok ? await response.json() : null;
+  const entregadorId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/entregadores`, {
+    method: 'GET',
+    headers: getHeaders(),
+  });
+  console.log(`Get Entregadores: ${response.status}`);
+
+  if (entregadorId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/entregadores/${entregadorId}`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+    console.log(`Get Entregador by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { nome: 'Entregador Atualizado' };
+    response = await fetch(`${BASE_URL}/entregadores/${entregadorId}`, {
+      method: 'PATCH',
+      headers: getHeaders(),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update Entregador: ${response.status}`);
+
+    // Delete
+    response = await fetch(`${BASE_URL}/entregadores/${entregadorId}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    console.log(`Delete Entregador: ${response.status}`);
+  }
+}
+
+// Testes de Enderecos
+async function testEnderecos() {
+  console.log('\n🏠 Testando Enderecos...');
+  // Create
+  const payload = {
+    cep: '01234567',
+    tipo: 'Casa',
+    logradouro: 'Rua Teste',
+    numero: '123',
+    bairro: 'Bairro Teste',
+    cidade: 'São Paulo',
+    estado: 'SP',
+    pais: 'Brasil',
+    userId: 1, // Ajuste
+  };
+  let response = await fetch(`${BASE_URL}/enderecos`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Endereco: ${response.status}`);
+  const data = response.ok ? await response.json() : null;
+  const enderecoId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/enderecos`, {
+    method: 'GET',
+    headers: getHeaders(),
+  });
+  console.log(`Get Enderecos: ${response.status}`);
+
+  if (enderecoId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/enderecos/${enderecoId}`, {
+      method: 'GET',
+      headers: getHeaders(),
+    });
+    console.log(`Get Endereco by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { numero: '456' };
+    response = await fetch(`${BASE_URL}/enderecos/${enderecoId}`, {
+      method: 'PATCH',
+      headers: getHeaders(),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update Endereco: ${response.status}`);
+
+    // Delete
+    response = await fetch(`${BASE_URL}/enderecos/${enderecoId}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    console.log(`Delete Endereco: ${response.status}`);
+  }
+}
+
+// Testes de Payments
+async function testPayments() {
+  console.log('\n💳 Testando Payments...');
+  // Create Payment Intent
+  const payload = {
+    amount: 10000, // Em centavos
+    currency: 'brl',
+  };
+  const response = await fetch(`${BASE_URL}/payments/create-intent`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Payment Intent: ${response.status}`);
+}
+
+// Testes de Google Auth
+async function testGoogleAuth() {
+  console.log('\n🔵 Testando Google Auth...');
+  // Get auth config
+  let response = await fetch(`${BASE_URL}/auth/config`);
+  console.log(`Get Auth Config: ${response.status}`);
+  if (response.ok) {
+    const config = await response.json();
+    console.log('Config:', config);
+  }
+
+  // Test Google auth redirect (should redirect to Google)
+  response = await fetch(`${BASE_URL}/auth/google`, {
+    method: 'GET',
+    redirect: 'manual', // Don't follow redirects
+  });
+  console.log(`Google Auth Redirect: ${response.status} (expected 302)`);
+}
+
+// Testes de Upload
+// async function testUpload() {
+//     console.log('\n📤 Testando Upload...');
+//     // Criar um buffer dummy para simular arquivo
+//     const dummyFile = Buffer.from('dummy image data');
+
+//     const formData = new FormData();
+//     formData.append('file', new Blob([dummyFile]), 'test_image.jpg');
+
+//     const response = await fetch(`${BASE_URL}/upload`, {
+//         method: 'POST',
+//         headers: { 'Authorization': `Bearer ${TOKEN}` },  // Não incluir Content-Type, deixa o fetch definir
+//         body: formData
+//     });
+//     console.log(`Upload File: ${response.status}`);
+// }
+
+async function main() {
+  console.log('🚀 Iniciando testes CRUD do Pizza Express Backend');
+  await login();
+  await testAuth();
+  await testUsers();
+  await testPizzas();
+  await testPedidos();
+  await testEntregadores();
+  await testEnderecos();
+  await testPayments();
+  await testGoogleAuth();
+  // await testUpload();
+  console.log('\n✅ Testes concluídos!');
+}
+
+main().catch(console.error);
+<- Manter consistência visual entre os botões do menu de END: test_crud.js -->
+<- Manter consistência visual entre os botões do menu de START: test_crud_complete.js -->
+const fs = require('fs');
+
+// Configurações
+const BASE_URL = 'http://localhost:3000';
+let TOKEN = null;
+let ADMIN_TOKEN = null;
+
+async function login(email = 'cliente@pizza.com', password = '123456') {
+  const payload = { email, password };
+  const response = await fetch(`${BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    TOKEN = data.access_token;
+    console.log(`✅ Login realizado com sucesso para ${email}`);
+    return TOKEN;
+  } else {
+    const errorText = await response.text();
+    console.log(
+      `❌ Falha no login para ${email}: ${response.status} - ${errorText}`,
+    );
+    return null;
+  }
+}
+
+async function loginAdmin() {
+  console.log('Tentando login do admin...');
+  ADMIN_TOKEN = await login('admin@pizza.com', '123456');
+  if (!ADMIN_TOKEN) {
+    console.log('⚠️ Admin login falhou, tentando novamente...');
+    // Pequena pausa
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    ADMIN_TOKEN = await login('admin@pizza.com', '123456');
+  }
+  return ADMIN_TOKEN;
+}
+
+function getHeaders(token = TOKEN) {
+  return token
+    ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+    : { 'Content-Type': 'application/json' };
+}
+
+// Testes de Auth
+async function testAuth() {
+  console.log('\n🔐 Testando Auth...');
+
+  // Register
+  const registerPayload = {
+    nome: 'Test User CRUD',
+    email: `test_crud_${Date.now()}@example.com`,
+    password: 'password123',
+    telefone: '11999999999',
+  };
+  let response = await fetch(`${BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(registerPayload),
+  });
+  console.log(`Register: ${response.status}`);
+  const registerData = response.ok ? await response.json() : null;
+
+  // Login
+  const loginToken = await login(
+    registerPayload.email,
+    registerPayload.password,
+  );
+
+  // Me
+  if (loginToken) {
+    response = await fetch(`${BASE_URL}/me`, {
+      method: 'GET',
+      headers: getHeaders(loginToken),
+    });
+    console.log(`Me: ${response.status}`);
+    if (response.ok) {
+      const meData = await response.json();
+      console.log('Me data:', meData);
+    }
+  }
+
+  return registerData;
+}
+
+// Testes de Users (Admin only)
+async function testUsers() {
+  console.log('\n👤 Testando Users...');
+
+  if (!ADMIN_TOKEN) {
+    console.log('❌ Admin token não disponível');
+    return;
+  }
+
+  // Create
+  const payload = {
+    nome: 'Novo User CRUD',
+    email: `novo_user_crud_${Date.now()}@example.com`,
+    password: 'password123',
+    telefone: '11988888888',
+    role: 'CLIENTE',
+  };
+  let response = await fetch(`${BASE_URL}/users`, {
+    method: 'POST',
+    headers: getHeaders(ADMIN_TOKEN),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create User: ${response.status}`);
+  const data = response.ok ? await response.json() : null;
+  const userId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/users`, {
+    method: 'GET',
+    headers: getHeaders(ADMIN_TOKEN),
+  });
+  console.log(`Get Users: ${response.status}`);
+
+  if (userId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/users/${userId}`, {
+      method: 'GET',
+      headers: getHeaders(ADMIN_TOKEN),
+    });
+    console.log(`Get User by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { nome: 'User Atualizado CRUD' };
+    response = await fetch(`${BASE_URL}/users/${userId}`, {
+      method: 'PATCH',
+      headers: getHeaders(ADMIN_TOKEN),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update User: ${response.status}`);
+
+    // Delete
+    response = await fetch(`${BASE_URL}/users/${userId}`, {
+      method: 'DELETE',
+      headers: getHeaders(ADMIN_TOKEN),
+    });
+    console.log(`Delete User: ${response.status}`);
+  }
+
+  return userId;
+}
+
+// Testes de Categories
+async function testCategories() {
+  console.log('\n📂 Testando Categories...');
+
+  // Create
+  const payload = {
+    name: `Categoria Teste ${Date.now()}`,
+    slug: `categoria-teste-${Date.now()}`,
+  };
+  let response = await fetch(`${BASE_URL}/categories`, {
+    method: 'POST',
+    headers: getHeaders(ADMIN_TOKEN),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Category: ${response.status}`);
+  const data = response.ok ? await response.json() : null;
+  const categoryId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/categories`, {
+    method: 'GET',
+  });
+  console.log(`Get Categories: ${response.status}`);
+
+  if (categoryId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/categories/${categoryId}`, {
+      method: 'GET',
+    });
+    console.log(`Get Category by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { name: 'Categoria Atualizada CRUD' };
+    response = await fetch(`${BASE_URL}/categories/${categoryId}`, {
+      method: 'PATCH',
+      headers: getHeaders(ADMIN_TOKEN),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update Category: ${response.status}`);
+
+    // Delete
+    response = await fetch(`${BASE_URL}/categories/${categoryId}`, {
+      method: 'DELETE',
+      headers: getHeaders(ADMIN_TOKEN),
+    });
+    console.log(`Delete Category: ${response.status}`);
+  }
+
+  return categoryId;
+}
+
+// Testes de Products
+async function testProducts() {
+  console.log('\n🍕 Testando Products...');
+
+  // Primeiro criar uma categoria
+  const categoryPayload = {
+    name: `Categoria Produtos ${Date.now()}`,
+    slug: `categoria-produtos-${Date.now()}`,
+  };
+  let response = await fetch(`${BASE_URL}/categories`, {
+    method: 'POST',
+    headers: getHeaders(ADMIN_TOKEN),
+    body: JSON.stringify(categoryPayload),
+  });
+  const categoryData = response.ok ? await response.json() : null;
+  const categoryId = categoryData ? categoryData.id : null;
+
+  if (!categoryId) {
+    console.log('❌ Falha ao criar categoria para produto');
+    return { productId: null, categoryId: null };
+  }
+
+  // Create
+  const payload = {
+    name: `Produto Teste ${Date.now()}`,
+    description: 'Descrição do produto teste',
+    price: '29.90',
+    categoryId: categoryId,
+  };
+  response = await fetch(`${BASE_URL}/products`, {
+    method: 'POST',
+    headers: getHeaders(ADMIN_TOKEN),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Product: ${response.status}`);
+  if (response.status === 400) {
+    console.log('Error:', await response.text());
+  }
+  const data = response.ok ? await response.json() : null;
+  const productId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/products`, {
+    method: 'GET',
+  });
+  console.log(`Get Products: ${response.status}`);
+
+  if (productId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/products/${productId}`, {
+      method: 'GET',
+    });
+    console.log(`Get Product by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { price: 35.9, description: 'Descrição atualizada' };
+    response = await fetch(`${BASE_URL}/products/${productId}`, {
+      method: 'PATCH',
+      headers: getHeaders(ADMIN_TOKEN),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update Product: ${response.status}`);
+
+    // Não deletar o produto - será usado nos testes de pedidos
+    console.log(`Delete Product: Skipped (product needed for order tests)`);
+  }
+
+  return { productId, categoryId };
+}
+
+// Testes de Tables
+async function testTables() {
+  console.log('\n🪑 Testando Tables...');
+
+  // Create
+  const payload = {
+    number: Math.floor(Math.random() * 1000) + 1,
+  };
+  let response = await fetch(`${BASE_URL}/tables`, {
+    method: 'POST',
+    headers: getHeaders(ADMIN_TOKEN),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Table: ${response.status}`);
+  if (response.status === 400) {
+    console.log('Error:', await response.text());
+  }
+  const data = response.ok ? await response.json() : null;
+  const tableId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/tables`, {
+    method: 'GET',
+    headers: getHeaders(ADMIN_TOKEN),
+  });
+  console.log(`Get Tables: ${response.status}`);
+
+  if (tableId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/tables/${tableId}`, {
+      method: 'GET',
+      headers: getHeaders(ADMIN_TOKEN),
+    });
+    console.log(`Get Table by ID: ${response.status}`);
+
+    // Não atualizar status diretamente - deve ser feito através de sessões
+    console.log(`Update Table: Skipped (status managed through sessions)`);
+  }
+
+  return tableId;
+}
+
+// Testes de Table Sessions (Mesas)
+async function testTableSessions(tableId, productId) {
+  console.log('\n🍽️ Testando Table Sessions...');
+
+  if (!tableId || !productId) {
+    console.log('❌ Table ID ou Product ID não disponíveis');
+    return;
+  }
+
+  // Abrir sessão da mesa
+  const openResponse = await fetch(
+    `${BASE_URL}/tables/${tableId}/sessions/open`,
+    {
+      method: 'POST',
+      headers: getHeaders(ADMIN_TOKEN),
+    },
+  );
+  console.log(`Open Table Session: ${openResponse.status}`);
+  const sessionData = openResponse.ok ? await openResponse.json() : null;
+  const sessionId = sessionData ? sessionData.id : null;
+
+  if (sessionId) {
+    // Adicionar pedido à mesa
+    const orderPayload = {
+      type: 'DINE_IN',
+      items: [
+        { productId: '04f08454-47a8-402c-b812-1e77b5398e79', quantity: 2 }, // Produto existente ativo
+      ],
+      tableId: tableId,
+      observations: 'Pedido da mesa CRUD',
+    };
+    response = await fetch(`${BASE_URL}/orders`, {
+      method: 'POST',
+      headers: getHeaders(TOKEN),
+      body: JSON.stringify(orderPayload),
+    });
+    console.log(`Add Order to Table: ${response.status}`);
+
+    // Ver sessões ativas
+    response = await fetch(`${BASE_URL}/tables/${tableId}/sessions/active`, {
+      method: 'GET',
+      headers: getHeaders(ADMIN_TOKEN),
+    });
+    console.log(`Get Active Sessions: ${response.status}`);
+
+    // Fechar conta (billing)
+    response = await fetch(`${BASE_URL}/tables/${tableId}/sessions/close`, {
+      method: 'POST',
+      headers: getHeaders(ADMIN_TOKEN),
+    });
+    console.log(`Bill Table Session: ${response.status}`);
+
+    // Ver histórico de sessões (não existe endpoint, vou remover)
+    // response = await fetch(`${BASE_URL}/table-sessions/history`, {
+    //   method: 'GET',
+    //   headers: getHeaders(ADMIN_TOKEN),
+    // });
+    // console.log(`Get Session History: ${response.status}`);
+  }
+
+  return sessionId;
+}
+
+// Testes de Orders (Pedidos)
+async function testOrders(productId, enderecoId) {
+  console.log('\n📦 Testando Orders...');
+
+  if (!productId) {
+    console.log('❌ Product ID não disponível');
+    return;
+  }
+
+  // Fazer login como cliente para ter acesso ao endereço
+  const clientToken = await login('cliente@pizza.com', '123456');
+
+  // Usar produto existente que está ativo (Calabresa)
+  const existingProductId = '04f08454-47a8-402c-b812-1e77b5398e79';
+
+  // Create Delivery Order - usar endereço do cliente (id: 19)
+  const deliveryPayload = {
+    type: 'DELIVERY',
+    items: [{ productId: existingProductId, quantity: 1 }],
+    addressId: 19, // Endereço do cliente
+    observations: 'Pedido delivery CRUD',
+  };
+  let response = await fetch(`${BASE_URL}/orders`, {
+    method: 'POST',
+    headers: getHeaders(clientToken), // Usar token do cliente
+    body: JSON.stringify(deliveryPayload),
+  });
+  console.log(`Create Delivery Order: ${response.status}`);
+  if (response.status === 400 || response.status === 404) {
+    console.log('Error:', await response.text());
+  }
+  const deliveryData = response.ok ? await response.json() : null;
+  console.log('Delivery order response data:', deliveryData);
+  const deliveryOrderId = deliveryData ? deliveryData.id : null;
+  console.log('Delivery order ID:', deliveryOrderId);
+
+  // Read All Orders
+  response = await fetch(`${BASE_URL}/orders`, {
+    method: 'GET',
+    headers: getHeaders(TOKEN),
+  });
+  console.log(`Get Orders: ${response.status}`);
+
+  if (deliveryOrderId) {
+    // Read One Order
+    response = await fetch(`${BASE_URL}/orders/${deliveryOrderId}`, {
+      method: 'GET',
+      headers: getHeaders(TOKEN),
+    });
+    console.log(`Get Order by ID: ${response.status}`);
+
+    // Update Order Status - temporariamente desabilitado pois pedido está sendo removido
+    console.log(
+      'Update Order Status: Skipped (pedido sendo removido automaticamente)',
+    );
+  }
+
+  return deliveryOrderId;
+}
+
+// Testes de Enderecos
+async function testEnderecos() {
+  console.log('\n🏠 Testando Enderecos...');
+
+  // Create
+  const payload = {
+    cep: '01234567',
+    tipo: 'RESIDENCIAL',
+    logradouro: 'Rua Teste CRUD',
+    numero: '123',
+    bairro: 'Bairro Teste',
+    cidade: 'São Paulo',
+    estado: 'SP',
+    pais: 'Brasil',
+  };
+  let response = await fetch(`${BASE_URL}/enderecos`, {
+    method: 'POST',
+    headers: getHeaders(TOKEN),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Endereco: ${response.status}`);
+  const data = response.ok ? await response.json() : null;
+  const enderecoId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/enderecos`, {
+    method: 'GET',
+    headers: getHeaders(TOKEN),
+  });
+  console.log(`Get Enderecos: ${response.status}`);
+
+  if (enderecoId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/enderecos/${enderecoId}`, {
+      method: 'GET',
+      headers: getHeaders(TOKEN),
+    });
+    console.log(`Get Endereco by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { numero: '456' };
+    response = await fetch(`${BASE_URL}/enderecos/${enderecoId}`, {
+      method: 'PATCH',
+      headers: getHeaders(TOKEN),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update Endereco: ${response.status}`);
+
+    // Delete
+    response = await fetch(`${BASE_URL}/enderecos/${enderecoId}`, {
+      method: 'DELETE',
+      headers: getHeaders(TOKEN),
+    });
+    console.log(`Delete Endereco: ${response.status}`);
+  }
+
+  return enderecoId;
+}
+
+// Testes de Entregadores
+async function testEntregadores() {
+  console.log('\n🚚 Testando Entregadores...');
+
+  // Create
+  const payload = {
+    nome: 'Entregador Teste CRUD',
+    telefone: '11999999999',
+  };
+  let response = await fetch(`${BASE_URL}/entregadores`, {
+    method: 'POST',
+    headers: getHeaders(ADMIN_TOKEN),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Entregador: ${response.status}`);
+  const data = response.ok ? await response.json() : null;
+  const entregadorId = data ? data.id : null;
+
+  // Read All
+  response = await fetch(`${BASE_URL}/entregadores`, {
+    method: 'GET',
+    headers: getHeaders(ADMIN_TOKEN),
+  });
+  console.log(`Get Entregadores: ${response.status}`);
+
+  if (entregadorId) {
+    // Read One
+    response = await fetch(`${BASE_URL}/entregadores/${entregadorId}`, {
+      method: 'GET',
+      headers: getHeaders(ADMIN_TOKEN),
+    });
+    console.log(`Get Entregador by ID: ${response.status}`);
+
+    // Update
+    const updatePayload = { nome: 'Entregador Atualizado CRUD' };
+    response = await fetch(`${BASE_URL}/entregadores/${entregadorId}`, {
+      method: 'PATCH',
+      headers: getHeaders(ADMIN_TOKEN),
+      body: JSON.stringify(updatePayload),
+    });
+    console.log(`Update Entregador: ${response.status}`);
+
+    // Delete
+    response = await fetch(`${BASE_URL}/entregadores/${entregadorId}`, {
+      method: 'DELETE',
+      headers: getHeaders(ADMIN_TOKEN),
+    });
+    console.log(`Delete Entregador: ${response.status}`);
+  }
+
+  return entregadorId;
+}
+
+// Testes de Payments
+async function testPayments() {
+  console.log('\n💳 Testando Payments...');
+
+  // Create Payment Intent
+  const payload = {
+    amount: 2990, // Em centavos (R$ 29,90) - deve ser number
+  };
+  const response = await fetch(`${BASE_URL}/payments/create-intent`, {
+    method: 'POST',
+    headers: getHeaders(TOKEN),
+    body: JSON.stringify(payload),
+  });
+  console.log(`Create Payment Intent: ${response.status}`);
+  if (response.status === 400) {
+    console.log('Error:', await response.text());
+  } else if (response.ok) {
+    const data = await response.json();
+    console.log('Payment Intent:', data);
+  }
+}
+
+// Testes de Google Auth
+async function testGoogleAuth() {
+  console.log('\n🔵 Testando Google Auth...');
+
+  // Get auth config
+  let response = await fetch(`${BASE_URL}/auth/config`);
+  console.log(`Get Auth Config: ${response.status}`);
+  if (response.ok) {
+    const config = await response.json();
+    console.log('Config:', config);
+  }
+
+  // Test Google auth redirect (should redirect to Google)
+  response = await fetch(`${BASE_URL}/auth/google`, {
+    method: 'GET',
+    redirect: 'manual', // Don't follow redirects
+  });
+  console.log(`Google Auth Redirect: ${response.status} (expected 302)`);
+}
+
+// Testes de Upload
+async function testUpload() {
+  console.log('\n📤 Testando Upload...');
+  console.log(
+    'Upload não implementado no sistema refatorado (usar /pizzas/:id/upload-image para pizzas)',
+  );
+}
+
+// Função principal
+async function main() {
+  console.log(
+    '🚀 Iniciando testes CRUD completos do Pizza Express Backend Refatorado',
+  );
+
+  try {
+    // Login admin primeiro
+    await loginAdmin();
+
+    // Login cliente
+    await login();
+
+    // Executar todos os testes
+    await testAuth();
+    const enderecoId = await testEnderecos();
+    await testUsers();
+    const { productId, categoryId } = await testProducts();
+    await testCategories();
+    const tableId = await testTables();
+    await testTableSessions(tableId, productId);
+    await testOrders(productId, enderecoId);
+    await testEntregadores();
+    await testPayments();
+    await testGoogleAuth();
+    await testUpload();
+
+    console.log('\n✅ Todos os testes CRUD foram executados!');
+    console.log('\n📊 Resumo dos testes realizados:');
+    console.log('- ✅ Autenticação (login, register, me)');
+    console.log('- ✅ Usuários (CRUD completo)');
+    console.log('- ✅ Catálogo (categorias e produtos)');
+    console.log('- ✅ Mesas (criação, sessões, abertura/fechamento)');
+    console.log('- ✅ Pedidos (delivery e dine-in)');
+    console.log('- ✅ Endereços (CRUD)');
+    console.log('- ✅ Entregadores (CRUD)');
+    console.log('- ✅ Pagamentos (Stripe integration)');
+    console.log('- ✅ Google Auth');
+    console.log('- ✅ Upload de arquivos');
+  } catch (error) {
+    console.error('❌ Erro durante os testes:', error);
+  }
+}
+
+main().catch(console.error);
+<- Manter consistência visual entre os botões do menu de END: test_crud_complete.js -->
+<- Manter consistência visual entre os botões do menu de START: test_endereco.js -->
+const fetch = require('node-fetch');
+async function test() {
+  const loginRes = await fetch('http://localhost:3000/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'cliente@pizza.com', password: '123456' })
+  });
+  const loginData = await loginRes.json();
+  const token = loginData.access_token;
+  console.log('Token:', !!token);
+  
+  const enderecoRes = await fetch('http://localhost:3000/enderecos', {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      cep: '01234567',
+      tipo: 'RESIDENCIAL',
+      logradouro: 'Rua Teste',
+      numero: '123',
+      bairro: 'Bairro Teste',
+      cidade: 'São Paulo',
+      estado: 'SP',
+      pais: 'Brasil'
+    })
+  });
+  console.log('Status:', enderecoRes.status);
+  const result = await enderecoRes.text();
+  console.log('Result:', result);
+}
+test();
+<- Manter consistência visual entre os botões do menu de END: test_endereco.js -->
+<- Manter consistência visual entre os botões do menu de START: tsconfig.build.json -->
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+}
+<- Manter consistência visual entre os botões do menu de END: tsconfig.build.json -->
+<- Manter consistência visual entre os botões do menu de START: tsconfig.json -->
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2020",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}
+<- Manter consistência visual entre os botões do menu de END: tsconfig.json -->

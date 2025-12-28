@@ -15,6 +15,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { CatalogModule } from './catalog/catalog.module';
 import { TablesModule } from './tables/tables.module';
+import { OrderItemsModule } from './order-items/order-items.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { TablesModule } from './tables/tables.module';
     PaymentsModule,
     CatalogModule, // Novo módulo de catálogo
     TablesModule, // Novo módulo de mesas
+    OrderItemsModule, // Novo módulo de itens de pedido
   ],
   controllers: [AppController],
   providers: [
